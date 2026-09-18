@@ -4,6 +4,7 @@
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Android-8.0%2B-3ddc84.svg?logo=android&logoColor=white)](https://developer.android.com)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Pia300/highlight-replay)
 
 A replay-style screen recorder: the screen is recorded to memory continuously, and the last few seconds can be saved as a video on demand.
 
@@ -56,11 +57,17 @@ This project is developed using [Android Studio](https://developer.android.com/s
 | [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) | Async and state streams |
 | [MediaCodec](https://developer.android.com/reference/android/media/MediaCodec) / [MediaMuxer](https://developer.android.com/reference/android/media/MediaMuxer) | Encoding and muxing |
 
-## 📊 Community
+## ⭐ Star History
 
-📖 [DeepWiki](https://deepwiki.com/Pia300/highlight-replay) · AI-generated wiki of this repository
+If you like this project, please give it a star ⭐
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Pia300/highlight-replay&type=Date)](https://star-history.com/#Pia300/highlight-replay&Date)
+<a href="https://www.star-history.com/?type=date&repos=Pia300%2Fhighlight-replay">
+ <picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Pia300/highlight-replay&type=date&theme=dark&legend=top-left" />
+  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Pia300/highlight-replay&type=date&legend=top-left" />
+  <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Pia300/highlight-replay&type=date&legend=top-left" />
+ </picture>
+</a>
 
 ## 📄 License
 

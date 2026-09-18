@@ -5,6 +5,7 @@
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Android-8.0%2B-3ddc84.svg?logo=android&logoColor=white)](https://developer.android.com)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Pia300/highlight-replay)
 
 一款回錄式螢幕錄製應用：螢幕畫面持續錄製到記憶體，依需求儲存過去若干秒為影片。
 
@@ -55,11 +56,17 @@
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines)（非同步與狀態串流）
 - [MediaCodec](https://developer.android.com/reference/android/media/MediaCodec) / [MediaMuxer](https://developer.android.com/reference/android/media/MediaMuxer)（編解碼與封裝）
 
-## 📊 社群
+## ⭐ Star History
 
-📖 [DeepWiki](https://deepwiki.com/Pia300/highlight-replay) · 本儲存庫的 AI 生成文件
+如果喜歡這個專案，請給它一顆星 ⭐
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Pia300/highlight-replay&type=Date)](https://star-history.com/#Pia300/highlight-replay&Date)
+<a href="https://www.star-history.com/?type=date&repos=Pia300%2Fhighlight-replay">
+ <picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Pia300/highlight-replay&type=date&theme=dark&legend=top-left" />
+  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Pia300/highlight-replay&type=date&legend=top-left" />
+  <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Pia300/highlight-replay&type=date&legend=top-left" />
+ </picture>
+</a>
 
 ## 📄 授權條款
 

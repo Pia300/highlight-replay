@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通知栏控制图标的常规着色；低透明度变体用于“音频未启用”的灰色状态点。 -->
+    <color name="notif_btn_inactive">#44474E</color>
+
+    <!-- 通知“录制中”状态色（深绿）。 -->
+    <color name="notif_recording">#1B6D24</color>
+
+    <!-- 通知“流错误”状态色（深红）。 -->
+    <color name="notif_stream_error">#B00020</color>
+</resources>

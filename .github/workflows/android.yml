@@ -1,0 +1,125 @@
+# Android 持续集成：build job 做 debug 打包 / lint / JVM 单元测试 / release 打包；
+# instrumented job 在模拟器上跑 Compose 仪器化测试。
+name: Android CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          # 显式安装并锁定构建所需组件，避免依赖 AGP 在构建期自动下载（受 30 分钟超时约束）。
+          # 注意 Android 37 起平台包改为次版本号模型，包名是 platforms;android-37.0 而非 android-37。
+          packages: 'platforms;android-37.0,build-tools;37.0.0'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Assemble debug APK, run lint, unit tests and version checks
+        run: ./gradlew --no-daemon --stacktrace assembleDebug testDebugUnitTest lintDebug verifyThirdPartyVersions
+
+      - name: Assemble release APK (verifies R8/ProGuard config; unsigned without keystore.properties)
+        run: ./gradlew --no-daemon --stacktrace assembleRelease
+
+      - name: Upload unit test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: app/build/test-results/testDebugUnitTest/
+          if-no-files-found: ignore
+
+      - name: Upload lint report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-results
+          path: app/build/reports/lint-results-*.html
+          if-no-files-found: ignore
+
+      - name: Upload R8 mapping (deobfuscates release stack traces)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r8-mapping
+          path: app/build/outputs/mapping/release/mapping.txt
+          if-no-files-found: ignore
+
+      - name: Upload APKs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apks
+          path: app/build/outputs/apk/**/*.apk
+          if-no-files-found: ignore
+
+  # 仪器化测试单独成 job：Compose 交互与状态行为无法在 JVM 上验证，
+  # 历史缺陷（弹窗输入、旋转后状态丢失、页签状态）都属此类。
+  #
+  # continue-on-error：AGP 9 起 UTP 采信 am instrument 的返回码，而本仓库真机
+  # （Android 15）在用例全过时仍返回 INSTRUMENTATION_CODE: -1 而被判失败。
+  # 该 job 继续执行并产出报告，但不阻断流水线；设备侧结论须人工看报告。
+  instrumented:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-37.0,build-tools;37.0.0'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run instrumented tests on an emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          disable-animations: true
+          # 本应用依赖 MediaProjection 与悬浮窗权限；仪器化用例只覆盖不依赖它们的 Compose 组件。
+          script: ./gradlew --no-daemon --stacktrace connectedDebugAndroidTest
+
+      - name: Upload instrumented test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: instrumented-test-results
+          path: app/build/outputs/androidTest-results/
+          if-no-files-found: ignore

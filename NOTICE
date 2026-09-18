@@ -1,0 +1,33 @@
+ScreenReplayRecorder (Highlight Replay)
+Copyright (c) 2026 Pia300
+Homepage: https://github.com/Pia300/ScreenReplayRecorder
+
+This product is licensed under the GNU General Public License, version 3
+(see the LICENSE file in this distribution).
+
+Third-party components that are compiled into or distributed with this product
+are governed by their own licenses. Their copyright lines and license texts are
+listed in THIRD_PARTY_NOTICES.md, which includes the full text of the Apache
+License 2.0. The redistributed third-party binaries embed no NOTICE files of
+their own, so no upstream NOTICE content is reproduced here (see the notice
+statement in THIRD_PARTY_NOTICES.md).
+
+The launcher icon and the Quick Settings tile icon of this product are adapted
+(recolored) from the "loop-left-ai-fill" glyph of Remix Icon:
+
+    Icons by Remix Icon (https://remixicon.com)
+    Copyright (c) 2017-2026 Remix Design
+
+The design of the segment-based capture buffer (data/SegmentRingBuffer.kt) is
+derived from highlight-recorder, an independent GPL-3.0 project:
+
+    highlight-recorder (https://github.com/owen88ob/highlight-recorder)
+    Copyright (c) owen88ob
+    Licensed under the GNU General Public License, version 3
+
+Specifically, this product adopts its approach of cutting the ring buffer at
+actual key-frame boundaries so that a snapshot is decodable without a save-time
+key-frame search, together with its soft/hard segment-length limits and forced
+segmentation. The implementation here is a rewrite for this codebase: it uses
+this project's millisecond monotonic clock and adds a byte budget to eviction.
+

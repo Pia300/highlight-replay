@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 11 及以下的备份规则。
+  排除标签数据（tag_prefs）：其键是 MediaStore 的 _ID，恢复到另一台设备或媒体库重建后
+  ID 会变化，恢复标签只会把标签错配到别的视频上。
+  排除引导标记（prompt_state）：它记录本机是否已引导过权限，而权限本身不随备份迁移，
+  恢复后会让新设备直接跳过引导。用户设置仍随主偏好文件迁移。
+-->
+<full-backup-content>
+    <exclude domain="sharedpref" path="tag_prefs.xml" />
+    <exclude domain="sharedpref" path="prompt_state.xml" />
+</full-backup-content>

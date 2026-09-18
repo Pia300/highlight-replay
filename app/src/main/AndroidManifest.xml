@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 前台服务与媒体投影类型（Android 9+/10+ 必需）。 -->
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE"
+        tools:ignore="ForegroundServicesPolicy" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <!-- 系统内录（AudioPlaybackCapture）的前置授权；低版本无内录能力，不申请。 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 通知权限（Android 13+ 运行时申请）：录制期间的后台控制入口。 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- 电池优化豁免：避免长时间录制被 Doze 中断。 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- 悬浮窗权限：悬浮球常驻其他应用之上。 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 旧版外部存储读写：仅 Android 9 (API 28) 及更低版本需要。 -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- 进程内动态广播的签名级权限：Android 13- 动态接收器注册时用它约束发送方。 -->
+    <permission
+        android:name="io.github.pia300.highlightreplay.permission.INTERNAL_BROADCAST"
+        android:protectionLevel="signature" />
+    <!-- 声明权限不等于持有：接收器侧以该权限校验“发送方是否持有”，本应用必须自行申请，
+         否则 Android 12 及以下的 sendBroadcast 会被系统以权限不足丢弃（悬浮球状态/磁贴刷新失效）。 -->
+    <uses-permission android:name="io.github.pia300.highlightreplay.permission.INTERNAL_BROADCAST" />
+
+    <application
+        android:name=".RecorderApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.HighlightReplay">
+
+        <!-- 主界面：单任务模式避免录制期间出现多实例。 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 录制启动授权页：磁贴冷启动等无 Activity 场景的投影授权中转（半透明、不进最近任务）。 -->
+        <activity
+            android:name=".RecordingStartActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- 录制前台服务：持有 MediaProjection 令牌与整条采集/缓冲/保存管线。 -->
+        <service
+            android:name=".service.RecorderService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <!-- 悬浮球服务：录制会话中的悬浮快速控制（随会话生灭）。 -->
+        <service
+            android:name=".service.FloatingControlService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- 快捷设置磁贴：开始/停止录制。 -->
+        <service
+            android:name=".service.RecordingTileService"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_app"
+            android:label="@string/tile_start_recording"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- 快捷设置磁贴：一键保存回放。 -->
+        <service
+            android:name=".service.ReplaySaveTileService"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@drawable/ic_save"
+            android:label="@string/tile_save_replay"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- 快捷设置磁贴：显示/隐藏悬浮窗。 -->
+        <service
+            android:name=".service.FloatingTileService"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@drawable/ic_float_on"
+            android:label="@string/tile_floating"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>

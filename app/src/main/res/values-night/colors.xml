@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 深色主题下通知控制图标的常规着色。 -->
+    <color name="notif_btn_inactive">#C4C6D0</color>
+
+    <!-- 深色主题下通知“录制中”状态色（浅绿）。 -->
+    <color name="notif_recording">#81C784</color>
+
+    <!-- 深色主题下通知“流错误”状态色（浅红，深底可读）。 -->
+    <color name="notif_stream_error">#FFB4AB</color>
+</resources>

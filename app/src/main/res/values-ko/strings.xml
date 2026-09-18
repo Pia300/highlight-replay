@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Highlight Replay</string>
+
+    <string name="notification_channel_name">녹화 서비스</string>
+    <string name="notification_channel_description">화면 녹화 제어 알림</string>
+    <string name="notification_recording_title">녹화 중</string>
+
+    <string name="toast_replay_saved">리플레이가 저장되었습니다</string>
+    <string name="toast_permission_denied">권한이 거부되었습니다</string>
+
+    <string name="notif_btn_replay">저장</string>
+    <string name="notif_btn_stop">중지</string>
+
+
+
+    <string name="tab_control">컨트롤</string>
+    <string name="tab_history">리플레이</string>
+    <string name="tab_settings">설정</string>
+
+    <string name="notif_stream_video_ok">영상 정상</string>
+    <string name="notif_stream_video_dead">영상 끊김</string>
+    <string name="notif_stream_audio_ok">오디오 정상</string>
+    <string name="notif_stream_audio_dead">오디오 입력 없음</string>
+    <string name="notif_stream_audio_off">오디오 사용 안 함</string>
+    <string name="notif_status_combined">%1$s, %2$s</string>
+
+    <string name="tile_start_recording">녹화 시작</string>
+    <string name="tile_recording">녹화 중</string>
+    <string name="tile_starting">시작 중…</string>
+
+    <string name="control_start_recording">녹화 시작</string>
+    <string name="control_stop_recording">녹화 중지</string>
+    <string name="control_saving">저장 중…</string>
+    <string name="control_save_replay">리플레이 저장</string>
+    <string name="control_settings_changed_hint">녹화 설정이 변경되었습니다. 적용하려면 녹화를 중지하고 다시 시작하세요.</string>
+    <string name="control_recording_duration">녹화 시간 %1$s</string>
+    <string name="control_status_saving">리플레이 저장 중…</string>
+    <string name="control_status_recording">녹화 중</string>
+    <string name="control_status_ready">준비 완료</string>
+    <string name="control_status_saving_sub">리플레이 영상을 미디어 저장소에 저장하는 중입니다</string>
+    <string name="control_status_recording_sub">화면을 버퍼링 중입니다. 저장하고 싶은 순간에 “리플레이 저장”을 누르세요.</string>
+    <string name="control_status_ready_sub">준비가 끝났습니다. “녹화 시작”을 눌러 주세요.</string>
+    <string name="control_status_combined">%1$s, %2$s</string>
+
+    <string name="settings_resolution">해상도</string>
+    <string name="settings_frame_rate">프레임 속도</string>
+    <string name="settings_video_bitrate">영상 비트레이트</string>
+    <string name="settings_audio_source">오디오 소스</string>
+    <string name="settings_replay_duration">리플레이 길이</string>
+    <string name="settings_resolution_720p">720p</string>
+    <string name="settings_resolution_1080p">1080p</string>
+    <string name="settings_resolution_1440p">1440p</string>
+    <string name="settings_resolution_custom">%1$dp</string>
+    <string name="settings_resolution_mode">해상도 모드</string>
+    <string name="settings_resolution_mode_adaptive">적응형</string>
+    <string name="settings_resolution_mode_standard">표준</string>
+    <string name="settings_resolution_mode_standard_hint">표준 모드에서는 16:9 비율로 출력됩니다</string>
+    <string name="settings_resolution_summary">%1$s · %2$s · %3$s</string>
+    <string name="settings_audio_internal">내부 오디오</string>
+    <string name="settings_audio_internal_unsupported">이 Android 버전에서는 시스템 오디오를 지원하지 않습니다. “오디오 없음”만 사용할 수 있습니다.</string>
+    <string name="settings_audio_none">오디오 없음</string>
+    <string name="settings_fps">%1$d fps</string>
+    <string name="settings_mbps">%1$d Mbps</string>
+    <string name="settings_seconds">%1$d초</string>
+
+    <string name="settings_toast_notify">토스트 알림</string>
+    <string name="settings_toast_notify_enabled">토스트 알림 사용</string>
+    <string name="settings_toast_notify_off_hint">끄면 토스트 메시지가 표시되지 않습니다</string>
+
+    <string name="settings_content_rotation">적응형 캡처</string>
+    <string name="settings_content_rotation_enabled">적응형 캡처 사용</string>
+    <string name="settings_content_rotation_summary">캡처 방향이 화면 콘텐츠와 다르면 콘텐츠를 강제로 회전시켜 방향을 맞춥니다</string>
+
+    <string name="settings_replay_tip">기기가 뜨거워지거나 녹화가 버벅이거나 앱이 강제 종료되면 녹화 설정을 낮춰 보세요.</string>
+
+    <string name="tile_save_replay">리플레이 저장</string>
+    <string name="tile_floating">플로팅 창 전환</string>
+    <string name="tile_show_floating">플로팅 창 표시</string>
+    <string name="tile_hide_floating">플로팅 창 숨기기</string>
+
+    <string name="history_search_placeholder">리플레이 검색…</string>
+    <string name="history_search_clear">지우기</string>
+    <string name="history_retry">다시 시도</string>
+    <string name="history_empty_refresh">새로고침</string>
+    <string name="history_item_meta">%1$s · %2$s · %3$s</string>
+    <string name="history_sort">정렬</string>
+    <string name="history_empty_search">“%1$s”와 일치하는 리플레이가 없습니다</string>
+    <string name="history_empty_title">아직 저장된 리플레이가 없습니다</string>
+    <string name="history_empty_search_hint">다른 키워드로 검색해 보세요</string>
+    <string name="history_empty_hint">녹화를 시작한 뒤 “리플레이 저장”을 눌러 그 순간을 저장해 보세요</string>
+    <string name="history_menu_rename">이름 변경</string>
+    <string name="history_menu_tag">태그</string>
+    <string name="history_menu_share">공유</string>
+    <string name="history_menu_delete">삭제</string>
+    <string name="history_play">재생</string>
+    <string name="history_more_actions">더보기</string>
+    <string name="history_rename_title">이름 변경</string>
+    <string name="history_rename_field_label">파일 이름</string>
+    <string name="history_rename_hint">.mp4 확장자는 자동으로 추가됩니다</string>
+    <string name="common_confirm">확인</string>
+    <string name="common_cancel">취소</string>
+    <string name="history_exit_selection">선택 모드 종료</string>
+    <string name="history_selected_count">%1$d개 선택됨</string>
+    <string name="history_select_all">전체 선택</string>
+    <string name="history_deselect_all">전체 해제</string>
+    <string name="history_tag_selected">태그 추가</string>
+    <string name="history_delete_selected">선택 항목 삭제</string>
+    <string name="history_delete_confirm_title">삭제 확인</string>
+    <string name="history_delete_confirm_message">리플레이 영상 %1$d개를 삭제합니다. 이 작업은 되돌릴 수 없습니다.</string>
+    <string name="history_bulk_tag_title">태그 추가 · 선택 항목 %1$d개</string>
+    <string name="history_edit_tag_title">태그 편집 · %1$s</string>
+    <string name="history_load_failed">기록을 불러오지 못했습니다</string>
+    <string name="history_delete_failed">삭제하지 못했습니다. 저장 공간 권한을 확인해 주세요</string>
+    <string name="history_rename_failed">이름을 변경하지 못했습니다</string>
+    <string name="history_tag_save_failed">태그를 저장하지 못했습니다. 저장 공간을 확인하세요</string>
+    <string name="history_share_title">동영상 공유</string>
+    <string name="history_play_failed">이 동영상을 재생할 앱이 없습니다</string>
+    <string name="history_share_failed">이 동영상을 공유할 앱이 없습니다</string>
+    <string name="history_fallback_name">video_%1$d.mp4</string>
+    <string name="history_size_mb">%.1f MB</string>
+    <string name="history_size_kb">%.0f KB</string>
+    <string name="history_size_b">%1$d B</string>
+    <string name="history_duration_seconds">%1$d초</string>
+    <string name="history_date_format">%1$04d-%2$02d-%3$02d %4$02d:%5$02d</string>
+    <string name="history_sort_date_desc">최신순</string>
+    <string name="history_sort_date_asc">오래된순</string>
+    <string name="history_sort_name_asc">이름 A-Z</string>
+    <string name="history_sort_name_desc">이름 Z-A</string>
+    <string name="history_sort_size_desc">크기 큰 순</string>
+    <string name="history_sort_size_asc">크기 작은 순</string>
+
+    <string name="tag_new">새 태그</string>
+    <string name="tag_default_name">하이라이트 리플레이</string>
+    <string name="tag_chip_prefix">#%1$s</string>
+    <string name="tag_coverage_partial">일부 적용됨</string>
+    <string name="tag_name_label">태그 이름</string>
+    <string name="tag_exists">같은 이름의 태그가 이미 있습니다</string>
+    <string name="tag_create">만들기</string>
+    <string name="tag_cancel">취소</string>
+    <string name="tag_close">닫기</string>
+    <string name="tag_delete_title">태그 삭제</string>
+    <string name="tag_delete_confirm">“%1$s” 태그를 삭제할까요?\n이 태그는 모든 동영상에서 제거됩니다.</string>
+    <string name="tag_delete">삭제</string>
+    <string name="tag_done">완료</string>
+
+    <string name="settings_section_video">영상 설정</string>
+    <string name="settings_codec">인코더</string>
+    <string name="settings_codec_h264">H.264 (AVC)</string>
+    <string name="settings_codec_h265">H.265 (HEVC)</string>
+    <string name="settings_encoder_type">인코더 유형</string>
+    <string name="settings_encoder_hardware">하드웨어</string>
+    <string name="settings_encoder_software">소프트웨어</string>
+    <string name="settings_encoder_auto">자동</string>
+    <string name="settings_orientation">녹화 방향</string>
+    <string name="settings_orientation_auto">자동 감지</string>
+    <string name="settings_orientation_portrait">세로 고정</string>
+    <string name="settings_orientation_landscape">가로 고정</string>
+    <string name="settings_fps_24">24 fps</string>
+    <string name="settings_fps_30">30 fps</string>
+    <string name="settings_fps_60">60 fps</string>
+    <string name="settings_bitrate_4">4 Mbps</string>
+    <string name="settings_bitrate_8">8 Mbps</string>
+    <string name="settings_bitrate_12">12 Mbps</string>
+    <string name="settings_bitrate_16">16 Mbps</string>
+    <string name="settings_section_audio">오디오 설정</string>
+    <string name="settings_section_replay">리플레이 설정</string>
+    <string name="settings_replay_30s">30초</string>
+    <string name="settings_replay_60s">60초</string>
+    <string name="settings_section_general">일반</string>
+    <string name="settings_section_theme">테마</string>
+    <string name="settings_dark_mode">다크 모드</string>
+    <string name="settings_dark_system">시스템 설정 따르기</string>
+    <string name="settings_dark_light">라이트 모드</string>
+    <string name="settings_dark_dark">다크 모드</string>
+    <string name="settings_theme_color">테마 색상</string>
+    <string name="settings_color_dynamic">배경화면 기반 (동적)</string>
+    <string name="settings_color_blue">진한 파랑</string>
+    <string name="settings_color_green">청록색</string>
+    <string name="settings_color_purple">보라색</string>
+    <string name="settings_color_orange">앰버색</string>
+    <string name="settings_section_about">앱 정보</string>
+    <string name="settings_section_language">언어</string>
+    <string name="settings_language_system">시스템 설정 따르기</string>
+    <string name="settings_language_zh_cn">简体中文</string>
+    <string name="settings_language_zh_tw">繁體中文</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_language_ja">일본어</string>
+    <string name="settings_language_ko">한국어</string>
+    <string name="settings_language_es">스페인어</string>
+    <string name="settings_language_pt">포르투갈어</string>
+    <string name="settings_language_id">인도네시아어</string>
+    <string name="settings_language_vi">베트남어</string>
+    <string name="settings_language_th">태국어</string>
+    <string name="settings_language_ru">러시아어</string>
+    <string name="settings_section_permission">권한</string>
+    <string name="settings_notification_permission">알림 권한</string>
+    <string name="settings_notification_granted">허용됨</string>
+    <string name="settings_notification_denied">권한이 없어 알림 컨트롤을 사용할 수 없습니다</string>
+    <string name="settings_battery_optimization">배터리 최적화</string>
+    <string name="settings_battery_optimization_granted">허용됨</string>
+    <string name="settings_battery_optimization_denied">미허용. 녹화 시간이 길면 시스템이 녹화를 중지할 수 있습니다</string>
+    <string name="notification_permission_title">알림 권한 필요</string>
+    <string name="notification_permission_message">알림 컨트롤은 녹화 중 백그라운드 제어의 진입점입니다. 시스템 설정에서 이 앱의 알림을 허용해 주세요.</string>
+    <string name="notification_permission_confirm">설정으로 이동</string>
+    <string name="notification_permission_dismiss">나중에</string>
+    <string name="overlay_permission_title">다른 앱 위에 표시 권한 필요</string>
+    <string name="overlay_permission_message">“다른 앱 위에 표시” 권한은 플로팅 볼 빠른 컨트롤을 표시하는 데 사용됩니다. 시스템 설정에서 허용해 주세요.</string>
+    <string name="overlay_permission_confirm">설정으로 이동</string>
+    <string name="overlay_permission_dismiss">나중에</string>
+    <string name="settings_about_app_name">앱 이름</string>
+    <string name="settings_about_version">버전</string>
+    <string name="settings_about_project">프로젝트 홈페이지</string>
+    <string name="settings_about_open_failed">링크를 열 수 없습니다</string>
+    <string name="settings_license">라이선스</string>
+    <string name="settings_license_third_party_title">타사 오픈소스 구성 요소</string>
+    <string name="settings_license_apache">Apache License 2.0</string>
+    <string name="settings_license_jetpack_androidx">Jetpack Compose / Material 3 / AndroidX 라이브러리</string>
+    <string name="settings_license_kotlin_stdlib">Kotlin 표준 라이브러리</string>
+    <string name="settings_license_kotlinx_coroutines">kotlinx.coroutines</string>
+    <string name="settings_license_remix_icon">Remix Icon (앱 아이콘)</string>
+    <string name="settings_license_highlight_recorder">highlight-recorder (버퍼 설계 참고)</string>
+    <string name="settings_license_own_title">이 앱의 라이선스</string>
+    <string name="license_gpl_label">GNU General Public License v3.0</string>
+    <string name="settings_license_open_online">라이선스 원문을 온라인에서 보기</string>
+    <string name="license_modified_note">앱 아이콘과 빠른 설정 타일 아이콘은 Remix Icon의 “loop-left-ai-fill” 글리프를 개작(색상 변경)한 것입니다. 세그먼트 버퍼 설계는 highlight-recorder를 참고하여 구현했습니다.</string>
+    <string name="settings_license_back">뒤로</string>
+
+    <string name="notification_status">녹화 상태</string>
+
+    <string name="service_not_connected">녹화 서비스가 연결되지 않았습니다</string>
+
+    <string name="replay_file_prefix">Replay_</string>
+    <string name="replay_saving_in_progress">저장 진행 중입니다. 잠시만 기다려 주세요</string>
+    <string name="replay_save_failed">저장 실패: %1$s</string>
+    <string name="replay_not_enough_space">저장 공간이 부족하여 리플레이를 저장할 수 없습니다. 공간을 확보한 후 다시 시도하세요.</string>
+    <string name="replay_buffer_empty">버퍼에 데이터가 없습니다. 녹화가 시작되었는지 확인해 주세요.</string>
+    <string name="replay_data_expired">녹화 데이터가 만료되었습니다(다른 화면 녹화 앱이 녹화를 가로챘을 수 있습니다). 녹화를 다시 시작해 주세요.</string>
+    <string name="replay_no_keyframe">저장 구간에 키프레임이 없습니다. 잠시 후 다시 시도해 주세요.</string>
+    <string name="replay_encoder_format_unavailable">인코더 출력 형식을 사용할 수 없습니다. 다시 시도해 주세요.</string>
+    <string name="replay_create_media_failed">미디어 파일을 만들 수 없습니다</string>
+    <string name="replay_open_stream_failed">출력 스트림을 열 수 없습니다</string>
+    <string name="replay_error_projection_stopped">시스템이 화면 녹화를 중지했습니다</string>
+
+    <string name="error_projection_start_rejected">시스템이 화면 녹화 시작을 거부했습니다. 앱을 다시 시작한 후 다시 시도해 주세요.</string>
+    <string name="error_projection_unavailable">화면 녹화 권한을 가져올 수 없습니다</string>
+    <string name="error_recording_start_failed">녹화를 시작하지 못했습니다</string>
+    <string name="error_recording_generic">녹화 오류</string>
+    <string name="error_video_encoder_stalled">비디오 인코더가 응답하지 않아 녹화를 중지했습니다.</string>
+    <string name="error_recorder_not_initialized">녹화기가 초기화되지 않았습니다</string>
+    <string name="error_projection_terminated">시스템이 화면 녹화를 중지했습니다. 녹화를 다시 시작해 주세요.</string>
+    <string name="error_codec_h265_start_failed">H.265 인코더를 시작하지 못했습니다(이 기기에서 지원되지 않을 수 있습니다). H.264로 전환한 후 다시 시도해 주세요.</string>
+    <!-- 指定编码器不可用而改用系统代选：编码器与输出尺寸都会变，用户界面上看不出差别，必须告知。 -->
+    <string name="error_encoder_fallback">선택한 인코더를 사용할 수 없어 시스템이 선택한 인코더로 전환했습니다.</string>
+    <string name="error_open_notification_settings">알림 설정을 열 수 없습니다. 시스템 설정에서 알림 권한을 직접 허용해 주세요.</string>
+    <string name="error_media_store_write">미디어 저장소에 저장하지 못했습니다</string>
+    <string name="error_audio_permission_missing">오디오 권한이 허용되지 않아 이번 녹화에는 소리가 포함되지 않습니다</string>
+
+
+    <string name="notification_saving_title">저장 중</string>
+    <string name="notification_saved_title">저장 완료</string>
+    <string name="toast_replay_saving">리플레이 저장 중…</string>
+    <string name="settings_auto_show_floating_desc">녹화 중 플로팅 창 자동 표시</string>
+    <string name="settings_decrease">줄이기</string>
+    <string name="settings_permission_granted">허용됨</string>
+    <string name="settings_floating_size">플로팅 창 크기</string>
+    <string name="notification_toggle_floating">플로팅 창 전환</string>
+    <string name="floating_reset_toast">플로팅 창 설정이 초기화되었습니다</string>
+    <string name="settings_reset_floating">플로팅 창 설정 초기화</string>
+    <string name="settings_permission_denied">허용되지 않음 · 눌러서 허용하기</string>
+    <string name="settings_range">%1$d ~ %2$d</string>
+    <string name="settings_floating_permission">다른 앱 위에 표시</string>
+    <string name="notification_show_floating">플로팅 창 표시</string>
+    <string name="notification_hide_floating">플로팅 창 숨기기</string>
+    <string name="settings_range_percent">%1$d ~ %2$d%%</string>
+    <string name="settings_floating_opacity">플로팅 창 투명도</string>
+    <string name="settings_section_floating">플로팅 창 설정</string>
+    <string name="settings_increase">늘리기</string>
+    <string name="toast_stopping_recording">녹화 중지 중…</string>
+    <string name="notif_float_open_failed">플로팅 창을 열 수 없습니다. “다른 앱 위에 표시” 권한을 확인해 주세요.</string>
+    <string name="tag_color_option">색상 %1$d</string>
+    <string name="toast_recording_stopped">녹화를 중지했습니다</string>
+    <string name="settings_storage_permission">저장소 권한</string>
+</resources>
+

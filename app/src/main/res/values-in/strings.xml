@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 印尼语同时提供 values-in 与 values-id：java.util.Locale 会把 "id" 重写为旧 ISO 码 "in"，
+     不同平台/版本请求的语言码可能落在任一侧，双份可保证印尼语在两种口径下都能命中资源。 -->
+<resources>
+    <string name="app_name">Highlight Replay</string>
+
+    <string name="notification_channel_name">Layanan perekaman layar</string>
+    <string name="notification_channel_description">Notifikasi kontrol perekaman layar</string>
+    <string name="notification_recording_title">Merekam</string>
+
+    <string name="toast_replay_saved">Replay disimpan</string>
+    <string name="toast_permission_denied">Izin ditolak</string>
+
+    <string name="notif_btn_replay">Simpan</string>
+    <string name="notif_btn_stop">Berhenti</string>
+
+    <string name="tab_control">Konsol</string>
+    <string name="tab_history">Replay</string>
+    <string name="tab_settings">Setelan</string>
+
+    <string name="notif_stream_video_ok">Video normal</string>
+    <string name="notif_stream_video_dead">Video hilang</string>
+    <string name="notif_stream_audio_ok">Audio normal</string>
+    <string name="notif_stream_audio_dead">Tidak ada input audio</string>
+    <string name="notif_stream_audio_off">Audio nonaktif</string>
+    <string name="notif_status_combined">%1$s, %2$s</string>
+
+    <string name="tile_start_recording">Mulai merekam</string>
+    <string name="tile_recording">Merekam</string>
+    <string name="tile_starting">Memulai…</string>
+
+    <string name="control_start_recording">Mulai merekam</string>
+    <string name="control_stop_recording">Berhenti merekam</string>
+    <string name="control_saving">Menyimpan…</string>
+    <string name="control_save_replay">Simpan replay</string>
+    <string name="control_settings_changed_hint">Setelan perekaman berubah. Berhenti, lalu mulai lagi untuk menerapkannya.</string>
+    <string name="control_recording_duration">Durasi perekaman %1$s</string>
+    <string name="control_status_saving">Menyimpan replay…</string>
+    <string name="control_status_recording">Merekam</string>
+    <string name="control_status_ready">Siap</string>
+    <string name="control_status_saving_sub">Menulis klip replay ke galeri</string>
+    <string name="control_status_recording_sub">Layar sedang dibuffer. Ketuk Simpan replay untuk mengabadikan momen.</string>
+    <string name="control_status_ready_sub">Semua siap. Ketuk Mulai merekam.</string>
+    <string name="control_status_combined">%1$s, %2$s</string>
+
+    <string name="settings_resolution">Resolusi</string>
+    <string name="settings_frame_rate">Kecepatan bingkai</string>
+    <string name="settings_video_bitrate">Bitrate video</string>
+    <string name="settings_audio_source">Sumber audio</string>
+    <string name="settings_replay_duration">Durasi replay</string>
+    <string name="settings_resolution_720p">720p</string>
+    <string name="settings_resolution_1080p">1080p</string>
+    <string name="settings_resolution_1440p">1440p</string>
+    <string name="settings_resolution_custom">%1$dp</string>
+    <string name="settings_resolution_mode">Mode resolusi</string>
+    <string name="settings_resolution_mode_adaptive">Adaptif</string>
+    <string name="settings_resolution_mode_standard">Standar</string>
+    <string name="settings_resolution_mode_standard_hint">Mode standar menghasilkan rasio 16:9</string>
+    <string name="settings_resolution_summary">%1$s · %2$s · %3$s</string>
+    <string name="settings_audio_internal">Audio internal</string>
+    <string name="settings_audio_internal_unsupported">Audio sistem tidak didukung di versi Android ini; hanya pilihan \"Tanpa audio\" yang tersedia.</string>
+    <string name="settings_audio_none">Tanpa audio</string>
+    <string name="settings_fps">%1$d fps</string>
+    <string name="settings_mbps">%1$d Mbps</string>
+    <string name="settings_seconds">%1$d detik</string>
+
+    <string name="settings_toast_notify">Notifikasi Toast</string>
+    <string name="settings_toast_notify_enabled">Aktifkan notifikasi Toast</string>
+    <string name="settings_toast_notify_off_hint">Saat nonaktif, pesan Toast tidak akan ditampilkan</string>
+
+    <string name="settings_content_rotation">Perekaman adaptif</string>
+    <string name="settings_content_rotation_enabled">Aktifkan perekaman adaptif</string>
+    <string name="settings_content_rotation_summary">Jika arah perekaman berbeda dari arah konten layar, konten akan diputar paksa agar sesuai</string>
+
+    <string name="settings_replay_tip">Jika perangkat cepat panas atau layar tersendat, atau aplikasi mogok, turunkan setelan perekaman.</string>
+
+    <string name="tile_save_replay">Simpan replay</string>
+    <string name="tile_floating">Sakelar jendela melayang</string>
+    <string name="tile_show_floating">Tampilkan jendela melayang</string>
+    <string name="tile_hide_floating">Sembunyikan jendela melayang</string>
+
+    <string name="history_search_placeholder">Cari replay…</string>
+    <string name="history_search_clear">Bersihkan</string>
+    <string name="history_retry">Coba lagi</string>
+    <string name="history_empty_refresh">Segarkan</string>
+    <string name="history_item_meta">%1$s · %2$s · %3$s</string>
+    <string name="history_sort">Urutkan</string>
+    <string name="history_empty_search">Tidak ada replay yang cocok dengan \"%1$s\"</string>
+    <string name="history_empty_title">Belum ada replay yang disimpan</string>
+    <string name="history_empty_search_hint">Coba kata kunci lain</string>
+    <string name="history_empty_hint">Mulai perekaman, lalu ketuk \"Simpan replay\" untuk mengabadikan momen</string>
+    <string name="history_menu_rename">Ganti nama</string>
+    <string name="history_menu_tag">Tag</string>
+    <string name="history_menu_share">Bagikan</string>
+    <string name="history_menu_delete">Hapus</string>
+    <string name="history_play">Putar</string>
+    <string name="history_more_actions">Tindakan lainnya</string>
+    <string name="history_rename_title">Ganti nama</string>
+    <string name="history_rename_field_label">Nama file</string>
+    <string name="history_rename_hint">Ekstensi .mp4 ditambahkan secara otomatis</string>
+    <string name="common_confirm">OK</string>
+    <string name="common_cancel">Batal</string>
+    <string name="history_exit_selection">Keluar dari pemilihan</string>
+    <string name="history_selected_count">Terpilih: %1$d</string>
+    <string name="history_select_all">Pilih semua</string>
+    <string name="history_deselect_all">Batalkan pilihan semua</string>
+    <string name="history_tag_selected">Tambahkan tag</string>
+    <string name="history_delete_selected">Hapus yang dipilih</string>
+    <string name="history_delete_confirm_title">Konfirmasi penghapusan</string>
+    <string name="history_delete_confirm_message">Video replay yang akan dihapus: %1$d. Tindakan ini tidak dapat diurungkan.</string>
+    <string name="history_bulk_tag_title">Tambahkan tag · terpilih: %1$d</string>
+    <string name="history_edit_tag_title">Ubah tag · %1$s</string>
+    <string name="history_load_failed">Gagal memuat riwayat</string>
+    <string name="history_delete_failed">Gagal menghapus. Periksa izin penyimpanan.</string>
+    <string name="history_rename_failed">Gagal mengganti nama</string>
+    <string name="history_tag_save_failed">Gagal menyimpan tag. Periksa ruang penyimpanan</string>
+    <string name="history_share_title">Bagikan video</string>
+    <string name="history_play_failed">Tidak ada aplikasi untuk memutar video ini</string>
+    <string name="history_share_failed">Tidak ada aplikasi untuk membagikan video ini</string>
+    <string name="history_fallback_name">video_%1$d.mp4</string>
+    <string name="history_size_mb">%.1f MB</string>
+    <string name="history_size_kb">%.0f KB</string>
+    <string name="history_size_b">%1$d B</string>
+    <string name="history_duration_seconds">%1$d detik</string>
+    <string name="history_date_format">%1$04d-%2$02d-%3$02d %4$02d:%5$02d</string>
+    <string name="history_sort_date_desc">Terbaru dulu</string>
+    <string name="history_sort_date_asc">Terlama dulu</string>
+    <string name="history_sort_name_asc">Nama A-Z</string>
+    <string name="history_sort_name_desc">Nama Z-A</string>
+    <string name="history_sort_size_desc">Ukuran: terbesar dulu</string>
+    <string name="history_sort_size_asc">Ukuran: terkecil dulu</string>
+
+    <string name="tag_new">Tag baru</string>
+    <string name="tag_default_name">Replay Sorotan</string>
+    <string name="tag_chip_prefix">#%1$s</string>
+    <string name="tag_coverage_partial">Diterapkan sebagian</string>
+    <string name="tag_name_label">Nama tag</string>
+    <string name="tag_exists">Tag sudah ada</string>
+    <string name="tag_create">Buat</string>
+    <string name="tag_cancel">Batal</string>
+    <string name="tag_close">Tutup</string>
+    <string name="tag_delete_title">Hapus tag</string>
+    <string name="tag_delete_confirm">Hapus tag \"%1$s\"?\nTag tersebut akan dihapus dari semua video.</string>
+    <string name="tag_delete">Hapus</string>
+    <string name="tag_done">Selesai</string>
+
+    <string name="settings_section_video">Setelan video</string>
+    <string name="settings_codec">Encoder</string>
+    <string name="settings_codec_h264">H.264 (AVC)</string>
+    <string name="settings_codec_h265">H.265 (HEVC)</string>
+    <string name="settings_encoder_type">Jenis encoder</string>
+    <string name="settings_encoder_hardware">Perangkat keras</string>
+    <string name="settings_encoder_software">Perangkat lunak</string>
+    <string name="settings_encoder_auto">Otomatis</string>
+    <string name="settings_orientation">Orientasi perekaman</string>
+    <string name="settings_orientation_auto">Deteksi otomatis</string>
+    <string name="settings_orientation_portrait">Paksa potret</string>
+    <string name="settings_orientation_landscape">Paksa lanskap</string>
+    <string name="settings_fps_24">24 fps</string>
+    <string name="settings_fps_30">30 fps</string>
+    <string name="settings_fps_60">60 fps</string>
+    <string name="settings_bitrate_4">4 Mbps</string>
+    <string name="settings_bitrate_8">8 Mbps</string>
+    <string name="settings_bitrate_12">12 Mbps</string>
+    <string name="settings_bitrate_16">16 Mbps</string>
+    <string name="settings_section_audio">Setelan audio</string>
+    <string name="settings_section_replay">Setelan replay</string>
+    <string name="settings_replay_30s">30 detik</string>
+    <string name="settings_replay_60s">60 detik</string>
+    <string name="settings_section_general">Umum</string>
+    <string name="settings_section_theme">Tema</string>
+    <string name="settings_dark_mode">Mode gelap</string>
+    <string name="settings_dark_system">Ikuti sistem</string>
+    <string name="settings_dark_light">Terang</string>
+    <string name="settings_dark_dark">Gelap</string>
+    <string name="settings_theme_color">Warna tema</string>
+    <string name="settings_color_dynamic">Ikuti wallpaper (dinamis)</string>
+    <string name="settings_color_blue">Biru tua</string>
+    <string name="settings_color_green">Toska</string>
+    <string name="settings_color_purple">Violet</string>
+    <string name="settings_color_orange">Amber</string>
+    <string name="settings_section_about">Tentang</string>
+    <string name="settings_section_language">Bahasa</string>
+    <string name="settings_language_system">Ikuti sistem</string>
+    <string name="settings_language_zh_cn">简体中文</string>
+    <string name="settings_language_zh_tw">繁體中文</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_language_ja">Bahasa Jepang</string>
+    <string name="settings_language_ko">Bahasa Korea</string>
+    <string name="settings_language_es">Bahasa Spanyol</string>
+    <string name="settings_language_pt">Bahasa Portugis</string>
+    <string name="settings_language_id">Bahasa Indonesia</string>
+    <string name="settings_language_vi">Bahasa Vietnam</string>
+    <string name="settings_language_th">Bahasa Thai</string>
+    <string name="settings_language_ru">Bahasa Rusia</string>
+    <string name="settings_section_permission">Izin</string>
+    <string name="settings_notification_permission">Izin notifikasi</string>
+    <string name="settings_notification_granted">Diizinkan</string>
+    <string name="settings_notification_denied">Belum diizinkan; kontrol notifikasi tidak tersedia</string>
+    <string name="settings_battery_optimization">Optimasi baterai</string>
+    <string name="settings_battery_optimization_granted">Diizinkan</string>
+    <string name="settings_battery_optimization_denied">Belum diizinkan; perekaman lama dapat dihentikan oleh sistem</string>
+    <string name="notification_permission_title">Izin notifikasi diperlukan</string>
+    <string name="notification_permission_message">Kontrol notifikasi adalah pintu masuk latar belakang selama perekaman berlangsung. Aktifkan izin notifikasi untuk aplikasi ini di Setelan sistem.</string>
+    <string name="notification_permission_confirm">Buka setelan</string>
+    <string name="notification_permission_dismiss">Nanti saja</string>
+    <string name="overlay_permission_title">Izin tampil di atas aplikasi lain diperlukan</string>
+    <string name="overlay_permission_message">Izin ini digunakan untuk menampilkan bola melayang berisi kontrol cepat. Aktifkan izinnya di Setelan sistem.</string>
+    <string name="overlay_permission_confirm">Buka setelan</string>
+    <string name="overlay_permission_dismiss">Nanti saja</string>
+    <string name="settings_about_app_name">Nama aplikasi</string>
+    <string name="settings_about_version">Versi</string>
+    <string name="settings_about_project">Laman proyek</string>
+    <string name="settings_about_open_failed">Tidak dapat membuka tautan</string>
+    <string name="settings_license">Lisensi</string>
+    <string name="settings_license_third_party_title">Komponen sumber terbuka pihak ketiga</string>
+    <string name="settings_license_apache">Apache License 2.0</string>
+    <string name="settings_license_jetpack_androidx">Pustaka Jetpack Compose / Material 3 / AndroidX</string>
+    <string name="settings_license_kotlin_stdlib">Pustaka standar Kotlin</string>
+    <string name="settings_license_kotlinx_coroutines">kotlinx.coroutines</string>
+    <string name="settings_license_remix_icon">Remix Icon (ikon aplikasi)</string>
+    <string name="settings_license_highlight_recorder">highlight-recorder (referensi desain buffer)</string>
+    <string name="settings_license_own_title">Lisensi aplikasi ini</string>
+    <string name="license_gpl_label">GNU General Public License v3.0</string>
+    <string name="settings_license_open_online">Buka teks lisensi asli secara online</string>
+    <string name="license_modified_note">Ikon aplikasi dan ikon ubin setelan cepat diadaptasi (diwarnai ulang) dari glif “loop-left-ai-fill” milik Remix Icon. Desain buffer tersegmentasi diimplementasikan dengan merujuk pada highlight-recorder.</string>
+    <string name="settings_license_back">Kembali</string>
+
+    <string name="notification_status">Status perekaman</string>
+
+    <string name="service_not_connected">Layanan perekaman tidak terhubung</string>
+
+    <string name="replay_file_prefix">Replay_</string>
+    <string name="replay_saving_in_progress">Penyimpanan sedang berlangsung, harap tunggu.</string>
+    <string name="replay_save_failed">Gagal menyimpan: %1$s</string>
+    <string name="replay_not_enough_space">Ruang penyimpanan tidak cukup untuk menyimpan replay. Kosongkan sebagian ruang lalu coba lagi.</string>
+    <string name="replay_buffer_empty">Buffer kosong. Pastikan perekaman sudah dimulai.</string>
+    <string name="replay_data_expired">Data perekaman kedaluwarsa (mungkin diambil alih oleh perekam layar lain). Mulai ulang perekaman.</string>
+    <string name="replay_no_keyframe">Tidak ada keyframe dalam rentang penyimpanan. Coba lagi nanti.</string>
+    <string name="replay_encoder_format_unavailable">Format keluaran encoder tidak tersedia. Coba lagi.</string>
+    <string name="replay_create_media_failed">Tidak dapat membuat file media</string>
+    <string name="replay_open_stream_failed">Tidak dapat membuka aliran keluaran</string>
+    <string name="replay_error_projection_stopped">Perekaman layar dihentikan oleh sistem</string>
+
+    <string name="error_projection_start_rejected">Sistem menolak permintaan untuk memulai perekaman layar. Mulai ulang aplikasi, lalu coba lagi.</string>
+    <string name="error_projection_unavailable">Tidak dapat memperoleh izin perekaman layar</string>
+    <string name="error_recording_start_failed">Gagal memulai perekaman</string>
+    <string name="error_recording_generic">Kesalahan perekaman</string>
+    <string name="error_video_encoder_stalled">Encoder video berhenti merespons. Perekaman dihentikan.</string>
+    <string name="error_recorder_not_initialized">Recorder belum diinisialisasi</string>
+    <string name="error_projection_terminated">Perekaman layar dihentikan oleh sistem. Mulai perekaman lagi.</string>
+    <string name="error_codec_h265_start_failed">Encoder H.265 gagal dimulai (mungkin tidak didukung perangkat ini). Beralih ke H.264, lalu coba lagi.</string>
+    <!-- 指定编码器不可用而改用系统代选：编码器与输出尺寸都会变，用户界面上看不出差别，必须告知。 -->
+    <string name="error_encoder_fallback">Encoder yang dipilih tidak tersedia. Perekaman beralih ke encoder yang dipilih sistem.</string>
+    <string name="error_open_notification_settings">Tidak dapat membuka setelan notifikasi. Aktifkan izin notifikasi secara manual di Setelan sistem.</string>
+    <string name="error_media_store_write">Gagal menulis ke galeri</string>
+    <string name="error_audio_permission_missing">Izin audio tidak diberikan; rekaman ini tidak akan memiliki suara</string>
+
+    <string name="notification_saving_title">Menyimpan</string>
+    <string name="notification_saved_title">Tersimpan</string>
+    <string name="toast_replay_saving">Menyimpan replay…</string>
+    <string name="settings_auto_show_floating_desc">Tampilkan jendela melayang saat merekam</string>
+    <string name="settings_decrease">Perkecil</string>
+    <string name="settings_permission_granted">Diizinkan</string>
+    <string name="settings_floating_size">Ukuran jendela melayang</string>
+    <string name="notification_toggle_floating">Alihkan jendela melayang</string>
+    <string name="floating_reset_toast">Setelan jendela melayang telah direset</string>
+    <string name="settings_reset_floating">Reset setelan jendela melayang</string>
+    <string name="settings_permission_denied">Belum diizinkan. Ketuk untuk mengaktifkan.</string>
+    <string name="settings_range">%1$d ~ %2$d</string>
+    <string name="settings_floating_permission">Izin tampil di atas aplikasi lain</string>
+    <string name="notification_show_floating">Tampilkan jendela melayang</string>
+    <string name="notification_hide_floating">Sembunyikan jendela melayang</string>
+    <string name="settings_range_percent">%1$d ~ %2$d%%</string>
+    <string name="settings_floating_opacity">Opasitas jendela melayang</string>
+    <string name="settings_section_floating">Setelan jendela melayang</string>
+    <string name="settings_increase">Perbesar</string>
+    <string name="toast_stopping_recording">Menghentikan perekaman…</string>
+    <string name="notif_float_open_failed">Tidak dapat membuka jendela melayang. Periksa izin tampil di atas aplikasi lain.</string>
+    <string name="tag_color_option">Warna %1$d</string>
+    <string name="toast_recording_stopped">Perekaman dihentikan</string>
+    <string name="settings_storage_permission">Izin penyimpanan</string>
+</resources>
+

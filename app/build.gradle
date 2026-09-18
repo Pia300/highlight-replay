@@ -1,0 +1,390 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.plugin.compose'
+}
+
+// 发布签名材料来自仓库根的 keystore.properties（不入库，见 .gitignore）。
+// 缺失时 release 仍可构建，只是产物为未签名 APK，便于 CI/本地验证 R8 配置。
+def keystorePropsFile = rootProject.file('keystore.properties')
+def keystoreProps = new Properties()
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
+def hasReleaseKeystore = keystoreProps.containsKey('storeFile')
+
+// ---- 随应用分发的第三方组件版本（单一真源）----
+// 许可证页与 THIRD_PARTY_NOTICES 展示的版本值由此生成 BuildConfig.DEP_* 常量。
+// verifyThirdPartyVersions 任务对照 dependencies{} 与实际解析结果，任何一处不同步都会失败
+// （历史上漂移过一次：声明 lifecycle 2.8.3 而实际解析 2.9.4，人不会注意到）。
+// declared 为 null 表示由 BOM 或传递依赖决定，不要求 dependencies{} 有对应显式声明。
+ext.thirdPartyComponents = [
+    [key: 'COMPOSE',    name: 'Compose UI',     module: 'androidx.compose.ui:ui',                            version: '1.12.1', declared: null],
+    [key: 'MATERIAL3',  name: 'Material3',      module: 'androidx.compose.material3:material3',              version: '1.4.0',  declared: null],
+    [key: 'ICONS',      name: 'Material Icons', module: 'androidx.compose.material:material-icons-extended', version: '1.7.8',  declared: null],
+    [key: 'ACTIVITY',   name: 'Activity',       module: 'androidx.activity:activity-compose',                version: '1.8.2',  declared: '1.8.2'],
+    [key: 'LIFECYCLE',  name: 'Lifecycle',      module: 'androidx.lifecycle:lifecycle-runtime-compose',      version: '2.9.4',  declared: '2.9.4'],
+    [key: 'COREKTX',    name: 'Core KTX',       module: 'androidx.core:core-ktx',                            version: '1.16.0', declared: '1.16.0'],
+    [key: 'SAVEDSTATE', name: 'SavedState',     module: 'androidx.savedstate:savedstate-ktx',                version: '1.3.2',  declared: '1.3.2'],
+    [key: 'TRACING',    name: 'Tracing',        module: 'androidx.tracing:tracing',                          version: '1.2.0',  declared: null],
+    [key: 'KOTLIN',     name: 'Kotlin stdlib',  module: 'org.jetbrains.kotlin:kotlin-stdlib',                version: '2.4.20', declared: null],
+    [key: 'COROUTINES', name: 'Coroutines',     module: 'org.jetbrains.kotlinx:kotlinx-coroutines-android',  version: '1.9.0',  declared: '1.9.0'],
+]
+
+// 单一产品线应用模块：无 build flavor，悬浮球能力内建于主线。
+android {
+    namespace = 'io.github.pia300.highlightreplay'
+
+    // compileSdk 37：Compose 1.12 起要求 minCompileSdk 37。
+    // 注意：API 37 对应 Android 17（原注释写作 "Android 16 QPR"，与版本映射不符，已更正）。
+    // targetSdk 35：本项目不经 Google Play 分发，不受商店目标 API 政策约束，
+    // 故不以 Play 要求为升级理由。保持 35 是为了避免引入未经真机验证的运行时行为变更；
+    // 后续与编译工具链一并对齐到 36。
+    compileSdk = 37
+
+    // 显式锁定 build-tools 版本：避免 AGP 默认版本随环境漂移，aapt2/d8/zipalign 行为一致。
+    buildToolsVersion = '37.0.0'
+
+    defaultConfig {
+        applicationId = "io.github.pia300.highlightreplay"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 4
+        versionName = "2.5.3"
+        // 仪器化测试跑在设备上：Compose 交互与状态保存无法在 JVM 上验证。
+        testInstrumentationRunner = 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    signingConfigs {
+        release {
+            if (hasReleaseKeystore) {
+                storeFile = rootProject.file(keystoreProps['storeFile'])
+                storePassword = keystoreProps['storePassword']
+                keyAlias = keystoreProps['keyAlias']
+                keyPassword = keystoreProps['keyPassword']
+            }
+        }
+    }
+
+    // 两个 buildType 都要注入 DEP_* 常量（许可证页在 debug 构建下同样要显示版本号），
+    // 故统一在一次循环里设置，避免 debug/release 两份重复列表各自漂移。
+    def depFields = project.ext.thirdPartyComponents
+
+    buildTypes {
+        debug {
+            depFields.each { c -> buildConfigField 'String', "DEP_${c.key}", "\"${c.version}\"" }
+        }
+        release {
+            // R8 开启：debug 的 dex 合计 56,820,428 字节，未裁剪的 Material 图标与 Compose 代码占绝大多数；
+            // 裁剪后 release dex 为 2,351,092 字节、APK 约 1.6MB。
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (hasReleaseKeystore) {
+                signingConfig = signingConfigs.release
+            }
+            depFields.each { c -> buildConfigField 'String', "DEP_${c.key}", "\"${c.version}\"" }
+        }
+    }
+
+    // 语言资源打包进同一 APK（不按语言拆包）。
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
+    // 只保留本应用维护的语言，剥离 AndroidX/Compose 依赖携带的其余语言配置。
+    // 区域码写法与 values-* 目录一致；values-in 对应印尼语。
+    androidResources {
+        localeFilters += [
+            'en', 'es', 'in', 'ja', 'ko', 'pt', 'ru', 'th', 'vi',
+            'zh', 'zh-rHK'
+        ]
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    // ---- 随应用分发的第三方组件版本（单一真源）----
+    // 版本值定义在文件顶部的 project.ext.thirdPartyComponents，并在上面的 buildTypes 里
+    // 注入为 BuildConfig.DEP_* 常量（debug 与 release 同一份列表）。
+    // 校验方式见文件底部的 verifyThirdPartyVersions。
+
+    // lint 作为构建门禁：有 error 即失败，且 release 构建同样检查。
+    lint {
+        abortOnError = true
+        checkReleaseBuilds = true
+    }
+
+    // 单元测试在 JVM 上执行：框架桩方法返回默认值（被测代码含 android.util.Log 等调用）。
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
+dependencies {
+    implementation platform('androidx.compose:compose-bom:2026.09.00')
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material:material-icons-extended'
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.animation:animation'
+    implementation 'androidx.activity:activity-compose:1.8.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4'
+    implementation 'androidx.core:core-ktx:1.16.0'
+    // 主源码多处直接使用协程；显式声明以固定版本（与 THIRD_PARTY_NOTICES 记录一致）。
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
+    implementation 'androidx.savedstate:savedstate-ktx:1.3.2'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
+    testImplementation 'junit:junit:4.13.2'
+    // 单元测试在 JVM 上运行：android.jar 里的 org.json 是空桩，需真实实现才能测 JSON 解析。
+    testImplementation 'org.json:json:20240303'
+
+    androidTestImplementation platform('androidx.compose:compose-bom:2026.09.00')
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+}
+
+// 第三方组件版本声明的构建期校验。
+// 许可证页展示的版本号是手写声明，与本文件 dependencies{} 的实际声明是两份数据；
+// 历史上漂移过一次（声明 lifecycle 2.8.3，实际解析 2.9.4），人不会注意到，故由构建拦下。
+// 两类断言：
+//   1) declared 非 null 的组件，dependencies{} 必须显式声明且版本一致；
+//   2) 全部组件的声明版本必须等于 release 运行时 classpath 实际解析到的版本
+//      （对 BOM 升级同样有效：改 BOM 而未更新声明版本时会失败）。
+// 该任务挂在 check 上，随 testDebugUnitTest / assembleRelease 一起跑。
+def thirdPartyComponentsForCheck = project.ext.thirdPartyComponents
+
+// 配置期声明惰性输入：releaseRuntimeClasspath 由 AGP 延迟创建，脚本级不可直接获取；
+// 执行期亦不得触碰 configurations（配置缓存要求），故经 Provider 在求值时读取。
+def declaredModulesProvider = providers.provider {
+    def out = [:]
+    configurations.getByName('releaseRuntimeClasspath').allDependencies.each { d ->
+        def group = d.group
+        def name = d.name
+        def version = d.version
+        if (group != null && name != null && version != null && version != 'unspecified') {
+            out["${group}:${name}".toString()] = version.toString()
+        }
+    }
+    out
+}
+def resolvedModulesProvider = providers.provider {
+    def out = [:]
+    configurations.getByName('releaseRuntimeClasspath').incoming.resolutionResult.allComponents.each { comp ->
+        def id = comp.id
+        if (id instanceof org.gradle.api.artifacts.component.ModuleComponentIdentifier) {
+            out["${id.group}:${id.module}".toString()] = id.version.toString()
+        }
+    }
+    out
+}
+
+tasks.register('verifyThirdPartyVersions') {
+    group = 'verification'
+    description = '校验第三方组件版本声明与 dependencies{} 及实际解析结果一致'
+    def components = thirdPartyComponentsForCheck
+    inputs.property('expectedDeclared', components.collect { "${it.module}:${it.declared ?: '-'}" })
+    inputs.property('expectedResolved', components.collect { "${it.module}:${it.version}" })
+
+    doLast {
+        // Provider 每次读取都返回同一结果，且其求值发生在任务执行时
+        def declaredInDeps = declaredModulesProvider.get()
+        def resolved = resolvedModulesProvider.get()
+        def problems = []
+
+        // 断言 1：dependencies{} 中显式声明的版本必须与声明值一致
+        components.each { c ->
+            if (c.declared != null) {
+                def actual = declaredInDeps[c.module]
+                if (actual == null) {
+                    problems << "  ${c.name}（${c.module}）声明为 ${c.version}，但 dependencies{} 未显式声明该坐标"
+                } else if (actual != c.declared) {
+                    problems << "  ${c.name}（${c.module}）声明为 ${c.declared}，而 dependencies{} 写的是 ${actual}"
+                }
+            }
+        }
+
+        // 断言 2：声明版本必须等于实际解析版本（对 BOM 升级同样有效）
+        components.each { c ->
+            def actual = resolved[c.module]
+            if (actual == null) {
+                problems << "  ${c.name}（${c.module}）不在 release 运行时依赖图中，声明版本 ${c.version} 无从校验"
+            } else if (actual != c.version) {
+                problems << "  ${c.name}（${c.module}）声明为 ${c.version}，实际解析为 ${actual}"
+            }
+        }
+
+        if (!problems.isEmpty()) {
+            throw new GradleException(
+                "第三方组件版本声明与实际情况不符：\n" + problems.join("\n") +
+                "\n请同步 app/build.gradle 的 thirdPartyComponents、THIRD_PARTY_NOTICES.md 与许可证页。"
+            )
+        }
+        logger.lifecycle("verifyThirdPartyVersions: ${components.size()} 个组件的版本声明与实际一致")
+    }
+}
+tasks.named('check') { dependsOn 'verifyThirdPartyVersions' }
+
+// ---- 屏幕捕获授权 Intent 的单一构造点守卫 ----
+// 规则：授权 Intent 只在 ui/ScreenCaptureIntent.kt 一处构造，两条入口（应用内「开始录制」与
+// 磁贴冷启动）都必须调用它。任一侧自行构造会让两条入口请求不同的捕获范围——按应用共享的
+// 镜像区域在被选应用退到后台后为空，录出的回放整段纯黑且不报错，而编译、单测、lint 都不出声。
+// 此处把这个不变式变成会失败的断言。
+def CAPTURE_INTENT_OWNER = 'ScreenCaptureIntent.kt'
+// 匹配「作为成员调用」的形态 `.createScreenCaptureIntent(`，而非裸子串：
+// newScreenCaptureIntent( 的尾部就是该子串，纯子串匹配会把合法调用点与文档引用一起误判。
+def CAPTURE_INTENT_CALL = ~/\.createScreenCaptureIntent\s*\(/
+def captureIntentSources = android.sourceSets.main.java.srcDirs.toList()
+def captureIntentFileTree = project.files(captureIntentSources.collect { project.fileTree(it) })
+
+tasks.register('checkCaptureIntentConstruction') {
+    group = 'verification'
+    description = '校验屏幕捕获授权 Intent 只在 ui/ScreenCaptureIntent.kt 一处构造'
+    inputs.files(captureIntentFileTree)
+
+    doLast {
+        def offenders = []
+        captureIntentSources.each { srcDir ->
+            if (!srcDir.exists()) return
+            srcDir.eachFileRecurse { f ->
+                if (f.isFile() && f.name.endsWith('.kt') &&
+                    CAPTURE_INTENT_CALL.matcher(f.text).find() && f.name != CAPTURE_INTENT_OWNER
+                ) {
+                    offenders << f.absolutePath
+                }
+            }
+        }
+        if (!offenders.isEmpty()) {
+            throw new GradleException(
+                "屏幕捕获授权 Intent 必须只在 $CAPTURE_INTENT_OWNER 中构造，" +
+                    "以下文件自行构造了一份（两条入口会给出不同捕获范围）：\n" +
+                    offenders.collect { "  ${it}" }.join("\n") +
+                    "\n请改为调用 MediaProjectionManager.newScreenCaptureIntent()。"
+            )
+        }
+        logger.lifecycle("checkCaptureIntentConstruction: 授权 Intent 构造点唯一（$CAPTURE_INTENT_OWNER）")
+    }
+}
+tasks.named('check') { dependsOn 'checkCaptureIntentConstruction' }
+tasks.matching { it.name == 'lintDebug' }.configureEach {
+    dependsOn 'checkCaptureIntentConstruction'
+}
+
+// ---- 「仅诊断用」计数器必须真的有诊断出口 ----
+// 规则：任何以 `/** … 仅诊断用 … */` 之类的诊断性 KDoc 声明的计数器，必须在 app/src/main 下
+// 至少有一个**读点**（不是声明、不是自增、不是归零）。否则它对现场排查毫无用处——
+// SegmentRingBuffer.forcedCutCount 曾长期处于这种状态：注释写着"仅诊断用"，
+// 生产代码只有声明/自增/归零三处，读它的只有测试，于是用户报「回放开头花屏」时
+// 日志里拿不到「编码器是否始终不补发关键帧」这个关键读数。
+// 把这个不变式变成会失败的断言：新增此类计数器而忘了接日志，构建即失败。
+tasks.register('checkDiagnosticCountersAreRead') {
+    group = 'verification'
+    description = '校验标注为「仅诊断用」的计数器在 app/src/main 下确有读点'
+
+    inputs.files(captureIntentFileTree)
+
+    doLast {
+        // 声明形态：先找「含『仅诊断用』的 KDoc」，再在其后若干行内找 `var <name>: <Type>`
+        // （中间可能夹着 @Volatile 之类的注解）。
+        // 逐行扫描而非用多行正则：Groovy 里 `^...$` 作用于整段文本时行为不符合直觉，
+        // 早先的整段匹配版本会把空行当成读点，使断言恒为通过（假绿）。
+        // 读点在**整个 app/src/main** 里找，不限声明所在文件——
+        // 计数器常声明在数据层、消费在保存/日志层（forcedCutCount 即如此）。
+        def mainSources = []   // [fileName, lines]
+        captureIntentSources.each { srcDir ->
+            if (!srcDir.exists()) return
+            srcDir.eachFileRecurse { f ->
+                if (f.isFile() && f.name.endsWith('.kt')) {
+                    mainSources << [f.name, f.readLines('UTF-8')]
+                }
+            }
+        }
+        def kdocRe = ~/仅诊断用/
+        def declRe = ~/^\s*(?:@\w+\s*)?(?:private\s+|internal\s+|public\s+)?var\s+(\w+)\s*:/
+        def offenders = []
+        def checked = []
+        mainSources.each { entry ->
+            def declFile = entry[0]
+            def lines = entry[1]
+            for (int i = 0; i < lines.size(); i++) {
+                if (!kdocRe.matcher(lines[i]).find()) continue
+                // 从 KDoc 之后开始找声明，最多看 6 行（跨 @Volatile 之类注解）
+                def name = null
+                for (int j = i + 1; j < Math.min(i + 7, lines.size()); j++) {
+                    def mm = declRe.matcher(lines[j])
+                    if (mm.find()) { name = mm.group(1); break }
+                }
+                if (name == null) continue
+                checked << name
+                // 读点：整个 app/src/main 内出现此名，且既不是声明行、也不是纯自增/自减/赋值/累加
+                def reads = []
+                mainSources.each { e2 ->
+                    e2[1].each { raw ->
+                        def t = raw.trim()
+                        if (t.startsWith('//') || t.startsWith('*') || t.startsWith('/*')) return
+                        if (!t.contains(name)) return
+                        def asDecl = declRe.matcher(raw)
+                        if (asDecl.find() && asDecl.group(1) == name) return
+                        if (t ==~ /${java.util.regex.Pattern.quote(name)}\s*(\+\+|--)/) return
+                        if (t ==~ /${java.util.regex.Pattern.quote(name)}\s*=[^=].*/) return
+                        if (t ==~ /${java.util.regex.Pattern.quote(name)}\s*\+=.*/) return
+                        reads << "${e2[0]}: ${t}"
+                    }
+                }
+                if (reads.isEmpty()) {
+                    offenders << "${declFile}: $name（仅声明/自增/归零，全仓无读点）"
+                } else {
+                    logger.lifecycle("  $name -> ${reads.size()} 处读点，例如 ${reads.first()}")
+                }
+            }
+        }
+        if (!offenders.isEmpty()) {
+            throw new GradleException(
+                "以下计数器标注为「仅诊断用」，但在 app/src/main 下没有任何读点，" +
+                    "现场排查时拿不到该读数：\n" +
+                    offenders.collect { "  ${it}" }.join("\n") +
+                    "\n请把它接进日志（或删掉该计数器与注释）。"
+            )
+        }
+        logger.lifecycle(
+            "checkDiagnosticCountersAreRead: ${checked.size()} 个诊断计数器均有读点" +
+                (checked.isEmpty() ? "（未发现此类声明）" : "（${checked.join(', ')}）")
+        )
+    }
+}
+tasks.named('check') { dependsOn 'checkDiagnosticCountersAreRead' }
+tasks.matching { it.name == 'lintDebug' }.configureEach {
+    dependsOn 'checkDiagnosticCountersAreRead'
+}
+
+// 让文档里的常规门禁命令真正做到它声称的事。
+// 原先只挂 check，而 `lintDebug` / `assembleDebug` **都不依赖 check**
+// （`./gradlew lintDebug --dry-run` 只列出 checkDebugAarMetadata 与 lintDebug），
+// 于是 `./gradlew assembleDebug testDebugUnitTest lintDebug assembleRelease`
+// 这条 README 与 CI 都推荐的门禁**从不执行版本校验**——
+// 本地跑绿了也说明不了声明与实际一致。CI 之所以没漏，是因为它另外点了名。
+// verifyThirdPartyVersions 只读配置不编译，挂上去的代价可忽略。
+tasks.matching { it.name == 'lintDebug' }.configureEach {
+    dependsOn 'verifyThirdPartyVersions'
+}

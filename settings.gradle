@@ -1,0 +1,25 @@
+// 插件仓库：阿里云镜像优先（国内访问加速），官方仓库兜底。
+pluginManagement {
+    repositories {
+        maven { url = uri('https://maven.aliyun.com/repository/google') }
+        maven { url = uri('https://maven.aliyun.com/repository/public') }
+        maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+// 依赖仓库：禁止子项目自建仓库，统一由根项目解析。
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven { url = uri('https://maven.aliyun.com/repository/google') }
+        maven { url = uri('https://maven.aliyun.com/repository/public') }
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "HighlightReplay"
+include ':app'

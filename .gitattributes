@@ -1,0 +1,13 @@
+# 统一行尾：仓库内文本一律 LF，各平台 checkout 后保持一致（Linux CI 直接执行 gradlew）。
+* text=auto eol=lf
+
+# 批处理文件保持 CRLF（Windows cmd 兼容）。
+*.bat text eol=crlf
+
+# 二进制文件不做任何行尾转换。
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.jar binary

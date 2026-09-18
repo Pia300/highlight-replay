@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 12+ 的备份/换机规则。
+  排除 tag_prefs：标签以 MediaStore _ID 为键，跨设备或媒体库重建后 ID 不一致，
+  恢复过来会造成标签错配（宁可丢标签，也不要把标签挂到错误的视频上）。
+  排除 prompt_state：引导标记描述本机状态，而权限不随备份迁移，恢复后新设备会跳过引导。
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="tag_prefs.xml" />
+        <exclude domain="sharedpref" path="prompt_state.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="tag_prefs.xml" />
+        <exclude domain="sharedpref" path="prompt_state.xml" />
+    </device-transfer>
+</data-extraction-rules>

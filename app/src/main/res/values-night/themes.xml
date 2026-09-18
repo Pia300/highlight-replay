@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 应用夜间基础主题：无操作栏的深色 Material 样式。 -->
+    <style name="Theme.HighlightReplay" parent="@android:style/Theme.Material.NoActionBar" />
+</resources>

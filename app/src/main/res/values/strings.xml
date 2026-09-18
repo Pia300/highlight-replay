@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Highlight Replay</string>
+
+    <string name="notification_channel_name">Recording service</string>
+    <string name="notification_channel_description">Screen recording control notification</string>
+    <string name="notification_recording_title">Recording</string>
+
+    <string name="toast_replay_saved">Replay saved</string>
+    <string name="toast_permission_denied">Permission denied</string>
+
+    <string name="notif_btn_replay">Save</string>
+    <string name="notif_btn_stop">Stop</string>
+
+
+
+    <string name="tab_control">Console</string>
+    <string name="tab_history">Replays</string>
+    <string name="tab_settings">Settings</string>
+
+    <string name="notif_stream_video_ok">Video OK</string>
+    <string name="notif_stream_video_dead">Video lost</string>
+    <string name="notif_stream_audio_ok">Audio OK</string>
+    <string name="notif_stream_audio_dead">No audio input</string>
+    <string name="notif_stream_audio_off">Audio disabled</string>
+    <string name="notif_status_combined">%1$s, %2$s</string>
+
+    <string name="tile_start_recording">Start recording</string>
+    <string name="tile_recording">Recording</string>
+    <string name="tile_starting">Starting…</string>
+
+    <string name="control_start_recording">Start recording</string>
+    <string name="control_stop_recording">Stop recording</string>
+    <string name="control_saving">Saving…</string>
+    <string name="control_save_replay">Save replay</string>
+    <string name="control_settings_changed_hint">Recording settings changed. Stop and start again to apply.</string>
+    <string name="control_recording_duration">Recording duration %1$s</string>
+    <string name="control_status_saving">Saving replay…</string>
+    <string name="control_status_recording">Recording</string>
+    <string name="control_status_ready">Ready</string>
+    <string name="control_status_saving_sub">Writing the replay clip to the media library</string>
+    <string name="control_status_recording_sub">Buffering the screen. Tap Save replay to capture the moment.</string>
+    <string name="control_status_ready_sub">All set. Tap Start recording.</string>
+    <string name="control_status_combined">%1$s, %2$s</string>
+
+    <string name="settings_resolution">Resolution</string>
+    <string name="settings_frame_rate">Frame rate</string>
+    <string name="settings_video_bitrate">Video bitrate</string>
+    <string name="settings_audio_source">Audio source</string>
+    <string name="settings_replay_duration">Replay duration</string>
+    <string name="settings_resolution_720p">720p</string>
+    <string name="settings_resolution_1080p">1080p</string>
+    <string name="settings_resolution_1440p">1440p</string>
+    <string name="settings_resolution_custom">%1$dp</string>
+    <string name="settings_resolution_mode">Resolution mode</string>
+    <string name="settings_resolution_mode_adaptive">Adaptive</string>
+    <string name="settings_resolution_mode_standard">Standard</string>
+    <string name="settings_resolution_mode_standard_hint">Standard mode outputs 16:9 ratio</string>
+    <string name="settings_resolution_summary">%1$s · %2$s · %3$s</string>
+    <string name="settings_audio_internal">Internal audio</string>
+    <string name="settings_audio_internal_unsupported">System audio is not supported on this Android version; only \"No audio\" is available.</string>
+    <string name="settings_audio_none">No audio</string>
+    <string name="settings_fps">%1$d fps</string>
+    <string name="settings_mbps">%1$d Mbps</string>
+    <string name="settings_seconds">%1$ds</string>
+
+    <string name="settings_toast_notify">Toast notifications</string>
+    <string name="settings_toast_notify_enabled">Enable toast notifications</string>
+    <string name="settings_toast_notify_off_hint">No toast messages will be shown when off</string>
+
+    <string name="settings_content_rotation">Adaptive capture</string>
+    <string name="settings_content_rotation_enabled">Enable adaptive capture</string>
+    <string name="settings_content_rotation_summary">When the capture direction differs from the screen content, the content is forcibly rotated to match</string>
+
+    <string name="settings_replay_tip">If the device gets hot or stutters, or the app crashes, lower the recording settings.</string>
+
+    <string name="tile_save_replay">Save replay</string>
+    <string name="tile_floating">Floating window switch</string>
+    <string name="tile_show_floating">Show floating window</string>
+    <string name="tile_hide_floating">Hide floating window</string>
+
+    <string name="history_search_placeholder">Search replays…</string>
+    <string name="history_search_clear">Clear</string>
+    <string name="history_retry">Retry</string>
+    <string name="history_empty_refresh">Refresh</string>
+    <string name="history_item_meta">%1$s · %2$s · %3$s</string>
+    <string name="history_sort">Sort</string>
+    <string name="history_empty_search">No replays matching \"%1$s\"</string>
+    <string name="history_empty_title">No saved replays yet</string>
+    <string name="history_empty_search_hint">Try a different keyword</string>
+    <string name="history_empty_hint">Start recording, then tap \"Save replay\" to capture the moment</string>
+    <string name="history_menu_rename">Rename</string>
+    <string name="history_menu_tag">Tag</string>
+    <string name="history_menu_share">Share</string>
+    <string name="history_menu_delete">Delete</string>
+    <string name="history_play">Play</string>
+    <string name="history_more_actions">More actions</string>
+    <string name="history_rename_title">Rename</string>
+    <string name="history_rename_field_label">File name</string>
+    <string name="history_rename_hint">The .mp4 extension is added automatically</string>
+    <string name="common_confirm">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="history_exit_selection">Exit selection</string>
+    <string name="history_selected_count">Selected: %1$d</string>
+    <string name="history_select_all">Select all</string>
+    <string name="history_deselect_all">Deselect all</string>
+    <string name="history_tag_selected">Add tag</string>
+    <string name="history_delete_selected">Delete selected</string>
+    <string name="history_delete_confirm_title">Confirm deletion</string>
+    <string name="history_delete_confirm_message">Replay videos to delete: %1$d. This cannot be undone.</string>
+    <string name="history_bulk_tag_title">Add tag · selected: %1$d</string>
+    <string name="history_edit_tag_title">Edit tag · %1$s</string>
+    <string name="history_load_failed">Failed to load history</string>
+    <string name="history_delete_failed">Failed to delete. Check storage permission</string>
+    <string name="history_rename_failed">Rename failed</string>
+    <string name="history_tag_save_failed">Failed to save tags. Check storage space</string>
+    <string name="history_share_title">Share video</string>
+    <string name="history_play_failed">No app found to play this video</string>
+    <string name="history_share_failed">No app found to share this video</string>
+    <string name="history_fallback_name">video_%1$d.mp4</string>
+    <string name="history_size_mb">%.1f MB</string>
+    <string name="history_size_kb">%.0f KB</string>
+    <string name="history_size_b">%1$d B</string>
+    <string name="history_duration_seconds">%1$ds</string>
+    <string name="history_date_format">%1$04d-%2$02d-%3$02d %4$02d:%5$02d</string>
+    <string name="history_sort_date_desc">Newest first</string>
+    <string name="history_sort_date_asc">Oldest first</string>
+    <string name="history_sort_name_asc">Name A-Z</string>
+    <string name="history_sort_name_desc">Name Z-A</string>
+    <string name="history_sort_size_desc">Size: largest first</string>
+    <string name="history_sort_size_asc">Size: smallest first</string>
+
+    <string name="tag_new">New tag</string>
+    <string name="tag_default_name">Highlight Replay</string>
+    <string name="tag_chip_prefix">#%1$s</string>
+    <string name="tag_coverage_partial">Partially applied</string>
+    <string name="tag_name_label">Tag name</string>
+    <string name="tag_exists">Tag already exists</string>
+    <string name="tag_create">Create</string>
+    <string name="tag_cancel">Cancel</string>
+    <string name="tag_close">Close</string>
+    <string name="tag_delete_title">Delete tag</string>
+    <string name="tag_delete_confirm">Delete tag \"%1$s\"?\nThe tag will be removed from all videos.</string>
+    <string name="tag_delete">Delete</string>
+    <string name="tag_done">Done</string>
+
+    <string name="settings_section_video">Video settings</string>
+    <string name="settings_codec">Encoder</string>
+    <string name="settings_codec_h264">H.264 (AVC)</string>
+    <string name="settings_codec_h265">H.265 (HEVC)</string>
+    <string name="settings_encoder_type">Encoder type</string>
+    <string name="settings_encoder_hardware">Hardware</string>
+    <string name="settings_encoder_software">Software</string>
+    <string name="settings_encoder_auto">Automatic</string>
+    <string name="settings_orientation">Recording orientation</string>
+    <string name="settings_orientation_auto">Auto-detect</string>
+    <string name="settings_orientation_portrait">Force portrait</string>
+    <string name="settings_orientation_landscape">Force landscape</string>
+    <string name="settings_fps_24">24 fps</string>
+    <string name="settings_fps_30">30 fps</string>
+    <string name="settings_fps_60">60 fps</string>
+    <string name="settings_bitrate_4">4 Mbps</string>
+    <string name="settings_bitrate_8">8 Mbps</string>
+    <string name="settings_bitrate_12">12 Mbps</string>
+    <string name="settings_bitrate_16">16 Mbps</string>
+    <string name="settings_section_audio">Audio settings</string>
+    <string name="settings_section_replay">Replay settings</string>
+    <string name="settings_replay_30s">30 sec</string>
+    <string name="settings_replay_60s">60 sec</string>
+    <string name="settings_section_general">General</string>
+    <string name="settings_section_theme">Theme</string>
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="settings_dark_system">Follow system</string>
+    <string name="settings_dark_light">Light</string>
+    <string name="settings_dark_dark">Dark</string>
+    <string name="settings_theme_color">Theme color</string>
+    <string name="settings_color_dynamic">Follow wallpaper (dynamic)</string>
+    <string name="settings_color_blue">Deep blue</string>
+    <string name="settings_color_green">Teal</string>
+    <string name="settings_color_purple">Violet</string>
+    <string name="settings_color_orange">Amber</string>
+    <string name="settings_section_about">About</string>
+    <string name="settings_section_language">Language</string>
+    <string name="settings_language_system">Follow system</string>
+    <string name="settings_language_zh_cn">Chinese (Simplified)</string>
+    <string name="settings_language_zh_tw">Chinese (Traditional)</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_language_ja">Japanese</string>
+    <string name="settings_language_ko">Korean</string>
+    <string name="settings_language_es">Spanish</string>
+    <string name="settings_language_pt">Portuguese</string>
+    <string name="settings_language_id">Indonesian</string>
+    <string name="settings_language_vi">Vietnamese</string>
+    <string name="settings_language_th">Thai</string>
+    <string name="settings_language_ru">Russian</string>
+    <string name="settings_section_permission">Permissions</string>
+    <string name="settings_notification_permission">Notification permission</string>
+    <string name="settings_notification_granted">Granted</string>
+    <string name="settings_notification_denied">Not granted; notification controls unavailable</string>
+    <string name="settings_battery_optimization">Battery optimization</string>
+    <string name="settings_battery_optimization_granted">Allowed</string>
+    <string name="settings_battery_optimization_denied">Not allowed; long recordings may be stopped by the system</string>
+    <string name="notification_permission_title">Notification permission needed</string>
+    <string name="notification_permission_message">Notification controls are the background entry point during recording. Enable notifications for this app in system settings.</string>
+    <string name="notification_permission_confirm">Go to settings</string>
+    <string name="notification_permission_dismiss">Not now</string>
+    <string name="overlay_permission_title">Overlay permission needed</string>
+    <string name="overlay_permission_message">The overlay permission is used to show the floating ball quick controls. Enable it in system settings.</string>
+    <string name="overlay_permission_confirm">Go to settings</string>
+    <string name="overlay_permission_dismiss">Not now</string>
+    <string name="settings_about_app_name">App name</string>
+    <string name="settings_about_version">Version</string>
+    <string name="settings_about_project">Project homepage</string>
+    <string name="settings_about_open_failed">Unable to open link</string>
+    <string name="settings_license">License</string>
+    <string name="settings_license_third_party_title">Third-party open-source components</string>
+    <string name="settings_license_apache">Apache License 2.0</string>
+    <string name="settings_license_jetpack_androidx">Jetpack Compose / Material 3 / AndroidX libraries</string>
+    <string name="settings_license_kotlin_stdlib">Kotlin standard library</string>
+    <string name="settings_license_kotlinx_coroutines">kotlinx.coroutines</string>
+    <string name="settings_license_remix_icon">Remix Icon (app icon)</string>
+    <string name="settings_license_highlight_recorder">highlight-recorder (buffer design reference)</string>
+    <string name="settings_license_own_title">This application\'s license</string>
+    <string name="license_gpl_label">GNU General Public License v3.0</string>
+    <string name="settings_license_open_online">Open the original license text online</string>
+    <string name="license_modified_note">App icon and Quick Settings tile icon adapted (recolored) from the Remix Icon “loop-left-ai-fill” glyph. Segment buffer design implemented with reference to highlight-recorder.</string>
+    <string name="settings_license_back">Back</string>
+
+    <string name="notification_status">Recording status</string>
+
+    <string name="service_not_connected">Recording service not connected</string>
+
+    <string name="replay_file_prefix">Replay_</string>
+    <string name="replay_saving_in_progress">Saving in progress, please wait</string>
+    <string name="replay_save_failed">Save failed: %1$s</string>
+    <string name="replay_not_enough_space">Not enough free space to save the replay. Free up some storage and try again.</string>
+    <string name="replay_buffer_empty">No data in the buffer. Make sure recording has started.</string>
+    <string name="replay_data_expired">Recording data expired (possibly taken over by another screen recorder). Restart recording.</string>
+    <string name="replay_no_keyframe">No keyframe in the save window. Try again later.</string>
+    <string name="replay_encoder_format_unavailable">Encoder output format unavailable. Try again.</string>
+    <string name="replay_create_media_failed">Unable to create media file</string>
+    <string name="replay_open_stream_failed">Unable to open output stream</string>
+    <string name="replay_error_projection_stopped">Screen recording was stopped by the system</string>
+
+    <string name="error_projection_start_rejected">The system rejected starting screen recording. Restart the app and try again.</string>
+    <string name="error_projection_unavailable">Unable to get screen recording permission</string>
+    <string name="error_recording_start_failed">Failed to start recording</string>
+    <string name="error_recording_generic">Recording error</string>
+    <string name="error_video_encoder_stalled">Video encoder stopped responding. The recording has been stopped.</string>
+    <string name="error_recorder_not_initialized">Recorder not initialized</string>
+    <string name="error_projection_terminated">Screen recording was stopped by the system. Start recording again.</string>
+    <string name="error_codec_h265_start_failed">The H.265 encoder failed to start (possibly unsupported on this device). Please switch to H.264 and try again.</string>
+    <!-- 指定编码器不可用而改用系统代选：编码器与输出尺寸都会变，用户界面上看不出差别，必须告知。 -->
+    <string name="error_encoder_fallback">The selected encoder is unavailable. Recording switched to a system-selected encoder.</string>
+    <string name="error_open_notification_settings">Cannot open notification settings. Please enable the notification permission manually in system settings.</string>
+    <string name="error_media_store_write">Media library write failed</string>
+    <string name="error_audio_permission_missing">No audio permission granted; this recording will have no sound</string>
+
+
+    <string name="notification_saving_title">Saving</string>
+    <string name="notification_saved_title">Saved</string>
+    <string name="toast_replay_saving">Saving replay…</string>
+    <string name="settings_auto_show_floating_desc">Show floating window while recording</string>
+    <string name="settings_decrease">Decrease</string>
+    <string name="settings_permission_granted">Granted</string>
+    <string name="settings_floating_size">Floating window size</string>
+    <string name="notification_toggle_floating">Toggle floating window</string>
+    <string name="floating_reset_toast">Floating window settings reset</string>
+    <string name="settings_reset_floating">Reset floating window settings</string>
+    <string name="settings_permission_denied">Not granted. Tap to enable.</string>
+    <string name="settings_range">%1$d ~ %2$d</string>
+    <string name="settings_floating_permission">Overlay permission</string>
+    <string name="notification_show_floating">Show floating window</string>
+    <string name="notification_hide_floating">Hide floating window</string>
+    <string name="settings_range_percent">%1$d ~ %2$d%%</string>
+    <string name="settings_floating_opacity">Floating window opacity</string>
+    <string name="settings_section_floating">Floating window settings</string>
+    <string name="settings_increase">Increase</string>
+    <string name="toast_stopping_recording">Stopping recording…</string>
+    <string name="toast_recording_stopped">Recording stopped</string>
+    <string name="notif_float_open_failed">Unable to open the floating window. Check the overlay permission.</string>
+    <string name="tag_color_option">Colour %1$d</string>
+    <string name="settings_storage_permission">Storage permission</string>
+</resources>
+

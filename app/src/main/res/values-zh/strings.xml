@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">精彩回录</string>
+
+    <string name="notification_channel_name">录制服务</string>
+    <string name="notification_channel_description">屏幕录制控制通知</string>
+    <string name="notification_recording_title">录制中</string>
+
+    <string name="toast_replay_saved">保存成功</string>
+    <string name="toast_permission_denied">权限被拒绝</string>
+
+    <string name="notif_btn_replay">保存</string>
+    <string name="notif_btn_stop">停止</string>
+
+
+
+
+    <string name="tab_control">控制台</string>
+    <string name="tab_history">回录</string>
+    <string name="tab_settings">设置</string>
+
+    <string name="notif_stream_video_ok">画面正常</string>
+    <string name="notif_stream_video_dead">画面中断</string>
+    <string name="notif_stream_audio_ok">声音正常</string>
+    <string name="notif_stream_audio_dead">无声音输入</string>
+    <string name="notif_stream_audio_off">未启用声音</string>
+    <string name="notif_status_combined">%1$s，%2$s</string>
+
+    <string name="tile_start_recording">开始录制</string>
+    <string name="tile_recording">录制中</string>
+    <string name="tile_starting">正在启动…</string>
+
+    <string name="control_start_recording">开始录制</string>
+    <string name="control_stop_recording">停止录制</string>
+    <string name="control_saving">正在保存…</string>
+    <string name="control_save_replay">保存回录</string>
+    <string name="control_settings_changed_hint">录制设置已修改，停止并重新录制后生效</string>
+    <string name="control_recording_duration">录制时长 %1$s</string>
+
+    <string name="control_status_saving">正在保存回录…</string>
+    <string name="control_status_recording">正在录制</string>
+    <string name="control_status_ready">准备就绪</string>
+    <string name="control_status_saving_sub">正在把回录片段写入媒体库</string>
+    <string name="control_status_recording_sub">正在缓冲屏幕画面，点击保存回录精彩瞬间</string>
+    <string name="control_status_ready_sub">一切就绪，点击开始录制</string>
+
+    <string name="control_status_combined">%1$s，%2$s</string>
+
+    <string name="settings_resolution">分辨率</string>
+    <string name="settings_frame_rate">帧率</string>
+    <string name="settings_video_bitrate">视频码率</string>
+    <string name="settings_audio_source">音频来源</string>
+    <string name="settings_replay_duration">回录时长</string>
+    <string name="settings_resolution_720p">720p</string>
+    <string name="settings_resolution_1080p">1080p</string>
+    <string name="settings_resolution_1440p">1440p</string>
+    <string name="settings_resolution_custom">%1$dp</string>
+    <string name="settings_resolution_mode">分辨率模式</string>
+    <string name="settings_resolution_mode_adaptive">自适应</string>
+    <string name="settings_resolution_mode_standard">标准</string>
+    <string name="settings_resolution_mode_standard_hint">标准模式输出 16:9 比例</string>
+
+    <string name="settings_resolution_summary">%1$s · %2$s · %3$s</string>
+    <string name="settings_audio_internal">系统内录</string>
+    <string name="settings_audio_internal_unsupported">当前系统版本不支持系统内录，已仅提供"无音频"选项。</string>
+    <string name="settings_audio_none">无音频</string>
+    <string name="settings_fps">%1$d fps</string>
+    <string name="settings_mbps">%1$d Mbps</string>
+    <string name="settings_seconds">%1$d 秒</string>
+
+    <string name="settings_toast_notify">Toast 提示</string>
+    <string name="settings_toast_notify_enabled">启用 Toast 提示</string>
+    <string name="settings_toast_notify_off_hint">关闭后将没有 Toast 提示</string>
+
+    <string name="settings_content_rotation">录屏自适应</string>
+    <string name="settings_content_rotation_enabled">启用录屏自适应</string>
+    <string name="settings_content_rotation_summary">录制方向与屏幕内容方向不一致时，内容强制旋转对齐</string>
+
+    <string name="settings_replay_tip">如果遇到设备发热卡顿，程序崩溃退出，请调低录制参数</string>
+
+    <string name="tile_save_replay">保存回录</string>
+    <string name="tile_floating">悬浮窗开关</string>
+    <string name="tile_show_floating">显示悬浮窗</string>
+    <string name="tile_hide_floating">隐藏悬浮窗</string>
+
+    <string name="history_search_placeholder">搜索回录…</string>
+    <string name="history_search_clear">清空</string>
+    <string name="history_retry">重试</string>
+    <string name="history_empty_refresh">刷新</string>
+    <string name="history_item_meta">%1$s · %2$s · %3$s</string>
+    <string name="history_sort">排序</string>
+    <string name="history_empty_search">没有匹配「%1$s」的回录</string>
+    <string name="history_empty_title">还没有保存的回录片段</string>
+    <string name="history_empty_search_hint">试试其他关键字</string>
+    <string name="history_empty_hint">开始录制后点击「保存回录」保存精彩瞬间</string>
+    <string name="history_menu_rename">重命名</string>
+    <string name="history_menu_tag">标签</string>
+    <string name="history_menu_share">分享</string>
+    <string name="history_menu_delete">删除</string>
+    <string name="history_play">播放</string>
+    <string name="history_more_actions">更多操作</string>
+    <string name="history_rename_title">重命名</string>
+    <string name="history_rename_field_label">文件名</string>
+    <string name="history_rename_hint">会自动添加 .mp4 扩展名</string>
+    <string name="common_confirm">确定</string>
+    <string name="common_cancel">取消</string>
+    <string name="history_exit_selection">退出多选</string>
+    <string name="history_selected_count">已选 %1$d 项</string>
+    <string name="history_select_all">全选</string>
+    <string name="history_deselect_all">取消全选</string>
+    <string name="history_tag_selected">打标签</string>
+    <string name="history_delete_selected">删除选中</string>
+    <string name="history_delete_confirm_title">确认删除</string>
+    <string name="history_delete_confirm_message">将删除 %1$d 个回录视频，删除后无法恢复。</string>
+    <string name="history_bulk_tag_title">打标签 · 已选 %1$d 个回录</string>
+    <string name="history_edit_tag_title">编辑标签 · %1$s</string>
+    <string name="history_load_failed">加载历史失败</string>
+    <string name="history_delete_failed">删除失败，请检查存储权限</string>
+    <string name="history_rename_failed">重命名失败</string>
+    <string name="history_tag_save_failed">标签保存失败，请检查存储空间</string>
+    <string name="history_share_title">分享视频</string>
+    <string name="history_play_failed">未找到可播放视频的应用</string>
+    <string name="history_share_failed">未找到可分享视频的应用</string>
+    <string name="history_fallback_name">video_%1$d.mp4</string>
+
+    <string name="history_size_mb">%.1f MB</string>
+    <string name="history_size_kb">%.0f KB</string>
+    <string name="history_size_b">%1$d B</string>
+    <string name="history_duration_seconds">%1$d 秒</string>
+    <string name="history_date_format">%1$04d-%2$02d-%3$02d %4$02d:%5$02d</string>
+
+    <string name="history_sort_date_desc">最新优先</string>
+    <string name="history_sort_date_asc">最早优先</string>
+    <string name="history_sort_name_asc">名称 A-Z</string>
+    <string name="history_sort_name_desc">名称 Z-A</string>
+    <string name="history_sort_size_desc">大小从大到小</string>
+    <string name="history_sort_size_asc">大小从小到大</string>
+
+    <string name="tag_new">新建标签</string>
+    <string name="tag_default_name">精彩回录</string>
+    <string name="tag_chip_prefix">#%1$s</string>
+    <string name="tag_coverage_partial">部分应用</string>
+    <string name="tag_name_label">标签名称</string>
+    <string name="tag_exists">标签已存在</string>
+    <string name="tag_create">创建</string>
+    <string name="tag_cancel">取消</string>
+    <string name="tag_close">关闭</string>
+    <string name="tag_delete_title">删除标签</string>
+    <string name="tag_delete_confirm">确定删除标签「%1$s」吗？\n该标签将从所有视频上移除。</string>
+    <string name="tag_delete">删除</string>
+    <string name="tag_done">完成</string>
+
+    <string name="settings_section_video">视频设置</string>
+    <string name="settings_codec">编码器</string>
+    <string name="settings_codec_h264">H.264 (AVC)</string>
+    <string name="settings_codec_h265">H.265 (HEVC)</string>
+    <string name="settings_encoder_type">编码器类型</string>
+    <string name="settings_encoder_hardware">硬件</string>
+    <string name="settings_encoder_software">软件</string>
+    <string name="settings_encoder_auto">自动</string>
+    <string name="settings_orientation">录制方向</string>
+    <string name="settings_orientation_auto">自动检测</string>
+    <string name="settings_orientation_portrait">强制竖屏</string>
+    <string name="settings_orientation_landscape">强制横屏</string>
+    <string name="settings_fps_24">24 fps</string>
+    <string name="settings_fps_30">30 fps</string>
+    <string name="settings_fps_60">60 fps</string>
+    <string name="settings_bitrate_4">4 Mbps</string>
+    <string name="settings_bitrate_8">8 Mbps</string>
+    <string name="settings_bitrate_12">12 Mbps</string>
+    <string name="settings_bitrate_16">16 Mbps</string>
+    <string name="settings_section_audio">音频设置</string>
+    <string name="settings_section_replay">回录设置</string>
+    <string name="settings_replay_30s">30 秒</string>
+    <string name="settings_replay_60s">60 秒</string>
+    <string name="settings_section_general">通用</string>
+    <string name="settings_section_theme">主题</string>
+    <string name="settings_dark_mode">深色模式</string>
+    <string name="settings_dark_system">跟随系统</string>
+    <string name="settings_dark_light">浅色</string>
+    <string name="settings_dark_dark">深色</string>
+    <string name="settings_theme_color">主题颜色</string>
+    <string name="settings_color_dynamic">跟随壁纸（动态）</string>
+    <string name="settings_color_blue">深蓝</string>
+    <string name="settings_color_green">青绿</string>
+    <string name="settings_color_purple">紫罗兰</string>
+    <string name="settings_color_orange">琥珀</string>
+    <string name="settings_section_about">关于</string>
+    <string name="settings_section_language">语言</string>
+    <string name="settings_language_system">跟随系统</string>
+    <string name="settings_language_zh_cn">简体中文</string>
+    <string name="settings_language_zh_tw">繁體中文</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_language_ja">日语</string>
+    <string name="settings_language_ko">韩语</string>
+    <string name="settings_language_es">西班牙语</string>
+    <string name="settings_language_pt">葡萄牙语</string>
+    <string name="settings_language_id">印尼语</string>
+    <string name="settings_language_vi">越南语</string>
+    <string name="settings_language_th">泰语</string>
+    <string name="settings_language_ru">俄语</string>
+    <string name="settings_section_permission">权限</string>
+    <string name="settings_notification_permission">通知权限</string>
+    <string name="settings_notification_granted">已开启</string>
+    <string name="settings_notification_denied">未开启，通知栏控制不可用</string>
+    <string name="settings_battery_optimization">电池优化</string>
+    <string name="settings_battery_optimization_granted">已允许</string>
+    <string name="settings_battery_optimization_denied">未允许，长时间录制可能被系统终止</string>
+    <string name="notification_permission_title">需要通知权限</string>
+    <string name="notification_permission_message">通知栏控制是录制期间的后台控制入口。请在系统设置中开启本应用的通知权限。</string>
+    <string name="notification_permission_confirm">去设置</string>
+    <string name="notification_permission_dismiss">暂不</string>
+    <string name="overlay_permission_title">需要悬浮窗权限</string>
+    <string name="overlay_permission_message">悬浮窗权限用于显示悬浮球快速控制按钮。请在系统设置中开启。</string>
+    <string name="overlay_permission_confirm">去设置</string>
+    <string name="overlay_permission_dismiss">暂不</string>
+    <string name="settings_about_app_name">应用名称</string>
+    <string name="settings_about_version">版本</string>
+    <string name="settings_about_project">项目主页</string>
+    <string name="settings_about_open_failed">无法打开链接</string>
+    <string name="settings_license">许可证</string>
+    <string name="settings_license_third_party_title">第三方开源组件</string>
+    <string name="settings_license_apache">Apache License 2.0</string>
+    <string name="settings_license_jetpack_androidx">Jetpack Compose / Material 3 / AndroidX 库</string>
+    <string name="settings_license_kotlin_stdlib">Kotlin 标准库</string>
+    <string name="settings_license_kotlinx_coroutines">kotlinx.coroutines</string>
+    <string name="settings_license_remix_icon">Remix Icon（应用图标）</string>
+    <string name="settings_license_highlight_recorder">highlight-recorder（缓冲设计参考）</string>
+    <string name="settings_license_own_title">本应用的许可证</string>
+    <string name="license_gpl_label">GNU General Public License v3.0</string>
+    <string name="settings_license_open_online">在线查看许可证原文</string>
+    <string name="license_modified_note">应用图标与快捷设置磁贴图标改编自 Remix Icon 的 “loop-left-ai-fill” 图形（已改色）；分片缓冲设计参考 highlight-recorder 实现。</string>
+    <string name="settings_license_back">返回</string>
+
+    <string name="notification_status">录制状态</string>
+
+    <string name="service_not_connected">录制服务未连接</string>
+
+    <string name="replay_file_prefix">Replay_</string>
+    <string name="replay_saving_in_progress">正在保存中，请稍候</string>
+    <string name="replay_save_failed">保存失败: %1$s</string>
+    <string name="replay_not_enough_space">存储空间不足，无法保存回放。请清理空间后重试。</string>
+    <string name="replay_buffer_empty">缓冲区没有数据，请确认录制已启动</string>
+    <string name="replay_data_expired">录制数据已过期（可能被其他录屏软件抢占），请重新启动录制</string>
+    <string name="replay_no_keyframe">保存窗口内没有关键帧，请稍后再试</string>
+    <string name="replay_encoder_format_unavailable">编码器输出格式不可用，请重试</string>
+    <string name="replay_create_media_failed">无法创建媒体文件</string>
+    <string name="replay_open_stream_failed">无法打开输出流</string>
+    <string name="replay_error_projection_stopped">屏幕录制被系统终止</string>
+
+    <string name="error_projection_start_rejected">系统拒绝了屏幕录制启动，请重启应用后重试</string>
+    <string name="error_projection_unavailable">无法获取屏幕录制权限</string>
+    <string name="error_recording_start_failed">录制启动失败</string>
+    <string name="error_recording_generic">录制错误</string>
+    <string name="error_video_encoder_stalled">视频编码器已停止响应，录制已停止。</string>
+    <string name="error_recorder_not_initialized">录制器未初始化</string>
+    <string name="error_projection_terminated">屏幕录制已被系统终止，请重新启动录制</string>
+    <string name="error_codec_h265_start_failed">H.265 编码器启动失败（该设备可能不支持），请改用 H.264 后重试</string>
+    <!-- 指定编码器不可用而改用系统代选：编码器与输出尺寸都会变，用户界面上看不出差别，必须告知。 -->
+    <string name="error_encoder_fallback">所选编码器不可用，已改用系统选定的编码器。</string>
+    <string name="error_open_notification_settings">无法打开通知设置，请在系统设置中手动开启通知权限</string>
+    <string name="error_media_store_write">写入媒体库失败</string>
+    <string name="error_audio_permission_missing">未授予录音权限，本次录制将不包含声音</string>
+
+
+    <string name="notification_saving_title">保存中</string>
+    <string name="notification_saved_title">已保存</string>
+    <string name="toast_replay_saving">正在保存回录…</string>
+    <string name="settings_auto_show_floating_desc">录制时显示悬浮窗</string>
+    <string name="settings_decrease">减小</string>
+    <string name="settings_permission_granted">已授权</string>
+    <string name="settings_floating_size">悬浮窗大小</string>
+    <string name="notification_toggle_floating">切换悬浮窗</string>
+    <string name="floating_reset_toast">悬浮窗设置已重置</string>
+    <string name="settings_reset_floating">重置悬浮窗设置</string>
+    <string name="settings_permission_denied">未授权，点击去开启</string>
+    <string name="settings_range">%1$d ~ %2$d</string>
+    <string name="settings_floating_permission">悬浮窗权限</string>
+    <string name="notification_show_floating">打开悬浮窗</string>
+    <string name="notification_hide_floating">关闭悬浮窗</string>
+    <string name="settings_range_percent">%1$d ~ %2$d%%</string>
+    <string name="settings_floating_opacity">悬浮窗透明度</string>
+    <string name="settings_section_floating">悬浮窗设置</string>
+    <string name="settings_increase">增大</string>
+    <string name="toast_stopping_recording">正在停止录制…</string>
+    <string name="toast_recording_stopped">已停止录制</string>
+    <string name="notif_float_open_failed">无法打开悬浮窗，请检查悬浮窗权限</string>
+    <string name="tag_color_option">颜色 %1$d</string>
+    <string name="settings_storage_permission">存储权限</string>
+</resources>
+

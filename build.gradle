@@ -1,0 +1,6 @@
+// 根项目：只声明插件版本，不在此应用；模块自行应用。
+plugins {
+    id 'com.android.application' version '9.4.0' apply false
+    // Compose 编译器插件版本必须与 Kotlin 一致；AGP 9 内建 Kotlin，不再声明 kotlin.android。
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.4.20' apply false
+}

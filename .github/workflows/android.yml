@@ -29,7 +29,8 @@ jobs:
         with:
           # 显式安装并锁定构建所需组件，避免依赖 AGP 在构建期自动下载（受 30 分钟超时约束）。
           # 注意 Android 37 起平台包改为次版本号模型，包名是 platforms;android-37.0 而非 android-37。
-          packages: 'platforms;android-37.0,build-tools;37.0.0'
+          # 该 action 按空格拆分 packages：多个组件须以空格分隔，逗号会被合并成单个参数导致 sdkmanager 找不到包。
+          packages: 'platforms;android-37.0 build-tools;37.0.0'
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -102,7 +103,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: 'platforms;android-37.0,build-tools;37.0.0'
+          packages: 'platforms;android-37.0 build-tools;37.0.0'
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4

@@ -45,6 +45,8 @@ class RecorderServiceBinding(
 
     private var isBound = false
 
+    private var bindRequested = false
+
     /** Activity 已停止：此后到达的连接回调须立即解绑，避免绑定滞留在已停止的界面（服务因此无法销毁）。 */
     private var stopped = false
 
@@ -70,41 +72,42 @@ class RecorderServiceBinding(
             val binder = service as? RecorderService.LocalBinder ?: return
             recorderService = binder.getService()
             isBound = true
+            bindRequested = false
             // 连接成功即重置重试计数。
             bindAttempts = 0
 
             // 连接后立即同步一次录制状态。
             onRecorderState(RecorderService.currentState())
-
-            // 先取消旧的收集任务，避免重复订阅。
-            stateCollectJob?.cancel()
-            stateCollectJob = activity.lifecycleScope.launch {
-                RecorderService.stateFlow.collect { s ->
-                    onRecorderState(s)
-                }
-            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            // 系统断开连接（防御性处理）：先取消状态收集并清空引用，避免残留回调写回过期状态。
-            stateCollectJob?.cancel()
-            stateCollectJob = null
-            onDisconnectedReset()
-            recorderService = null
-            if (isBound) {
-                isBound = false
-                // 解除已失效的绑定，避免后续 bindService 被拒或产生重复回调。
-                try {
-                    activity.unbindService(serviceConnection)
-                } catch (_: Exception) {
-                    // 绑定已失效时再次解绑会抛异常，忽略即可。
-                }
+            handleBindingLost()
+        }
+
+        override fun onBindingDied(name: ComponentName?) {
+            handleBindingLost()
+        }
+    }
+
+    private fun handleBindingLost() {
+        // 系统断开连接（防御性处理）：清空引用，避免残留回调写回过期状态。
+        onDisconnectedReset()
+        recorderService = null
+        val hadBinding = isBound || bindRequested
+        isBound = false
+        bindRequested = false
+        if (hadBinding) {
+            // 解除已失效的绑定，避免后续 bindService 被拒或产生重复回调。
+            try {
+                activity.unbindService(serviceConnection)
+            } catch (_: Exception) {
+                // 绑定已失效时再次解绑会抛异常，忽略即可。
             }
-            // 会话仍在运行时重新发起绑定（受 MAX_BIND_ATTEMPTS 上限约束）。
-            if (RecorderService.isRunning) {
-                bindAttempts = 0
-                tryBindService()
-            }
+        }
+        // 会话仍在运行且界面未停止时重新发起绑定（受 MAX_BIND_ATTEMPTS 上限约束）。
+        if (!stopped && RecorderService.isRunning) {
+            bindAttempts = 0
+            tryBindService()
         }
     }
 
@@ -130,12 +133,28 @@ class RecorderServiceBinding(
         activity.window.decorView.removeCallbacks(tryBindRunnable)
     }
 
+    fun startStateSync() {
+        stopped = false
+        stateCollectJob?.cancel()
+        stateCollectJob = activity.lifecycleScope.launch {
+            RecorderService.stateFlow.collect { s ->
+                onRecorderState(s)
+                if (s.isRunning) {
+                    if (!isBound) tryBindService()
+                } else {
+                    bindRequested = false
+                }
+            }
+        }
+    }
+
     /** 内部解绑：先取消状态收集再解绑服务，避免泄漏与重复回调。 */
     fun unbind() {
         // 先置停止标记：在途的 bindService 受理后其回调据此立即解绑。
         stopped = true
         stateCollectJob?.cancel()
         stateCollectJob = null
+        bindRequested = false
         if (isBound) {
             try {
 
@@ -153,7 +172,7 @@ class RecorderServiceBinding(
     /** 尝试绑定：仅服务运行中且未绑定时发起；失败按 [MAX_BIND_ATTEMPTS] 上限重试。 */
     private fun tryBindService() {
         if (RecorderService.isRunning) {
-            if (!isBound) {
+            if (!isBound && !bindRequested) {
                 // bindService 返回 false 表示未被受理（如服务仍在启动），按失败进入重试分支。
                 val accepted = try {
                     activity.bindService(
@@ -168,6 +187,7 @@ class RecorderServiceBinding(
                 }
                 if (accepted) {
                     // 已受理：onServiceConnected 会置 isBound 并重置计数。
+                    bindRequested = true
                     return
                 }
                 Log.w(TAG, "bindService not accepted; retrying later")
@@ -179,6 +199,7 @@ class RecorderServiceBinding(
             // 服务已停止：复位界面状态，不排定重试。
             onStoppedReset()
             recorderService = null
+            bindRequested = false
             return
         }
 

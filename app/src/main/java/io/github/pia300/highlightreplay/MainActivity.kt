@@ -261,6 +261,7 @@ class MainActivity : ComponentActivity() {
 
         // 重置计数后重新调度绑定，兼容服务仍在启动的竞态。
         serviceBinding.scheduleBind()
+        serviceBinding.startStateSync()
     }
 
     /** 退到后台：取消待绑定回调并解绑服务以释放资源。 */

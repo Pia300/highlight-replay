@@ -31,7 +31,6 @@ private val DEFAULT_INDICATOR_SIZE = 140.dp
 internal fun TopStatus(
     uiState: ControlUiState,
     statusColor: Color,
-    settingsChanged: Boolean,
     indicatorSize: Dp = DEFAULT_INDICATOR_SIZE
 ) {
     StatusIndicator(
@@ -41,7 +40,7 @@ internal fun TopStatus(
         isActive = uiState.isRecording,
         size = indicatorSize
     )
-    if (settingsChanged && uiState.isRecording) {
+    if (uiState.settingsChanged && uiState.isRecording) {
         Spacer(Modifier.height(12.dp))
         SettingsChangedBanner(modifier = Modifier.padding(horizontal = 12.dp))
     }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Immutable
 import io.github.pia300.highlightreplay.R
 
 /**
- * 控制界面的不可变 UI 状态：录制/保存标志、已录时长与错误信息。
+ * 控制界面的不可变 UI 状态：录制/保存标志、已录时长与录制中设置变更提示。
  * isRecording 与 isSaving 相互独立：保存中可与录制并存，停止时若保存未结束会出现
  * 短暂的“未录制 + 保存中”收尾窗口，此时仍按“保存中”渲染并禁用开始按钮。
  */
@@ -15,8 +15,8 @@ data class ControlUiState(
     val isRecording: Boolean = false,
     /** 是否正在保存录制结果。 */
     val isSaving: Boolean = false,
-    /** 最近一次错误信息，无错误时为 null。 */
-    val errorMessage: String? = null,
+    /** 录制中是否修改过设置（停止后重新录制才生效）。 */
+    val settingsChanged: Boolean = false,
     /** 已录制时长（秒）。 */
     val elapsedSeconds: Long = 0L
 ) {

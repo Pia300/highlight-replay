@@ -116,7 +116,6 @@ internal fun TabContent(
     onLicenseOpen: () -> Unit,
     onLicenseClose: () -> Unit,
     onHistorySelectionChange: (Boolean) -> Unit,
-    settingsChanged: Boolean,
     uiState: () -> ControlUiState,
     onStartRecording: () -> Unit,
     onStopRecording: () -> Unit,
@@ -143,7 +142,6 @@ internal fun TabContent(
                 onStartRecording = onStartRecording,
                 onStopRecording = onStopRecording,
                 onSaveReplay = onSaveReplay,
-                settingsChanged = settingsChanged,
                 modifier = modifier
             )
         }

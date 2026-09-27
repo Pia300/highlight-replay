@@ -51,7 +51,6 @@ private fun SettingsSummary(
 internal fun LandscapeControlLayout(
     uiState: ControlUiState,
     statusColor: Color,
-    settingsChanged: Boolean,
     onStartRecording: () -> Unit,
     onStopRecording: () -> Unit,
     onSaveReplay: () -> Unit,
@@ -82,7 +81,6 @@ internal fun LandscapeControlLayout(
                     TopStatus(
                         uiState = uiState,
                         statusColor = statusColor,
-                        settingsChanged = settingsChanged,
                         indicatorSize = COMPACT_INDICATOR_SIZE
                     )
                 }
@@ -96,7 +94,6 @@ internal fun LandscapeControlLayout(
                     TopStatus(
                         uiState = uiState,
                         statusColor = statusColor,
-                        settingsChanged = settingsChanged,
                         indicatorSize = LANDSCAPE_INDICATOR_SIZE
                     )
                 }
@@ -165,7 +162,6 @@ internal fun LandscapeControlLayout(
 internal fun PortraitControlLayout(
     uiState: ControlUiState,
     statusColor: Color,
-    settingsChanged: Boolean,
     onStartRecording: () -> Unit,
     onStopRecording: () -> Unit,
     onSaveReplay: () -> Unit,
@@ -200,7 +196,6 @@ internal fun PortraitControlLayout(
                         TopStatus(
                             uiState = uiState,
                             statusColor = statusColor,
-                            settingsChanged = settingsChanged,
                             indicatorSize = COMPACT_INDICATOR_SIZE
                         )
                     }
@@ -238,8 +233,7 @@ internal fun PortraitControlLayout(
                     ) {
                         TopStatus(
                             uiState = uiState,
-                            statusColor = statusColor,
-                            settingsChanged = settingsChanged
+                            statusColor = statusColor
                         )
                     }
                 }

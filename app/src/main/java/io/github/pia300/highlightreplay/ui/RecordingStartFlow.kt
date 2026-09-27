@@ -31,23 +31,19 @@ import io.github.pia300.highlightreplay.service.RecorderService
  * 使活动结果回调在 Activity 进入 STARTED 前完成注册。
  *
  * @param activity 宿主 Activity，提供权限申请、系统页跳转与服务启动。
- * @param recorderService 已连接的录制服务；未连接时为 null。
  * @param setContinueAfterPermissions 置「权限结果后继续投影授权」标记。
  * @param shouldContinueProjection 读取「权限结果后继续投影授权」标记。
  * @param onContinueConsumed 消费「权限结果后继续投影授权」标记。
  * @param onNotificationRationale 通知权限被拒时展示说明弹窗。
  * @param onOverlayRationale 悬浮窗权限被拒时展示说明弹窗。
- * @param onScheduleBindAfterStart 录制服务启动后延迟重试绑定。
  */
 class RecordingStartFlow(
     private val activity: ComponentActivity,
-    private val recorderService: () -> RecorderService?,
     private val setContinueAfterPermissions: (Boolean) -> Unit,
     private val shouldContinueProjection: () -> Boolean,
     private val onContinueConsumed: () -> Unit,
     private val onNotificationRationale: () -> Unit,
-    private val onOverlayRationale: () -> Unit,
-    private val onScheduleBindAfterStart: () -> Unit
+    private val onOverlayRationale: () -> Unit
 ) {
 
     /** 日志标签；首装引导标记键定义在 data/PromptPrefs.kt。 */
@@ -129,7 +125,7 @@ class RecordingStartFlow(
                     activity.startForegroundService(this)
                 }
             } catch (e: Exception) {
-                // 前台服务启动失败：记日志、提示用户并刷新磁贴，不再排定绑定重试。
+                // 前台服务启动失败：记日志、提示用户并刷新磁贴。
                 Log.e(TAG, "Failed to start recorder service: ${e.message}", e)
                 ToastCenter.show(activity, R.string.error_recording_start_failed, Toast.LENGTH_SHORT)
                 activity.sendBroadcast(Intent(RecorderService.ACTION_TILE_UPDATE).apply {
@@ -137,9 +133,6 @@ class RecordingStartFlow(
                 })
                 return@registerForActivityResult
             }
-
-            // 服务可能仍在启动，延迟 1 秒再尝试绑定。
-            onScheduleBindAfterStart()
         } else {
 
             // 用户拒绝授权：提示并刷新快捷设置磁贴。
@@ -273,21 +266,4 @@ class RecordingStartFlow(
      */
     private fun createCaptureIntent(projectionManager: MediaProjectionManager): Intent =
         projectionManager.newScreenCaptureIntent()
-
-    /** 停止录制；悬浮球与状态复位由录制服务统一处理。 */
-    fun stopRecording() {
-        val service = recorderService()
-        if (service != null) {
-            service.stop()
-        } else {
-            // 绑定失效兜底：与磁贴/通知路径一致，经 startService 下发停止命令。
-            try {
-                activity.startService(Intent(activity, RecorderService::class.java).apply {
-                    action = RecorderService.ACTION_STOP
-                })
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to start recorder service for stop: ${e.message}", e)
-            }
-        }
-    }
 }

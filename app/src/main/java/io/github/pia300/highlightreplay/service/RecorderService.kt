@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.os.Binder
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -170,8 +169,6 @@ class RecorderService : Service() {
     @Volatile
     private var sessionTearingDown = false
 
-    private val binder = LocalBinder()
-
     /**
      * 「画面是否活跃」的唯一判据（单一来源）。
      *
@@ -249,7 +246,7 @@ class RecorderService : Service() {
         NotificationFactory.createChannel(this)
     }
 
-    override fun onBind(intent: Intent?): IBinder = binder
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
         super.onDestroy()
@@ -691,14 +688,4 @@ class RecorderService : Service() {
     private var systemStopNotified = false
 
     private fun str(resId: Int): String = LanguagePrefs.string(this, resId)
-
-    // ---------------- 对外绑定 API ----------------
-
-    inner class LocalBinder : Binder() {
-        fun getService(): RecorderService = this@RecorderService
-    }
-
-    fun saveReplay() = replaySaveCoordinator.triggerReplay()
-
-    fun stop() = safeStopRecording()
 }

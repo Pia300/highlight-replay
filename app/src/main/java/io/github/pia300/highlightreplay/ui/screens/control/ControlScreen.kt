@@ -19,8 +19,7 @@ fun ControlScreen(
     onStartRecording: () -> Unit,
     onStopRecording: () -> Unit,
     onSaveReplay: () -> Unit,
-    modifier: Modifier = Modifier,
-    settingsChanged: Boolean = false
+    modifier: Modifier = Modifier
 ) {
 
     val darkTheme = LocalDarkTheme.current
@@ -38,7 +37,6 @@ fun ControlScreen(
         LandscapeControlLayout(
             uiState = uiState,
             statusColor = statusColor,
-            settingsChanged = settingsChanged,
             onStartRecording = onStartRecording,
             onStopRecording = onStopRecording,
             onSaveReplay = onSaveReplay,
@@ -48,7 +46,6 @@ fun ControlScreen(
         PortraitControlLayout(
             uiState = uiState,
             statusColor = statusColor,
-            settingsChanged = settingsChanged,
             onStartRecording = onStartRecording,
             onStopRecording = onStopRecording,
             onSaveReplay = onSaveReplay,

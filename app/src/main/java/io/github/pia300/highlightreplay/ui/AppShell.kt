@@ -1,6 +1,5 @@
 package io.github.pia300.highlightreplay.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -22,13 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.github.pia300.highlightreplay.R
@@ -49,7 +42,7 @@ enum class Tab(
 }
 
 /**
- * 主界面骨架：顶栏/底栏、错误提示、权限说明弹窗与导航分发。
+ * 主界面骨架：顶栏/底栏、权限说明弹窗与导航分发。
  *
  * @param currentTab 当前页签。
  * @param onTabSelected 页签切换回调（同时关闭许可证页）。
@@ -58,9 +51,7 @@ enum class Tab(
  * @param onLicenseClose 关闭许可证页。
  * @param historySelectionActive 历史页是否处于多选模式（用于隐藏顶栏）。
  * @param onHistorySelectionChange 历史页多选模式变化回调。
- * @param settingsChanged 录制中是否修改过设置。
  * @param uiState 控制页状态读取器：在组合作用域内取值，避免每秒一次的状态更新重组整个骨架。
- * @param onErrorMessageConsumed 错误信息已提示，清空状态。
  * @param onStartRecording 开始录制。
  * @param onStopRecording 停止录制。
  * @param onSaveReplay 保存回放。
@@ -86,9 +77,7 @@ fun MainScreen(
     onLicenseClose: () -> Unit,
     historySelectionActive: Boolean,
     onHistorySelectionChange: (Boolean) -> Unit,
-    settingsChanged: Boolean,
     uiState: () -> ControlUiState,
-    onErrorMessageConsumed: () -> Unit,
     onStartRecording: () -> Unit,
     onStopRecording: () -> Unit,
     onSaveReplay: () -> Unit,
@@ -104,20 +93,6 @@ fun MainScreen(
     onThemeColorChange: (String) -> Unit,
     onLanguageChange: () -> Unit
 ) {
-    val context = LocalContext.current
-
-    // 错误消息弹出 Toast 后立即清空，避免重复提示。
-    // 用 derivedStateOf 只订阅 errorMessage：否则录制中每秒一次的 uiState 更新（elapsedSeconds）
-    // 会让 MainScreen 整个作用域（Scaffold、顶栏/底栏与当前页签）每秒重复执行一次。
-    val latestUiState by rememberUpdatedState(uiState)
-    val errorMessage by remember { derivedStateOf { latestUiState().errorMessage } }
-    LaunchedEffect(errorMessage) {
-        errorMessage?.let {
-            ToastCenter.show(context, it, Toast.LENGTH_LONG)
-            onErrorMessageConsumed()
-        }
-    }
-
     Scaffold(
 
         topBar = {
@@ -163,7 +138,6 @@ fun MainScreen(
                 onLicenseOpen = onLicenseOpen,
                 onLicenseClose = onLicenseClose,
                 onHistorySelectionChange = onHistorySelectionChange,
-                settingsChanged = settingsChanged,
                 uiState = uiState,
                 onStartRecording = onStartRecording,
                 onStopRecording = onStopRecording,

@@ -15,17 +15,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.pia300.highlightreplay.data.LanguagePrefs
 import io.github.pia300.highlightreplay.data.ThemePrefs
 import io.github.pia300.highlightreplay.service.RecorderService
 import io.github.pia300.highlightreplay.ui.MainScreen
-import io.github.pia300.highlightreplay.ui.RecorderServiceBinding
 import io.github.pia300.highlightreplay.ui.RecordingStartFlow
 import io.github.pia300.highlightreplay.ui.Tab
-import io.github.pia300.highlightreplay.ui.screens.control.ControlUiState
+import io.github.pia300.highlightreplay.ui.screens.control.ControlViewModel
 import io.github.pia300.highlightreplay.ui.theme.HighlightReplayTheme
 
-/** 主活动：承载控制/历史/设置三个页面，负责权限申请与服务绑定。 */
+/** 主活动：承载控制/历史/设置三个页面，负责权限申请与录制启动流程。 */
 class MainActivity : ComponentActivity() {
 
     /** 日志标签与状态保存键。 */
@@ -33,31 +34,16 @@ class MainActivity : ComponentActivity() {
         private const val TAG = "MainActivity"
         private const val KEY_TAB = "tab"
         private const val KEY_LICENSE_OPEN = "license_open"
-        private const val KEY_SETTINGS_CHANGED = "settings_changed"
         private const val KEY_CONTINUE_AFTER_PERMISSIONS = "continue_after_permissions"
         private const val KEY_HISTORY_SELECTION = "history_selection"
         private const val KEY_NOTIFICATION_RATIONALE = "notification_rationale"
         private const val KEY_OVERLAY_RATIONALE = "overlay_rationale"
     }
 
-    // 初始状态直接取进程级会话状态：旋转重建时不必等服务绑定（约 300ms 后）才纠正，
-    // 否则录制中旋转会短暂显示“就绪 / 00:00”。
-    private var uiState by mutableStateOf(
-        RecorderService.currentState().let { s ->
-            ControlUiState(
-                isRecording = s.isRunning,
-                isSaving = s.isSaving,
-                elapsedSeconds = s.elapsedSeconds
-            )
-        }
-    )
-
     private var currentTab by mutableStateOf(Tab.CONTROL)
     private var licenseOpen by mutableStateOf(false)
     private var historySelectionActive by mutableStateOf(false)
 
-    /** 录制中是否修改过设置（控制页横幅提示“下次生效”），随服务状态流同步。 */
-    private var settingsChanged by mutableStateOf(false)
     private var showNotificationRationale by mutableStateOf(false)
 
     /** 悬浮窗权限被拒后的说明弹窗开关（从系统授权页返回仍未授权时置位）。 */
@@ -69,36 +55,14 @@ class MainActivity : ComponentActivity() {
     private var themeMode by mutableStateOf(ThemePrefs.MODE_SYSTEM)
     private var themeColor by mutableStateOf(ThemePrefs.COLOR_DYNAMIC)
 
-    /** 管理服务绑定生命周期；连接后同步状态并收集状态流（单一状态源）。 */
-    private val serviceBinding = RecorderServiceBinding(
-        activity = this,
-        onRecorderState = { s ->
-            uiState = uiState.copy(
-                isRecording = s.isRunning,
-                isSaving = s.isSaving,
-                elapsedSeconds = s.elapsedSeconds
-            )
-            settingsChanged = s.settingsStale
-        },
-        onDisconnectedReset = {
-            // 录制/保存态先复位为就绪，避免界面停留在过期状态。
-            if (uiState.isRecording || uiState.isSaving) {
-                uiState = ControlUiState()
-            }
-        },
-        onStoppedReset = { uiState = ControlUiState() }
-    )
-
     /** 权限申请、悬浮窗/电池优化引导与屏幕捕获授权流程；构造期创建以完成活动结果回调注册。 */
     private val startFlow = RecordingStartFlow(
         activity = this,
-        recorderService = { serviceBinding.recorderService },
         setContinueAfterPermissions = { continueAfterPermissions = it },
         shouldContinueProjection = { continueAfterPermissions },
         onContinueConsumed = { continueAfterPermissions = false },
         onNotificationRationale = { showNotificationRationale = true },
-        onOverlayRationale = { showOverlayRationale = true },
-        onScheduleBindAfterStart = { serviceBinding.scheduleBindAfterServiceStart() }
+        onOverlayRationale = { showOverlayRationale = true }
     )
 
     /** 在上下文创建前应用用户语言与主题模式，使界面与系统栏对比层从开始即符合目标主题。 */
@@ -144,8 +108,6 @@ class MainActivity : ComponentActivity() {
 
             licenseOpen = savedInstanceState.getBoolean(KEY_LICENSE_OPEN, false)
 
-            settingsChanged = savedInstanceState.getBoolean(KEY_SETTINGS_CHANGED, false)
-
             // 恢复权限结果后继续投影授权的标记，避免重建后流程中断或重复拉起。
             continueAfterPermissions =
                 savedInstanceState.getBoolean(KEY_CONTINUE_AFTER_PERMISSIONS, false)
@@ -166,6 +128,9 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+
+            val controlViewModel: ControlViewModel = viewModel()
+            val controlUiState by controlViewModel.uiState.collectAsStateWithLifecycle()
 
             // 由主题模式解析最终是否使用深色主题。
             val darkTheme = ThemePrefs.resolveDark(themeMode, isSystemInDarkTheme())
@@ -191,22 +156,10 @@ class MainActivity : ComponentActivity() {
                     onLicenseClose = { licenseOpen = false },
                     historySelectionActive = historySelectionActive,
                     onHistorySelectionChange = { historySelectionActive = it },
-                    settingsChanged = settingsChanged,
-                    uiState = { uiState },
-                    onErrorMessageConsumed = { uiState = uiState.copy(errorMessage = null) },
+                    uiState = { controlUiState },
                     onStartRecording = { startFlow.startRecording() },
-                    onStopRecording = { startFlow.stopRecording() },
-                    onSaveReplay = {
-                        // 保存回放需已连接的服务，未连接时给出错误提示。
-                        val service = serviceBinding.recorderService
-                        if (service != null) {
-                            service.saveReplay()
-                        } else {
-                            uiState = uiState.copy(
-                                errorMessage = getString(R.string.service_not_connected)
-                            )
-                        }
-                    },
+                    onStopRecording = { controlViewModel.stopRecording() },
+                    onSaveReplay = { controlViewModel.saveReplay() },
                     showNotificationRationale = showNotificationRationale,
                     onNotificationRationaleDismiss = { showNotificationRationale = false },
                     onNotificationRationaleConfirm = {
@@ -255,36 +208,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** 进入前台：延迟 300ms 尝试绑定录制服务。 */
-    override fun onStart() {
-        super.onStart()
-
-        // 重置计数后重新调度绑定，兼容服务仍在启动的竞态。
-        serviceBinding.scheduleBind()
-        serviceBinding.startStateSync()
-    }
-
-    /** 退到后台：取消待绑定回调并解绑服务以释放资源。 */
-    override fun onStop() {
-        super.onStop()
-        serviceBinding.cancelPendingBind()
-        serviceBinding.unbind()
-    }
-
-    /** 清理：移除绑定重试回调并解绑服务。 */
-    override fun onDestroy() {
-        super.onDestroy()
-        // 移除待执行的绑定重试回调，避免销毁后仍触发。
-        serviceBinding.cancelPendingBind()
-        serviceBinding.unbind()
-    }
-
     /** 保存页签、弹层状态与权限后继续标记，供重建时恢复。 */
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(KEY_TAB, currentTab.ordinal)
         outState.putBoolean(KEY_LICENSE_OPEN, licenseOpen)
-        outState.putBoolean(KEY_SETTINGS_CHANGED, settingsChanged)
         outState.putBoolean(KEY_CONTINUE_AFTER_PERMISSIONS, continueAfterPermissions)
         outState.putBoolean(KEY_HISTORY_SELECTION, historySelectionActive)
         outState.putBoolean(KEY_NOTIFICATION_RATIONALE, showNotificationRationale)

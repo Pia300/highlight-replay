@@ -388,3 +388,31 @@ tasks.matching { it.name == 'lintDebug' }.configureEach {
 tasks.matching { it.name == 'lintDebug' }.configureEach {
     dependsOn 'verifyThirdPartyVersions'
 }
+
+tasks.register('checkNoIsolatedProcess') {
+    group = 'verification'
+    description = '校验 manifest 未启用 android:process（进程内会话状态单例依赖默认进程）'
+    def manifestFile = project.file('src/main/AndroidManifest.xml')
+    inputs.file(manifestFile)
+
+    doLast() {
+        def offenders = []
+        manifestFile.readLines('UTF-8').eachWithIndex { raw, idx ->
+            def t = raw.trim()
+            if (t.startsWith('<!--') || t.startsWith('*')) return
+            if (t.contains('android:process')) offenders << "  AndroidManifest.xml:${idx + 1}: ${t}"
+        }
+        if (!offenders.isEmpty()) {
+            throw new GradleException(
+                "manifest 启用了独立进程，而会话状态是进程内单例（会得到两份状态且不报错）：\n" +
+                    offenders.join("\n") +
+                    "\n请移除 android:process，或改造成跨进程可见的状态通道后一并更新本守卫。"
+            )
+        }
+        logger.lifecycle("checkNoIsolatedProcess: manifest 未使用独立进程")
+    }
+}
+tasks.named('check') { dependsOn 'checkNoIsolatedProcess' }
+tasks.matching { it.name == 'lintDebug' }.configureEach {
+    dependsOn 'checkNoIsolatedProcess'
+}

@@ -14,7 +14,8 @@ import io.github.pia300.highlightreplay.data.LanguagePrefs
 import io.github.pia300.highlightreplay.data.TagCoverage
 import io.github.pia300.highlightreplay.data.TagStore
 import io.github.pia300.highlightreplay.data.VideoTag
-import io.github.pia300.highlightreplay.service.RecorderService
+import io.github.pia300.highlightreplay.service.session.SessionEvent
+import io.github.pia300.highlightreplay.service.session.SessionStateStore
 import io.github.pia300.highlightreplay.ui.ToastCenter
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -113,14 +114,10 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             }
         }
 
-        // 保存完成（isSaving true→false 降沿）时自动刷新列表。
+        // 保存完成时自动刷新列表：走显式事件通道，不对 StateFlow 做下降沿检测。
         viewModelScope.launch {
-            var lastSaving = RecorderService.currentState().isSaving
-            RecorderService.stateFlow.collect { s ->
-                if (lastSaving && !s.isSaving) {
-                    refresh()
-                }
-                lastSaving = s.isSaving
+            SessionStateStore.events.collect { event ->
+                if (event == SessionEvent.SaveFinished) refresh()
             }
         }
     }

@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.pia300.highlightreplay.service.RecorderService
-import io.github.pia300.highlightreplay.service.RecorderState
+import io.github.pia300.highlightreplay.service.session.RecorderState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

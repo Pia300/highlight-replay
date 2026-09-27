@@ -1,6 +1,7 @@
 package io.github.pia300.highlightreplay.ui.screens.control
 
-import io.github.pia300.highlightreplay.service.RecorderState
+import io.github.pia300.highlightreplay.service.session.RecorderState
+import io.github.pia300.highlightreplay.service.session.SessionPhase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -20,7 +21,7 @@ class ControlUiStateMappingTest {
 
     @Test
     fun recordingStateMapsIsRecordingAndElapsed() {
-        val ui = RecorderState(isRunning = true, elapsedSeconds = 42L).toControlUiState()
+        val ui = RecorderState(phase = SessionPhase.RUNNING, elapsedSeconds = 42L).toControlUiState()
 
         assertTrue(ui.isRecording)
         assertFalse(ui.isSaving)
@@ -29,15 +30,23 @@ class ControlUiStateMappingTest {
 
     @Test
     fun savingTailWindowKeepsIsSavingWithoutRecording() {
-        val ui = RecorderState(isRunning = false, isSaving = true).toControlUiState()
+        val ui = RecorderState(phase = SessionPhase.SAVING).toControlUiState()
 
         assertFalse(ui.isRecording)
         assertTrue(ui.isSaving)
     }
 
     @Test
+    fun startingStateStillMapsToRecording() {
+        val ui = RecorderState(phase = SessionPhase.STARTING).toControlUiState()
+
+        assertTrue(ui.isRecording)
+        assertFalse(ui.isSaving)
+    }
+
+    @Test
     fun settingsStaleMapsToSettingsChanged() {
-        val ui = RecorderState(isRunning = true, settingsStale = true).toControlUiState()
+        val ui = RecorderState(phase = SessionPhase.RUNNING, settingsStale = true).toControlUiState()
 
         assertTrue(ui.isRecording)
         assertTrue(ui.settingsChanged)

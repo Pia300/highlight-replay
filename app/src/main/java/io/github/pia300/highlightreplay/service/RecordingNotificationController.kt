@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Handler
 import io.github.pia300.highlightreplay.R
 import io.github.pia300.highlightreplay.data.LanguagePrefs
+import io.github.pia300.highlightreplay.service.session.SessionStateStore
 
 /** 录制前台通知：构建、重建发布、标题覆盖与流状态采样刷新。 */
 internal class RecordingNotificationController(
@@ -54,7 +55,7 @@ internal class RecordingNotificationController(
 
     /** 重建并发布前台通知；可选附带磁贴刷新。 */
     fun refresh(notifyTile: Boolean = false) {
-        if (!RecorderRuntimeState.currentState().isRunning || isSessionStopping()) return
+        if (!SessionStateStore.snapshot.isRunning || isSessionStopping()) return
         val holder = NotificationFactory.createRecordingNotification(
             service,
             FloatingControlService.isRunning,

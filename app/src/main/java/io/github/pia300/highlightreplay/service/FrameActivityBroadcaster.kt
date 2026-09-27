@@ -6,6 +6,8 @@ import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
 import io.github.pia300.highlightreplay.engine.ScreenRecorder
+import io.github.pia300.highlightreplay.service.session.SessionEvent
+import io.github.pia300.highlightreplay.service.session.SessionStateStore
 
 /**
  * 采集管线是否已产出可封装的轨道格式。
@@ -34,8 +36,7 @@ internal class FrameActivityBroadcaster(
      * 排空线程死亡时仍显示「活跃」，与通知给出的「中断」互相矛盾。
      */
     private val videoActiveProvider: () -> Boolean,
-    private val onCaptureReady: () -> Unit,
-    private val publish: (RecorderState, Boolean) -> Unit
+    private val onCaptureReady: () -> Unit
 ) {
 
     private companion object {
@@ -53,7 +54,7 @@ internal class FrameActivityBroadcaster(
     /** 会话周期任务：每拍向悬浮球广播帧活动，每 5 拍刷新已录时长；流监视器独立采样。 */
     private val sessionTick = object : Runnable {
         override fun run() {
-            val s = RecorderRuntimeState.currentState()
+            val s = SessionStateStore.snapshot
             if (!s.isRunning) return
             sessionTickCount++
             if (sessionTickCount % RecorderService.SESSION_TICKS_PER_SECOND == 1L) {
@@ -64,9 +65,7 @@ internal class FrameActivityBroadcaster(
                 } else {
                     0L
                 }
-                if (elapsed != s.elapsedSeconds) {
-                    publish(s.copy(elapsedSeconds = elapsed), false)
-                }
+                SessionStateStore.reduce(SessionEvent.ElapsedTick(elapsed))
             }
             val sr = screenRecorderProvider()
             // 编码器产出全部轨道的输出格式后才算真正就绪：此时保存一定能取到轨道格式，

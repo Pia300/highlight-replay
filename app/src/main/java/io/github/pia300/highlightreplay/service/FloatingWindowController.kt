@@ -10,6 +10,7 @@ import io.github.pia300.highlightreplay.data.LanguagePrefs
 import io.github.pia300.highlightreplay.data.RecorderPrefs
 import io.github.pia300.highlightreplay.data.defaultPrefs
 import io.github.pia300.highlightreplay.data.getBooleanSafe
+import io.github.pia300.highlightreplay.service.session.SessionStateStore
 import io.github.pia300.highlightreplay.ui.ToastCenter
 
 /** 悬浮球联动：拉起/停止悬浮球服务与显隐开关。 */
@@ -58,7 +59,7 @@ internal class FloatingWindowController(
 
     /** 通知/磁贴上的悬浮窗开关：按实际可见性反转（可见→隐藏，不可见→显示），单次点击即达预期状态。 */
     fun toggleFloatingVisibility() {
-        if (!RecorderRuntimeState.currentState().isRunning) return
+        if (!SessionStateStore.snapshot.isRunning) return
         val prefs = service.defaultPrefs()
         val show = !FloatingControlService.isRunning
         prefs.edit { putBoolean(RecorderPrefs.KEY_FLOATING_HIDDEN, !show) }

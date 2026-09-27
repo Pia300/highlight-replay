@@ -23,19 +23,21 @@ import io.github.pia300.highlightreplay.engine.ReplaySaver
 import io.github.pia300.highlightreplay.engine.ScreenRecorder
 import io.github.pia300.highlightreplay.engine.shouldReportEngineError
 import io.github.pia300.highlightreplay.engine.videoStreamActive
+import io.github.pia300.highlightreplay.service.session.RecorderState
+import io.github.pia300.highlightreplay.service.session.SessionEvent
+import io.github.pia300.highlightreplay.service.session.SessionStateStore
 import io.github.pia300.highlightreplay.ui.ToastCenter
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
-
-/** 录制会话对外状态快照（单一状态源）。平台一次 MediaProjection 令牌仅支持一个连续会话，故采用单会话模型，停止即释放全部资源。 */
-data class RecorderState(
-    val isRunning: Boolean = false,
-    val isSaving: Boolean = false,
-    val elapsedSeconds: Long = 0L,
-    // 录制中修改过设置（需停止并重新录制才能生效）。
-    val settingsStale: Boolean = false
-)
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 /** 录制前台服务：画面持续编码进环形缓冲，随时可保存回放；结束即释放全部资源。 */
 class RecorderService : Service() {
@@ -86,32 +88,29 @@ class RecorderService : Service() {
         /** “已保存”标题显示时长（毫秒）后恢复默认标题。 */
         const val TITLE_RESET_DELAY_MS = 2500L
 
-        // ---- 全局运行状态（单一来源；磁贴/悬浮球/绑定方无实例时读取）----
-        val isRunning: Boolean get() = RecorderRuntimeState.isRunning
-        val isSaving: Boolean get() = RecorderRuntimeState.isSaving
+        /** 当前存活的 RecorderService 实例；服务销毁后置空。 */
+        @Volatile
+        private var liveInstance: RecorderService? = null
 
-        /** 采集管线真正启动后置位（授权页据此保持前台；Android 15 无前台 Activity 时类型化 startForeground 会被降级并终止投影）。 */
-        var captureReady: Boolean
-            get() = RecorderRuntimeState.captureReady
-            private set(value) {
-                RecorderRuntimeState.captureReady = value
-            }
+        // ---- 全局运行状态（单一来源；磁贴/悬浮球/界面均读同一份快照）----
+        val isRunning: Boolean get() = SessionStateStore.snapshot.isRunning
+        val isSaving: Boolean get() = SessionStateStore.snapshot.isSaving
 
-        val stateFlow: StateFlow<RecorderState> get() = RecorderRuntimeState.stateFlow
+        /** 采集管线真正启动后为真（授权页据此保持前台；Android 15 无前台 Activity 时类型化 startForeground 会被降级并终止投影）。 */
+        val captureReady: Boolean get() = SessionStateStore.snapshot.isCaptureReady
 
-        fun currentState(): RecorderState = RecorderRuntimeState.currentState()
+        val stateFlow: StateFlow<RecorderState> get() = SessionStateStore.snapshots
+
+        fun currentState(): RecorderState = SessionStateStore.snapshot
 
         /** 录制中修改设置的进程内通知入口：Toast 提示并置 settingsStale。 */
         fun notifySettingsChangedWhileRecording() {
-            if (!RecorderRuntimeState.isRunning) return
-            val service = RecorderRuntimeState.instance ?: return
+            if (!isRunning) return
+            val service = liveInstance ?: return
             service.mainHandler.post {
                 if (!currentState().isRunning) return@post
                 ToastCenter.show(service, service.str(R.string.control_settings_changed_hint), Toast.LENGTH_LONG)
-                service.publishState(
-                    currentState().copy(settingsStale = true),
-                    notifyTile = false
-                )
+                SessionStateStore.reduce(SessionEvent.SettingsChanged)
             }
         }
     }
@@ -122,6 +121,8 @@ class RecorderService : Service() {
     }
 
     private val mainHandler = Handler(Looper.getMainLooper())
+
+    private val stateScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     /** 会话自增 ID：过滤过期回调。 */
     private var sessionId = 0
@@ -160,11 +161,11 @@ class RecorderService : Service() {
      * 本会话是否已进入收尾（用户主动停止、被系统终止，或采集管线启动失败）。
      *
      * `isRunning` 不足以代替它：会话在 `engineExecutor` 上调用 `ScreenRecorder.prepare()`/`start()`
-     * 期间，`publishState(isRunning = true)` 尚未执行，此时 `isRunning` 仍为 false——
+     * 期间，`StartRequested` 尚未发布，此时 `isRunning` 仍为 false——
      * 而引擎在 `prepare()` 阶段就会上报配置类问题（如编码器不可用改用系统代选）。
      * 若沿用 `!isRunning` 作丢弃条件，这些上报会在真正开始录制前被吞掉。
      *
-     * 置位点与语义对齐：与 `isRunning=false`、`sessionStartMs=0`、`captureReady=false` 同处设置。
+     * 置位点与语义对齐：与 `sessionStartMs=0`、`StopRequested`（isRunning 与 captureReady 一并转 false）同处设置。
      */
     @Volatile
     private var sessionTearingDown = false
@@ -215,10 +216,9 @@ class RecorderService : Service() {
         captureReadyProvider = { captureReady },
         videoActiveProvider = videoActiveProvider,
         onCaptureReady = {
-            captureReady = true
+            SessionStateStore.reduce(SessionEvent.CaptureReady)
             notificationController.refresh()
-        },
-        publish = { state, notifyTile -> publishState(state, notifyTile) }
+        }
     )
 
     private val replaySaveCoordinator = ReplaySaveCoordinator(
@@ -228,7 +228,6 @@ class RecorderService : Service() {
         replaySaverProvider = { replaySaver },
         screenRecorderProvider = { screenRecorder },
         settingsProvider = { settings },
-        publish = { publishState(it) },
         notifyError = { notifyError(it) },
         finishPendingForegroundTeardown = { finishPendingForegroundTeardownIfIdle() }
     )
@@ -242,15 +241,23 @@ class RecorderService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        RecorderRuntimeState.instance = this
+        liveInstance = this
         NotificationFactory.createChannel(this)
+        stateScope.launch {
+            SessionStateStore.snapshots
+                .map { it.phase }
+                .distinctUntilChanged()
+                .drop(1)
+                .collect { broadcastTileUpdate() }
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
         super.onDestroy()
-        RecorderRuntimeState.instance = null
+        liveInstance = null
+        stateScope.cancel()
         // 只停周期任务；在途保存由保存线程自行收尾并复位进程级 isSaving。
         stopSessionTickers()
         safeStopRecording()
@@ -316,7 +323,6 @@ class RecorderService : Service() {
         }
         startInFlight = true
         sessionId++
-        captureReady = false
         // 停止原因与提示标志属上一会话，新会话从未被系统终止的状态起步。
         stopReason = StopReason.USER
         systemStopNotified = false
@@ -370,7 +376,7 @@ class RecorderService : Service() {
         mediaProjection = projection
 
         // 前一会话的在途保存保留 isSaving，由保存回调真正完成时复位。
-        publishState(RecorderState(isRunning = true, isSaving = currentState().isSaving))
+        SessionStateStore.reduce(SessionEvent.StartRequested)
         startInFlight = false
         floatingWindowController.ensureFloatingService(started = true)
         notificationController.refresh()
@@ -556,14 +562,13 @@ class RecorderService : Service() {
         // 捕获引用的置空与 stop/release 统一放引擎线程串行执行，与启动互斥。
         replaySaver = null
         sessionStartMs = 0L
-        captureReady = false
-        // 与上三个标记同处置位：此后引擎上报的错误视为收尾噪音，不再打扰用户。
+        // 与上两个标记同处置位：此后引擎上报的错误视为收尾噪音，不再打扰用户。
         sessionTearingDown = true
         projectionReleased = false
         notificationController.discardForStop()
 
         // 保留在途保存的 isSaving，由保存回调完成时复位。
-        publishState(currentState().copy(isRunning = false))
+        SessionStateStore.reduce(SessionEvent.StopRequested)
         // 前台服务与通知须活到投影释放之后：投影仍存活时撤销 mediaProjection 类型前台服务，
         // 系统会先行终止投影并回调 onStop（会话正常停止被报成"被系统停止"）。
         // 在途保存另需保留前台至写盘完成（防进程被回收丢文件），由保存回调收尾。
@@ -614,7 +619,7 @@ class RecorderService : Service() {
         val s = currentState()
         if (s.isRunning || s.isSaving) return
         pendingForegroundTeardown = false
-        if (RecorderRuntimeState.instance === this) {
+        if (isLiveInstance()) {
             stopForeground(STOP_FOREGROUND_REMOVE)
         }
         stopSelf()
@@ -635,10 +640,7 @@ class RecorderService : Service() {
         }
     }
 
-    /** 单一状态发布点：字段、StateFlow 与磁贴广播一次到位。 */
-    private fun publishState(newState: RecorderState, notifyTile: Boolean = true) {
-        RecorderRuntimeState.publish(newState, notifyTile) { broadcastTileUpdate() }
-    }
+    internal fun isLiveInstance(): Boolean = liveInstance === this
 
     private fun broadcastTileUpdate() {
         sendBroadcast(Intent(ACTION_TILE_UPDATE).apply { setPackage(packageName) })

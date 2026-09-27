@@ -262,6 +262,19 @@ fun SettingsScreenContent(
                         },
                         offHint = stringResource(R.string.settings_toast_notify_off_hint)
                     )
+
+                    SwitchSettingRow(
+                        label = stringResource(R.string.settings_audio_monitor),
+                        boxText = stringResource(R.string.settings_audio_monitor_enabled),
+                        checked = currentState.audioMonitor == RecorderSettings.VALUE_ON,
+                        onCheckedChange = {
+                            update(
+                                RecorderSettings.KEY_AUDIO_MONITOR,
+                                if (it) RecorderSettings.VALUE_ON else RecorderSettings.VALUE_OFF
+                            )
+                        },
+                        offHint = stringResource(R.string.settings_audio_monitor_off_hint)
+                    )
                 }
 
                 // 悬浮窗特有设置区块由调用方注入。

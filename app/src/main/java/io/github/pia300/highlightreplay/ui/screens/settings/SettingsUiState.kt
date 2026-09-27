@@ -16,6 +16,7 @@ class SettingsUiState(
     val replayDuration: String,
     val toastNotify: String,
     val contentRotation: String,
+    val audioMonitor: String,
     val language: String,
     val floatingSize: Int,
     val floatingOpacity: Int,

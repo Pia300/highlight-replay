@@ -99,6 +99,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             replayDuration = s.replayDuration.toString(),
             toastNotify = s.toastNotify,
             contentRotation = s.contentRotation,
+            audioMonitor = s.audioMonitor,
             language = LanguagePrefs.current(getApplication()),
             floatingSize = prefs.getIntSafe(
                 RecorderPrefs.KEY_FLOATING_SIZE,

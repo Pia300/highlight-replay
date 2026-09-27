@@ -72,6 +72,10 @@
     <string name="settings_toast_notify_enabled">启用 Toast 提示</string>
     <string name="settings_toast_notify_off_hint">关闭后将没有 Toast 提示</string>
 
+    <string name="settings_audio_monitor">音频监视器</string>
+    <string name="settings_audio_monitor_enabled">启用音频监视器</string>
+    <string name="settings_audio_monitor_off_hint">关闭后悬浮球与通知栏不再指示声音跳动，视频状态仍会显示</string>
+
     <string name="settings_content_rotation">录屏自适应</string>
     <string name="settings_content_rotation_enabled">启用录屏自适应</string>
     <string name="settings_content_rotation_summary">录制方向与屏幕内容方向不一致时，内容强制旋转对齐</string>

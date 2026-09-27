@@ -87,7 +87,9 @@ data class RecorderSettings(
     val encoderPreference: String = EncoderPreference.AUTO.prefValue,
     val toastNotify: String = VALUE_ON,
     // 内容自适应旋转默认开启：物理方向与录制方向不一致时内容自动对齐。
-    val contentRotation: String = VALUE_ON
+    val contentRotation: String = VALUE_ON,
+    // 音频监视器默认关闭：关闭时不做音频电平判定，悬浮球与通知栏只指示视频状态。
+    val audioMonitor: String = VALUE_OFF
 ) {
 
     init {
@@ -116,6 +118,7 @@ data class RecorderSettings(
         }
         require(toastNotify == VALUE_ON || toastNotify == VALUE_OFF) { "invalid toastNotify: $toastNotify" }
         require(contentRotation == VALUE_ON || contentRotation == VALUE_OFF) { "invalid contentRotation: $contentRotation" }
+        require(audioMonitor == VALUE_ON || audioMonitor == VALUE_OFF) { "invalid audioMonitor: $audioMonitor" }
     }
 
     val codecEnum: VideoCodec get() = VideoCodec.fromPref(codec)
@@ -124,6 +127,9 @@ data class RecorderSettings(
     val captureOrientation: CaptureOrientation get() = CaptureOrientation.fromPref(orientation)
     val resolutionModeEnum: ResolutionMode get() = ResolutionMode.fromPref(resolutionMode)
     val contentRotationEnabled: Boolean get() = contentRotation == VALUE_ON
+
+    /** 音频监视器是否开启：开启时才判定音频电平，供悬浮球与通知栏指示。 */
+    val audioMonitorEnabled: Boolean get() = audioMonitor == VALUE_ON
 
     /** 视频码率（bps）；bitRate 字段以 Mbps 存储。 */
     fun getVideoBitRateBps(): Int = bitRate * 1_000_000
@@ -159,6 +165,7 @@ data class RecorderSettings(
 
         const val KEY_TOAST_NOTIFY = "toast_notify"
         const val KEY_CONTENT_ROTATION = "content_rotation"
+        const val KEY_AUDIO_MONITOR = "audio_monitor"
 
         // 引擎物理范围（构造校验/缓冲容量钳制使用；比 UI 档位宽）。
         val RESOLUTION_RANGE = 480..4320
@@ -260,7 +267,8 @@ data class RecorderSettings(
                     prefs.getStringSafe(KEY_ENCODER_PREFERENCE)
                 ).prefValue,
                 toastNotify = if (prefs.getStringSafe(KEY_TOAST_NOTIFY) == VALUE_OFF) VALUE_OFF else VALUE_ON,
-                contentRotation = if (prefs.getStringSafe(KEY_CONTENT_ROTATION) == VALUE_OFF) VALUE_OFF else VALUE_ON
+                contentRotation = if (prefs.getStringSafe(KEY_CONTENT_ROTATION) == VALUE_OFF) VALUE_OFF else VALUE_ON,
+                audioMonitor = if (prefs.getStringSafe(KEY_AUDIO_MONITOR) == VALUE_ON) VALUE_ON else VALUE_OFF
             )
         }
     }

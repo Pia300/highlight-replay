@@ -68,6 +68,10 @@
     <string name="settings_toast_notify_enabled">토스트 알림 사용</string>
     <string name="settings_toast_notify_off_hint">끄면 토스트 메시지가 표시되지 않습니다</string>
 
+    <string name="settings_audio_monitor">오디오 모니터</string>
+    <string name="settings_audio_monitor_enabled">오디오 모니터 사용</string>
+    <string name="settings_audio_monitor_off_hint">끄면 플로팅 버튼과 알림이 오디오 입력 상태를 더 이상 표시하지 않습니다</string>
+
     <string name="settings_content_rotation">적응형 캡처</string>
     <string name="settings_content_rotation_enabled">적응형 캡처 사용</string>
     <string name="settings_content_rotation_summary">캡처 방향이 화면 콘텐츠와 다르면 콘텐츠를 강제로 회전시켜 방향을 맞춥니다</string>

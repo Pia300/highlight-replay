@@ -66,6 +66,10 @@
     <string name="settings_toast_notify_enabled">トースト通知を有効にする</string>
     <string name="settings_toast_notify_off_hint">オフの場合はトースト通知は表示されません</string>
 
+    <string name="settings_audio_monitor">音声モニター</string>
+    <string name="settings_audio_monitor_enabled">音声モニターを有効にする</string>
+    <string name="settings_audio_monitor_off_hint">オフにすると、フローティングボタンと通知は音声入力の状態を示さなくなります</string>
+
     <string name="settings_content_rotation">向きの自動補正</string>
     <string name="settings_content_rotation_enabled">向きの自動補正を有効にする</string>
     <string name="settings_content_rotation_summary">録画の向きと画面の向きが異なる場合、画面の内容を録画の向きに合わせて自動的に回転します</string>

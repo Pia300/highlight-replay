@@ -66,6 +66,10 @@
     <string name="settings_toast_notify_enabled">Ativar notificações Toast</string>
     <string name="settings_toast_notify_off_hint">Quando desativadas, nenhuma mensagem Toast será exibida</string>
 
+    <string name="settings_audio_monitor">Monitor de áudio</string>
+    <string name="settings_audio_monitor_enabled">Ativar o monitor de áudio</string>
+    <string name="settings_audio_monitor_off_hint">Quando desativado, o botão flutuante e a notificação não indicam mais a entrada de áudio</string>
+
     <string name="settings_content_rotation">Captura adaptativa</string>
     <string name="settings_content_rotation_enabled">Ativar captura adaptativa</string>
     <string name="settings_content_rotation_summary">Quando a direção da captura difere da do conteúdo da tela, o conteúdo é girado à força para coincidir</string>

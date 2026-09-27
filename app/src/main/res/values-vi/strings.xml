@@ -66,6 +66,10 @@
     <string name="settings_toast_notify_enabled">Bật thông báo Toast</string>
     <string name="settings_toast_notify_off_hint">Khi tắt sẽ không hiển thị thông báo Toast nào</string>
 
+    <string name="settings_audio_monitor">Giám sát âm thanh</string>
+    <string name="settings_audio_monitor_enabled">Bật giám sát âm thanh</string>
+    <string name="settings_audio_monitor_off_hint">Khi tắt, nút nổi và thông báo sẽ không còn hiển thị tình trạng âm thanh đầu vào</string>
+
     <string name="settings_content_rotation">Tự động xoay nội dung</string>
     <string name="settings_content_rotation_enabled">Bật tự động xoay nội dung</string>
     <string name="settings_content_rotation_summary">Khi hướng quay khác với hướng nội dung trên màn hình, nội dung sẽ được xoay để khớp với hướng quay</string>

@@ -68,6 +68,10 @@
     <string name="settings_toast_notify_enabled">Aktifkan notifikasi Toast</string>
     <string name="settings_toast_notify_off_hint">Saat nonaktif, pesan Toast tidak akan ditampilkan</string>
 
+    <string name="settings_audio_monitor">Monitor audio</string>
+    <string name="settings_audio_monitor_enabled">Aktifkan monitor audio</string>
+    <string name="settings_audio_monitor_off_hint">Saat nonaktif, tombol melayang dan notifikasi tidak lagi menampilkan input audio</string>
+
     <string name="settings_content_rotation">Perekaman adaptif</string>
     <string name="settings_content_rotation_enabled">Aktifkan perekaman adaptif</string>
     <string name="settings_content_rotation_summary">Jika arah perekaman berbeda dari arah konten layar, konten akan diputar paksa agar sesuai</string>

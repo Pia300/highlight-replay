@@ -66,6 +66,10 @@
     <string name="settings_toast_notify_enabled">Показывать toast-уведомления</string>
     <string name="settings_toast_notify_off_hint">Если выключено, toast-сообщения отображаться не будут</string>
 
+    <string name="settings_audio_monitor">Монитор звука</string>
+    <string name="settings_audio_monitor_enabled">Включить монитор звука</string>
+    <string name="settings_audio_monitor_off_hint">Если выключено, плавающая кнопка и уведомление больше не показывают состояние аудиовхода</string>
+
     <string name="settings_content_rotation">Адаптивный захват</string>
     <string name="settings_content_rotation_enabled">Включить адаптивный захват</string>
     <string name="settings_content_rotation_summary">Если направление захвата отличается от направления содержимого экрана, содержимое принудительно поворачивается, чтобы совпадать с ним</string>

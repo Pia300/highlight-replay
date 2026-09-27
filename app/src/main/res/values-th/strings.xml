@@ -66,6 +66,10 @@
     <string name="settings_toast_notify_enabled">เปิดใช้การแจ้งเตือน Toast</string>
     <string name="settings_toast_notify_off_hint">เมื่อปิดจะไม่แสดงข้อความ Toast ใด ๆ</string>
 
+    <string name="settings_audio_monitor">ตัวตรวจสอบเสียง</string>
+    <string name="settings_audio_monitor_enabled">เปิดใช้ตัวตรวจสอบเสียง</string>
+    <string name="settings_audio_monitor_off_hint">เมื่อปิด ปุ่มลอยและการแจ้งเตือนจะไม่แสดงสถานะเสียงเข้าอีกต่อไป</string>
+
     <string name="settings_content_rotation">ปรับการจับภาพอัตโนมัติ</string>
     <string name="settings_content_rotation_enabled">เปิดใช้การปรับการจับภาพอัตโนมัติ</string>
     <string name="settings_content_rotation_summary">เมื่อทิศทางการจับภาพไม่ตรงกับเนื้อหาบนหน้าจอ เนื้อหาจะถูกหมุนให้ตรงกันโดยอัตโนมัติ</string>

@@ -28,6 +28,7 @@ internal class FrameActivityBroadcaster(
     private val sessionStartMsProvider: () -> Long,
     private val screenRecorderProvider: () -> ScreenRecorder?,
     private val captureReadyProvider: () -> Boolean,
+    private val audioMonitored: () -> Boolean,
     /**
      * 「画面是否活跃」的唯一判据提供方。
      *
@@ -118,7 +119,7 @@ internal class FrameActivityBroadcaster(
         // 判据与通知同源（videoActiveProvider），此处不再自行计算：
         // 两处各自拼判据会让悬浮球指示灯与通知对「是否中断」给出相反结论。
         val videoActive = videoActiveProvider()
-        val amplitude = sr.getAudioAmplitude()
+        val amplitude = if (audioMonitored()) sr.getAudioAmplitude() else 0f
         val changed = videoActive != lastBroadcastVideoActive ||
             kotlin.math.abs(amplitude - lastBroadcastAmplitude) > RecorderService.AMPLITUDE_SEND_EPSILON
         if (!changed) return

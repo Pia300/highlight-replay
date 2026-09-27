@@ -12,6 +12,7 @@ import io.github.pia300.highlightreplay.service.session.SessionStateStore
 internal class RecordingNotificationController(
     private val service: Context,
     private val mainHandler: Handler,
+    private val audioMonitored: () -> Boolean,
     private val audioEnabled: () -> Boolean,
     private val isSessionStopping: () -> Boolean,
     private val videoActiveProvider: () -> Boolean,
@@ -30,15 +31,15 @@ internal class RecordingNotificationController(
     private val streamMonitor = RecordingStreamMonitor(
         mainHandler = mainHandler,
         videoActiveProvider = videoActiveProvider,
-        audioActiveProvider = audioActiveProvider,
-        onStateChanged = { videoActive, audioActive ->
+        // 监视器关闭时短路：不再读取电平读数。
+        audioActiveProvider = { audioMonitored() && audioActiveProvider() },
+        onStateChanged = { videoActive, _ ->
             val holder = currentRecordingNotification ?: return@RecordingStreamMonitor
             NotificationFactory.applyStreamState(
                 service,
                 holder.views,
                 videoActive,
-                audioEnabled(),
-                audioActive
+                audioIndicator()
             )
             notifyRecording(holder)
         }
@@ -48,7 +49,7 @@ internal class RecordingNotificationController(
         return NotificationFactory.createRecordingNotification(
             service,
             FloatingControlService.isRunning,
-            audioEnabled(),
+            audioIndicator(),
             titleOverride
         ).notification
     }
@@ -59,7 +60,7 @@ internal class RecordingNotificationController(
         val holder = NotificationFactory.createRecordingNotification(
             service,
             FloatingControlService.isRunning,
-            audioEnabled(),
+            audioIndicator(),
             titleOverride
         )
         currentRecordingNotification = holder
@@ -68,8 +69,7 @@ internal class RecordingNotificationController(
                 service,
                 holder.views,
                 streamMonitor.videoActive(),
-                audioEnabled(),
-                streamMonitor.audioActive()
+                audioIndicator()
             )
         }
         notifyRecording(holder)
@@ -117,6 +117,13 @@ internal class RecordingNotificationController(
 
     /** 停止流状态采样（幂等）。 */
     fun stopStreamMonitor() = streamMonitor.stop()
+
+    private fun audioIndicator(): NotificationFactory.AudioIndicator = resolveAudioIndicator(
+        audioMonitored = audioMonitored(),
+        audioEnabled = audioEnabled(),
+        audioSampled = streamMonitor.hasSampled(),
+        audioActive = streamMonitor.audioActive()
+    )
 
     private fun notifyRecording(holder: NotificationFactory.RecordingNotification) {
         service.getSystemService(NotificationManager::class.java)

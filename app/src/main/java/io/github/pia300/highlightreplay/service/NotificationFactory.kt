@@ -22,6 +22,14 @@ object NotificationFactory {
     private const val REQUEST_SAVE_REPLAY = 101
     private const val REQUEST_STOP = 102
 
+    /** 通知上音频指示的状态；[DISABLED] 表示音频监视器已关闭，此时不指示音频。 */
+    enum class AudioIndicator {
+        DISABLED,
+        NOT_CONFIGURED,
+        ACTIVE,
+        SILENT
+    }
+
     /** 一次通知构建的产物：内容视图与最终 Notification。 */
     data class RecordingNotification(
         val views: RemoteViews,
@@ -49,7 +57,7 @@ object NotificationFactory {
     fun createRecordingNotification(
         context: Context,
         floatingVisible: Boolean,
-        audioEnabled: Boolean,
+        audioIndicator: AudioIndicator,
         titleOverride: String? = null
     ): RecordingNotification {
 
@@ -103,7 +111,7 @@ object NotificationFactory {
         )
 
         // 初始状态点：先按“有画面”点亮，真实状态由流监视器即时刷新。
-        applyStreamState(context, views, true, audioEnabled, true)
+        applyStreamState(context, views, true, audioIndicator)
 
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
@@ -127,8 +135,7 @@ object NotificationFactory {
         context: Context,
         views: RemoteViews,
         videoActive: Boolean,
-        audioEnabled: Boolean,
-        audioActive: Boolean
+        audioIndicator: AudioIndicator
     ) {
         val ctx = LanguagePrefs.wrap(context, LanguagePrefs.current(context))
 
@@ -136,10 +143,10 @@ object NotificationFactory {
             colorWithAlpha(color(context, R.color.notif_btn_inactive), DISABLED_CONTENT_ALPHA)
         val videoColor = if (videoActive) color(context, R.color.notif_recording)
         else color(context, R.color.notif_stream_error)
-        val audioColor = when {
-            !audioEnabled -> disabledGray
-            audioActive -> color(context, R.color.notif_recording)
-            else -> color(context, R.color.notif_stream_error)
+        val audioColor = when (audioIndicator) {
+            AudioIndicator.ACTIVE -> color(context, R.color.notif_recording)
+            AudioIndicator.SILENT -> color(context, R.color.notif_stream_error)
+            AudioIndicator.NOT_CONFIGURED, AudioIndicator.DISABLED -> disabledGray
         }
 
         applyIconColor(views, R.id.ivStatusDot, videoColor)
@@ -148,14 +155,18 @@ object NotificationFactory {
         val videoDesc = ctx.getString(
             if (videoActive) R.string.notif_stream_video_ok else R.string.notif_stream_video_dead
         )
-        val audioDesc = ctx.getString(
-            when {
-                !audioEnabled -> R.string.notif_stream_audio_off
-                audioActive -> R.string.notif_stream_audio_ok
-                else -> R.string.notif_stream_audio_dead
-            }
-        )
-        val statusDesc = ctx.getString(R.string.notif_status_combined, videoDesc, audioDesc)
+        val statusDesc = if (audioIndicator == AudioIndicator.DISABLED) {
+            videoDesc
+        } else {
+            val audioDesc = ctx.getString(
+                when (audioIndicator) {
+                    AudioIndicator.ACTIVE -> R.string.notif_stream_audio_ok
+                    AudioIndicator.SILENT -> R.string.notif_stream_audio_dead
+                    else -> R.string.notif_stream_audio_off
+                }
+            )
+            ctx.getString(R.string.notif_status_combined, videoDesc, audioDesc)
+        }
         views.setContentDescription(R.id.ivStatus, statusDesc)
     }
 
@@ -182,4 +193,18 @@ object NotificationFactory {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
+}
+
+/** 音频指示的唯一判据：监视器关闭时既非“正常”也非“中断”，而是不指示。 */
+internal fun resolveAudioIndicator(
+    audioMonitored: Boolean,
+    audioEnabled: Boolean,
+    audioSampled: Boolean,
+    audioActive: Boolean
+): NotificationFactory.AudioIndicator = when {
+    !audioMonitored -> NotificationFactory.AudioIndicator.DISABLED
+    !audioEnabled -> NotificationFactory.AudioIndicator.NOT_CONFIGURED
+    // 未采样前按“有声音”点亮，与首帧通知一致，采样后由真实状态纠正。
+    !audioSampled || audioActive -> NotificationFactory.AudioIndicator.ACTIVE
+    else -> NotificationFactory.AudioIndicator.SILENT
 }

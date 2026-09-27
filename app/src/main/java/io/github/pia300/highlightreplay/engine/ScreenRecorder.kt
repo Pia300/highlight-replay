@@ -211,7 +211,7 @@ class ScreenRecorder(
             if (settings.hasAudio() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
                 try {
-                    audioEncoder = AudioEncoder().apply {
+                    audioEncoder = AudioEncoder(audioMonitorEnabled = settings.audioMonitorEnabled).apply {
                         prepareWithMediaProjection(mediaProjection)
                         onOutputBufferAvailable = { data, info ->
 

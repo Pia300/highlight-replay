@@ -193,6 +193,7 @@ class RecorderService : Service() {
     private val notificationController = RecordingNotificationController(
         service = this,
         mainHandler = mainHandler,
+        audioMonitored = { settings?.audioMonitorEnabled ?: false },
         audioEnabled = { settings?.hasAudio() ?: false },
         isSessionStopping = { stopping },
         videoActiveProvider = videoActiveProvider,
@@ -214,6 +215,7 @@ class RecorderService : Service() {
         sessionStartMsProvider = { sessionStartMs },
         screenRecorderProvider = { screenRecorder },
         captureReadyProvider = { captureReady },
+        audioMonitored = { settings?.audioMonitorEnabled ?: false },
         videoActiveProvider = videoActiveProvider,
         onCaptureReady = {
             SessionStateStore.reduce(SessionEvent.CaptureReady)

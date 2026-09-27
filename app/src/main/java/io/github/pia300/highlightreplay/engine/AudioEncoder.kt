@@ -10,7 +10,7 @@ import android.util.Log
 import io.github.pia300.highlightreplay.data.RecorderSettings
 
 /** 经 MediaProjection + AudioRecord 捕获系统音频并编码为 AAC；一次性实例，每会话新建。 */
-class AudioEncoder {
+class AudioEncoder(private val audioMonitorEnabled: Boolean) {
 
     companion object {
         private const val MIME_TYPE = "audio/mp4a-latm"
@@ -223,7 +223,9 @@ class AudioEncoder {
                             read * 1000L / RecorderSettings.AUDIO_BYTES_PER_SECOND
                 }
 
-                currentAmplitude = levelMeter.onSamples(inputBuffer, read)
+                if (audioMonitorEnabled) {
+                    currentAmplitude = levelMeter.onSamples(inputBuffer, read)
+                }
                 if (levelDiagEnabled) {
                     captureLevelSum += currentAmplitude
                     captureLevelBlocks++

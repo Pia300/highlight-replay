@@ -49,7 +49,7 @@ class ControlViewModel(application: Application) : AndroidViewModel(application)
     }
 }
 
-private fun RecorderState.toControlUiState(): ControlUiState = ControlUiState(
+internal fun RecorderState.toControlUiState(): ControlUiState = ControlUiState(
     isRecording = isRunning,
     isSaving = isSaving,
     settingsChanged = settingsStale,

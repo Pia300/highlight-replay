@@ -282,7 +282,7 @@
     <string name="tag_color_option">顏色 %1$d</string>
     <string name="toast_recording_stopped">已停止錄製</string>
     <string name="settings_storage_permission">儲存權限</string>
-    <string name="settings_section_shake">搖一搖儲存</string>
+    <string name="settings_shake_to_save">搖一搖儲存</string>
     <string name="settings_shake_enabled">啟用搖一搖儲存</string>
     <string name="settings_shake_strength">觸發力度</string>
     <string name="settings_shake_hint">錄影中搖動裝置即可儲存回放；數值越大，需要越用力搖動</string>

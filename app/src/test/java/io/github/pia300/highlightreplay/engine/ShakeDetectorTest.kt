@@ -1,5 +1,6 @@
 package io.github.pia300.highlightreplay.engine
 
+import io.github.pia300.highlightreplay.data.RecorderSettings
 import kotlin.math.PI
 import kotlin.math.sin
 import org.junit.Assert.assertEquals
@@ -66,11 +67,7 @@ class ShakeDetectorTest {
         }
     }
 
-    /**
-     * 单次冲击（磕碰/放桌上）峰值可以很高，但只有一次换向，不得触发。
-     *
-     * 这正是"只看峰值"的做法会误判的场景，也是换向条件的价值所在。
-     */
+    /** 单次冲击（磕碰/放桌上）峰值可以很高，但只有一次换向，不得触发。 */
     @Test
     fun singleJoltDoesNotTrigger() {
         val detector = detector()
@@ -121,13 +118,17 @@ class ShakeDetectorTest {
     /** 力度换算：两端取到最低/最高阈值，越界钳制，且随力度单调递增。 */
     @Test
     fun amplitudeThresholdGrowsWithStrength() {
-        assertEquals(8f, ShakeTuning.amplitudeThreshold(0), 0.001f)
-        assertEquals(24f, ShakeTuning.amplitudeThreshold(100), 0.001f)
-        assertEquals(8f, ShakeTuning.amplitudeThreshold(-1), 0.001f)
+        val floor = RecorderSettings.SHAKE_STRENGTH_RANGE.first
+        val ceiling = RecorderSettings.SHAKE_STRENGTH_RANGE.last
+
+        // 力度下限 10 对应约 9.6 m/s²，仍在走路峰值之上。
+        assertEquals(9.6f, ShakeTuning.amplitudeThreshold(floor), 0.001f)
+        assertEquals(24f, ShakeTuning.amplitudeThreshold(ceiling), 0.001f)
+        assertEquals(9.6f, ShakeTuning.amplitudeThreshold(floor - 1), 0.001f)
         assertEquals(24f, ShakeTuning.amplitudeThreshold(999), 0.001f)
 
         var previous = Float.NEGATIVE_INFINITY
-        for (strength in 0..100) {
+        for (strength in floor..ceiling) {
             val current = ShakeTuning.amplitudeThreshold(strength)
             assertTrue("力度 $strength 的阈值应严格递增", current > previous)
             previous = current
@@ -137,8 +138,12 @@ class ShakeDetectorTest {
     /** 力度越大越难触发：同样幅度的摇动在低力度下触发、高力度下不触发。 */
     @Test
     fun higherStrengthRequiresLargerAmplitude() {
-        val permissive = ShakeDetector(amplitudeThreshold = ShakeTuning.amplitudeThreshold(0))
-        val strict = ShakeDetector(amplitudeThreshold = ShakeTuning.amplitudeThreshold(100))
+        val permissive = ShakeDetector(
+            amplitudeThreshold = ShakeTuning.amplitudeThreshold(RecorderSettings.SHAKE_STRENGTH_RANGE.first)
+        )
+        val strict = ShakeDetector(
+            amplitudeThreshold = ShakeTuning.amplitudeThreshold(RecorderSettings.SHAKE_STRENGTH_RANGE.last)
+        )
         var permissiveTriggered = false
         var strictTriggered = false
         for (t in 0L..2000L step stepMs) {

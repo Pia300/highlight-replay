@@ -80,12 +80,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         notifyFloatingSettingsChanged()
     }
 
-    /**
-     * 摇一摇设置变化：录制中的会话即时生效。
-     *
-     * 该设置不进「下次生效」的 stale 提示——摇一摇是触发通道，改了就该立刻按新力度判定，
-     * 与录制参数（分辨率/码率等）需要重启会话的语义不同。
-     */
+    /** 摇一摇设置变化：录制中的会话即时生效，不进「下次生效」提示。 */
     fun onShakeSettingChanged() {
         if (!RecorderService.isRunning) return
         val app = getApplication<Application>()

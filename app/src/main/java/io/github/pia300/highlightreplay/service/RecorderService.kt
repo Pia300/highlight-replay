@@ -270,7 +270,7 @@ class RecorderService : Service() {
         stateScope.cancel()
         // 只停周期任务；在途保存由保存线程自行收尾并复位进程级 isSaving。
         stopSessionTickers()
-        // 停服路径可能因状态判定提前返回，这里无条件注销传感器监听。
+        // 停服路径可能提前返回，这里无条件注销传感器。
         shakeController.stop()
         safeStopRecording()
         engineExecutor.shutdown()
@@ -392,8 +392,7 @@ class RecorderService : Service() {
         SessionStateStore.reduce(SessionEvent.StartRequested)
         startInFlight = false
         floatingWindowController.ensureFloatingService(started = true)
-        // 摇一摇：会话真正开始后才挂传感器。开关/力度改动经 ACTION_UPDATE_SHAKE 即时应用，
-        // 故这里用刚读到的会话设置快照作为初值。
+        // 摇一摇：会话开始后挂上传感器，初值取刚读到的会话设置。
         shakeController.update(loaded.shakeToSaveEnabled, loaded.shakeStrength)
         notificationController.refresh()
         broadcastTileUpdate()
@@ -574,7 +573,7 @@ class RecorderService : Service() {
         teardownInFlight = true
         // 只停周期任务；在途保存由保存线程自行收尾并复位进程级 isSaving。
         stopSessionTickers()
-        // 会话结束即停传感器：摇一摇只在录制中有意义，且不应在会话外占用传感器。
+        // 会话结束即停传感器。
         shakeController.stop()
 
         // 捕获引用的置空与 stop/release 统一放引擎线程串行执行，与启动互斥。
@@ -645,24 +644,14 @@ class RecorderService : Service() {
 
     // ---------------- 摇一摇 ----------------
 
-    /**
-     * 应用摇一摇设置（录制中即时生效）。
-     *
-     * 刻意不更新会话设置快照 [settings]：该快照的语义是「录制参数下次生效」，而摇一摇只是
-     * 触发通道，改了就该立刻按新力度判定——设置页据此走本入口而非 notifySettingsChangedWhileRecording。
-     */
+    /** 应用摇一摇设置（录制中即时生效）。不回写会话设置快照 [settings]：那个快照是「下次生效」语义。 */
     private fun applyShakeSettings() {
         if (!isRunning) return
         val current = RecorderSettings.fromPreferences(this)
         shakeController.update(current.shakeToSaveEnabled, current.shakeStrength)
     }
 
-    /**
-     * 摇一摇触发保存：与按钮、通知、磁贴、悬浮球共用同一保存协调器。
-     *
-     * 时机不合适时**静默忽略**（不弹「正在保存中」之类的提示）：用户摇一下没反应可以再摇，
-     * 但每次误摇都弹一条错误提示会很快变得烦人。
-     */
+    /** 摇一摇触发保存：与其它入口共用保存协调器；时机不合适时静默忽略，避免误摇弹提示。 */
     private fun handleShakeTrigger() {
         val current = currentState()
         if (!current.isRunning || !current.isCaptureReady || current.isSaving) return

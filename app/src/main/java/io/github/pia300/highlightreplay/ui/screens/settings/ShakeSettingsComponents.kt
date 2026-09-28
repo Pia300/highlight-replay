@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.pia300.highlightreplay.R
 import io.github.pia300.highlightreplay.data.RecorderSettings
@@ -19,10 +20,10 @@ import io.github.pia300.highlightreplay.ui.components.SettingCardSwitchRow
 import io.github.pia300.highlightreplay.ui.components.SettingGroupCard
 
 /**
- * 「触发力度」快捷档位：值与文案资源。低/中/高只是滑杆的跳转点，不是离散档位——
- * 用户拖到 43 也是合法值，此时三个档位都不高亮。
+ * 「触发力度」快捷档位：值与文案资源。
  *
- * 档位值必须落在 [RecorderSettings.SHAKE_STRENGTH_RANGE] 内且严格递增（见 ShakeStrengthPresetsTest）。
+ * 档位只是滑杆的跳转点，不是离散档位：拖到 43 时三个档位都不高亮。
+ * 值必须落在 [RecorderSettings.SHAKE_STRENGTH_RANGE] 内且严格递增（见 ShakeStrengthPresetsTest）。
  */
 internal val SHAKE_STRENGTH_PRESETS: List<Pair<Int, Int>> = listOf(
     25 to R.string.settings_shake_strength_low,
@@ -30,12 +31,7 @@ internal val SHAKE_STRENGTH_PRESETS: List<Pair<Int, Int>> = listOf(
     75 to R.string.settings_shake_strength_high
 )
 
-/**
- * 摇一摇保存区块：开关、触发力度滑杆与低/中/高快捷档位。
- *
- * 力度改动即时下发到录制服务（录制中立刻按新力度判定），故本区块不参与「下次生效」的提示。
- * 设备无加速度计时上层不渲染本区块（见 [SettingsScreenContent]）。
- */
+/** 摇一摇保存区块：标题、开关、触发力度滑杆与低/中/高快捷档位；力度改动即时下发到录制服务。 */
 @Composable
 internal fun ShakeToSaveSection(
     enabled: Boolean,
@@ -45,6 +41,13 @@ internal fun ShakeToSaveSection(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(R.string.settings_shake_to_save),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            // 与 SwitchSettingRow 的标题位置一致：卡片左右各 16dp 内边距，此处再加 4dp。
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 4.dp)
+        )
         SettingGroupCard(modifier = Modifier.padding(horizontal = 16.dp)) {
             SettingCardSwitchRow(
                 description = stringResource(R.string.settings_shake_enabled),
@@ -68,7 +71,7 @@ internal fun ShakeToSaveSection(
             text = stringResource(R.string.settings_shake_hint),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
+            modifier = Modifier.padding(start = 32.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
         )
     }
 }
@@ -81,7 +84,7 @@ private fun ShakeStrengthPresetRow(selected: Int, onSelect: (Int) -> Unit) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
 
-            // 语义上是一组互斥快捷项，读屏会播报为一组选择。
+            // 一组互斥快捷项，读屏按一组播报。
             .selectableGroup(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -91,9 +94,12 @@ private fun ShakeStrengthPresetRow(selected: Int, onSelect: (Int) -> Unit) {
                 selected = isSelected,
                 onClick = { if (!isSelected) onSelect(preset) },
                 label = {
+                    // 三个档位等宽，文字在按钮内居中。
                     Text(
                         text = stringResource(labelRes),
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.labelLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 },
                 modifier = Modifier.weight(1f)

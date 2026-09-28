@@ -6,9 +6,9 @@ import kotlin.math.sqrt
 /**
  * 「触发力度」档位到判定阈值的换算。
  *
- * 阈值是**线性加速度峰值**（m/s²，重力已去除），可直接与常见动作对照：
- * 手持走动约 2~5、抬手放下约 5~8、刻意摇动约 15~25。故下限取 8——再低会把走路误判为摇动；
- * 上限取 24——再高则正常用力也摇不出来。中间线性插值，使滑杆全程都有可见效果。
+ * 阈值是**线性加速度峰值**（m/s²，重力已去除），可与常见动作对照：手持走动约 2~5、
+ * 抬手放下约 5~8、刻意摇动约 15~25。故下限取 8、上限取 24，中间线性插值。
+ * [RecorderSettings.SHAKE_STRENGTH_RANGE] 的下限 10 对应约 9.6 m/s²，仍在走路峰值之上。
  */
 internal object ShakeTuning {
 
@@ -24,19 +24,18 @@ internal object ShakeTuning {
 }
 
 /**
- * 摇一摇判定器（纯逻辑，不含 Android 依赖，可在 JVM 上单测）。
+ * 摇一摇判定器（纯逻辑，无 Android 依赖，可在 JVM 上单测）。
  *
- * 输入是**已去重力**的线性加速度（m/s²）与单调时钟毫秒戳。判定只看最近 [windowMs] 的波形，
+ * 输入是已去重力的线性加速度（m/s²）与单调时钟毫秒戳；判定只看最近 [windowMs] 的波形，
  * 两个条件同时成立才算一次摇动：
  *
  *  1. 峰值条件：窗口内线性加速度峰值 ≥ [amplitudeThreshold]；
  *  2. 换向条件：窗口内主轴信号的方向反转次数 ≥ [minReversals]。
  *
- * 换向条件是必需的：单次冲击（磕到桌沿、放桌上、手里一抖）的峰值同样可以很高，但只有一次
- * 方向变化；摇动则会在数百毫秒内反复换向。只看峰值必然把单次冲击误判成摇动。
+ * 换向条件不可省：单次冲击（磕到桌沿、放桌上、手里一抖）峰值同样可以很高，但只有一次方向变化；
+ * 摇动会在数百毫秒内反复换向。只看峰值必然把单次冲击误判成摇动。
  *
- * 触发后进入 [cooldownMs] 冷却并清空窗口，使一次摇动只保存一次回放（保存自身需 1~3 秒）。
- * 本类非线程安全：由传感器回调所在线程独占使用。
+ * 触发后进入 [cooldownMs] 冷却并清空窗口。本类非线程安全，由传感器回调所在线程独占使用。
  */
 internal class ShakeDetector(
     private val amplitudeThreshold: Float,
@@ -46,10 +45,9 @@ internal class ShakeDetector(
     bufferCapacity: Int = DEFAULT_CAPACITY
 ) {
 
-    // 独立于构造参数命名：容量钳制后是采样窗口的硬上限，两者不是同一个概念。
     private val capacity = bufferCapacity.coerceAtLeast(MIN_CAPACITY)
 
-    // 环形缓冲：三轴 + 时间戳并行数组，按需覆盖最旧样本，避免每帧分配。
+    // 环形缓冲：三轴与时间戳并行数组，写满即覆盖最旧样本，采样路径上不分配。
     private val xs = FloatArray(capacity)
     private val ys = FloatArray(capacity)
     private val zs = FloatArray(capacity)
@@ -93,7 +91,7 @@ internal class ShakeDetector(
         }
         if (count < MIN_SAMPLES || peak < amplitudeThreshold) return false
 
-        // 主轴取峰峰值最大的轴：摇动方向任意，只有主能量轴的过零次数才代表换向。
+        // 主轴取峰峰值最大的轴：摇动方向任意，只有主能量轴的过零次数代表换向。
         val axis = dominantAxis(maxX - minX, maxY - minY, maxZ - minZ)
         val mean = when (axis) {
             AXIS_X -> sumX / count
@@ -178,7 +176,7 @@ internal class ShakeDetector(
         /** 换向死区（m/s²）：偏移小于该值不计方向，滤掉零附近噪声。 */
         private const val REVERSAL_DEADBAND = 0.5f
 
-        /** 判定所需最少样本：窗口未填满也允许判定，但样本太少没有统计意义。 */
+        /** 判定所需最少样本。 */
         private const val MIN_SAMPLES = 4
 
         /** 环形缓冲容量：500ms 窗口在 400Hz 采样下也不溢出。 */

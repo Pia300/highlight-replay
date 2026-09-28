@@ -282,7 +282,7 @@
     <string name="tag_color_option">Color %1$d</string>
     <string name="toast_recording_stopped">Grabación detenida</string>
     <string name="settings_storage_permission">Permiso de almacenamiento</string>
-    <string name="settings_section_shake">Guardar agitando</string>
+    <string name="settings_shake_to_save">Guardar agitando</string>
     <string name="settings_shake_enabled">Activar guardar agitando</string>
     <string name="settings_shake_strength">Fuerza de activación</string>
     <string name="settings_shake_hint">Durante la grabación, agita el dispositivo para guardar una repetición. Cuanto mayor sea el valor, más fuerte hay que agitar</string>

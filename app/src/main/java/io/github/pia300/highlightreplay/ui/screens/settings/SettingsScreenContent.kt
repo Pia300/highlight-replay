@@ -250,35 +250,6 @@ fun SettingsScreenContent(
                     )
                 }
 
-                // 摇一摇保存：力度改动即时下发到录制服务，故 notifyRecording = false
-                // （不置「下次生效」的 stale 提示，也不弹该提示的 Toast）。
-                if (shakeSupported) {
-                    item {
-                        SectionHeader(stringResource(R.string.settings_section_shake))
-                        ShakeToSaveSection(
-                            enabled = currentState.shakeToSave == RecorderSettings.VALUE_ON,
-                            strength = currentState.shakeStrength.toIntOrNull()
-                                ?: RecorderSettings.SHAKE_STRENGTH_DEFAULT,
-                            onEnabledChange = { enabled ->
-                                update(
-                                    RecorderSettings.KEY_SHAKE_TO_SAVE,
-                                    if (enabled) RecorderSettings.VALUE_ON else RecorderSettings.VALUE_OFF,
-                                    notifyRecording = false
-                                )
-                                viewModel.onShakeSettingChanged()
-                            },
-                            onStrengthChange = { strength ->
-                                update(
-                                    RecorderSettings.KEY_SHAKE_STRENGTH,
-                                    strength.toString(),
-                                    notifyRecording = false
-                                )
-                                viewModel.onShakeSettingChanged()
-                            }
-                        )
-                    }
-                }
-
                 item {
                     SectionHeader(stringResource(R.string.settings_section_general))
 
@@ -309,6 +280,31 @@ fun SettingsScreenContent(
                         },
                         offHint = stringResource(R.string.settings_audio_monitor_off_hint)
                     )
+
+                    // 力度改动即时下发到录制服务，故不置「下次生效」的 stale 标记。
+                    if (shakeSupported) {
+                        ShakeToSaveSection(
+                            enabled = currentState.shakeToSave == RecorderSettings.VALUE_ON,
+                            strength = currentState.shakeStrength.toIntOrNull()
+                                ?: RecorderSettings.SHAKE_STRENGTH_DEFAULT,
+                            onEnabledChange = { enabled ->
+                                update(
+                                    RecorderSettings.KEY_SHAKE_TO_SAVE,
+                                    if (enabled) RecorderSettings.VALUE_ON else RecorderSettings.VALUE_OFF,
+                                    notifyRecording = false
+                                )
+                                viewModel.onShakeSettingChanged()
+                            },
+                            onStrengthChange = { strength ->
+                                update(
+                                    RecorderSettings.KEY_SHAKE_STRENGTH,
+                                    strength.toString(),
+                                    notifyRecording = false
+                                )
+                                viewModel.onShakeSettingChanged()
+                            }
+                        )
+                    }
                 }
 
                 // 悬浮窗特有设置区块由调用方注入。

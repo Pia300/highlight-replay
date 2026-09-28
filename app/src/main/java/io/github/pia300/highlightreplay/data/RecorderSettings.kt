@@ -92,7 +92,7 @@ data class RecorderSettings(
     val audioMonitor: String = VALUE_OFF,
     // 摇一摇保存默认关闭：开启后才注册加速度计监听（避免默认占用传感器）。
     val shakeToSave: String = VALUE_OFF,
-    // 触发力度（0..100）：数值越大，判定阈值越高，需要越用力摇动才会触发。
+    // 触发力度（见 SHAKE_STRENGTH_RANGE）：数值越大，判定阈值越高，需要越用力摇动才会触发。
     val shakeStrength: Int = SHAKE_STRENGTH_DEFAULT
 ) {
 
@@ -184,9 +184,9 @@ data class RecorderSettings(
         val BIT_RATE_RANGE = 1..100
         val REPLAY_DURATION_RANGE = 1..300
 
-        // 触发力度：0（最容易触发）..100（最用力才触发）。范围即引擎换算阈值的定义域，
-        // 故不是 UI 档位而是硬边界——越界值一律钳制，见 parseShakeStrength。
-        val SHAKE_STRENGTH_RANGE = 0..100
+        // 触发力度：10（最容易触发）..100（最用力才触发）。下限高于 0：力度不存在"零"这档，
+        // 且该值直接展示为百分比。范围同时是引擎换算阈值的定义域，越界值一律钳制（见 parseShakeStrength）。
+        val SHAKE_STRENGTH_RANGE = 10..100
         const val SHAKE_STRENGTH_DEFAULT = 50
 
         // 设置页 UI 档位；存储值不在档位内时吸附到最近档位。
@@ -254,12 +254,7 @@ data class RecorderSettings(
             }
         }
 
-        /**
-         * 解析触发力度：越界值钳制到 [SHAKE_STRENGTH_RANGE]，缺失/非数字回退默认值。
-         *
-         * 与 [snapToOption] 不同：力度是连续量（滑杆），不存在"吸附到档位"，只有边界与默认值。
-         * （internal 供单元测试直接调用。）
-         */
+        /** 解析触发力度：越界值钳制到 [SHAKE_STRENGTH_RANGE]，缺失/非数字回退默认值。 */
         internal fun parseShakeStrength(raw: String?): Int =
             raw?.toIntOrNull()?.coerceIn(SHAKE_STRENGTH_RANGE) ?: SHAKE_STRENGTH_DEFAULT
 

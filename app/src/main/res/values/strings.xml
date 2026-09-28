@@ -285,5 +285,12 @@
     <string name="notif_float_open_failed">Unable to open the floating window. Check the overlay permission.</string>
     <string name="tag_color_option">Colour %1$d</string>
     <string name="settings_storage_permission">Storage permission</string>
+    <string name="settings_section_shake">Shake to save</string>
+    <string name="settings_shake_enabled">Enable shake to save</string>
+    <string name="settings_shake_strength">Trigger force</string>
+    <string name="settings_shake_hint">While recording, shake the device to save a replay. A higher value requires a harder shake.</string>
+    <string name="settings_shake_strength_low">Low</string>
+    <string name="settings_shake_strength_medium">Medium</string>
+    <string name="settings_shake_strength_high">High</string>
 </resources>
 

@@ -1,5 +1,6 @@
 package io.github.pia300.highlightreplay.ui.screens.settings
 
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import io.github.pia300.highlightreplay.data.ThemePrefs
 import io.github.pia300.highlightreplay.data.VideoCodec
 import io.github.pia300.highlightreplay.engine.cachedCodecSupport
 import io.github.pia300.highlightreplay.engine.isCodecSupported
+import io.github.pia300.highlightreplay.service.ShakeController
 import io.github.pia300.highlightreplay.ui.SettingOptionLabels
 import io.github.pia300.highlightreplay.ui.components.RecordingTipCard
 import io.github.pia300.highlightreplay.ui.components.SectionHeader
@@ -69,6 +71,9 @@ fun SettingsScreenContent(
     val (codecOptions, encoderOptions, audioOptions) = remember(hevcSupported) {
         settingsOptionLists(context, hevcSupported)
     }
+
+    // 无加速度计的机型（部分平板、模拟器）不展示摇一摇区块。
+    val shakeSupported = remember(context) { ShakeController.isSupported(context) }
 
     /** 更新字符串偏好：值未变化跳过写入；默认通知录制服务（录制中弹提示并置 stale 标记，下次会话生效）。 */
     fun update(key: String, value: String, notifyRecording: Boolean = true) {
@@ -243,6 +248,35 @@ fun SettingsScreenContent(
                         selected = currentState.replayDuration,
                         onSelect = { update(RecorderSettings.KEY_REPLAY_DURATION, it) }
                     )
+                }
+
+                // 摇一摇保存：力度改动即时下发到录制服务，故 notifyRecording = false
+                // （不置「下次生效」的 stale 提示，也不弹该提示的 Toast）。
+                if (shakeSupported) {
+                    item {
+                        SectionHeader(stringResource(R.string.settings_section_shake))
+                        ShakeToSaveSection(
+                            enabled = currentState.shakeToSave == RecorderSettings.VALUE_ON,
+                            strength = currentState.shakeStrength.toIntOrNull()
+                                ?: RecorderSettings.SHAKE_STRENGTH_DEFAULT,
+                            onEnabledChange = { enabled ->
+                                update(
+                                    RecorderSettings.KEY_SHAKE_TO_SAVE,
+                                    if (enabled) RecorderSettings.VALUE_ON else RecorderSettings.VALUE_OFF,
+                                    notifyRecording = false
+                                )
+                                viewModel.onShakeSettingChanged()
+                            },
+                            onStrengthChange = { strength ->
+                                update(
+                                    RecorderSettings.KEY_SHAKE_STRENGTH,
+                                    strength.toString(),
+                                    notifyRecording = false
+                                )
+                                viewModel.onShakeSettingChanged()
+                            }
+                        )
+                    }
                 }
 
                 item {

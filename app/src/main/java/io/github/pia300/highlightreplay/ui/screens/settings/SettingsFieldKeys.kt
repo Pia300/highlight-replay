@@ -18,7 +18,9 @@ internal enum class SettingsFieldKey(
     REPLAY_DURATION(RecorderSettings.KEY_REPLAY_DURATION, { it.replayDuration }),
     TOAST_NOTIFY(RecorderSettings.KEY_TOAST_NOTIFY, { it.toastNotify }),
     CONTENT_ROTATION(RecorderSettings.KEY_CONTENT_ROTATION, { it.contentRotation }),
-    AUDIO_MONITOR(RecorderSettings.KEY_AUDIO_MONITOR, { it.audioMonitor });
+    AUDIO_MONITOR(RecorderSettings.KEY_AUDIO_MONITOR, { it.audioMonitor }),
+    SHAKE_TO_SAVE(RecorderSettings.KEY_SHAKE_TO_SAVE, { it.shakeToSave }),
+    SHAKE_STRENGTH(RecorderSettings.KEY_SHAKE_STRENGTH, { it.shakeStrength });
 
     companion object {
         /** 按存储键查找映射；未知键返回 null（调用方应只传本表内的键）。 */

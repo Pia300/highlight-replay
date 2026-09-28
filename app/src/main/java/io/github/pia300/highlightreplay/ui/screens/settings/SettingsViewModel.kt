@@ -3,6 +3,7 @@ package io.github.pia300.highlightreplay.ui.screens.settings
 import android.app.Application
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
@@ -21,6 +22,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** 设置页 ViewModel：读写应用主偏好文件并刷新状态流；录制中修改参数经静态入口通知录制服务（Toast + stale 标记，不热生效）。 */
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
+
+    private companion object {
+        private const val TAG = "SettingsViewModel"
+    }
 
     private val prefs = application.defaultPrefs()
 
@@ -75,6 +80,24 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         notifyFloatingSettingsChanged()
     }
 
+    /**
+     * 摇一摇设置变化：录制中的会话即时生效。
+     *
+     * 该设置不进「下次生效」的 stale 提示——摇一摇是触发通道，改了就该立刻按新力度判定，
+     * 与录制参数（分辨率/码率等）需要重启会话的语义不同。
+     */
+    fun onShakeSettingChanged() {
+        if (!RecorderService.isRunning) return
+        val app = getApplication<Application>()
+        try {
+            app.startService(
+                Intent(app, RecorderService::class.java).setAction(RecorderService.ACTION_UPDATE_SHAKE)
+            )
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to update shake settings: ${e.message}")
+        }
+    }
+
     private fun notifyFloatingSettingsChanged(resetPosition: Boolean = false) {
         if (!FloatingControlService.isRunning) return
         val app = getApplication<Application>()
@@ -100,6 +123,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             toastNotify = s.toastNotify,
             contentRotation = s.contentRotation,
             audioMonitor = s.audioMonitor,
+            shakeToSave = s.shakeToSave,
+            shakeStrength = s.shakeStrength.toString(),
             language = LanguagePrefs.current(getApplication()),
             floatingSize = prefs.getIntSafe(
                 RecorderPrefs.KEY_FLOATING_SIZE,

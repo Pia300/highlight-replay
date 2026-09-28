@@ -17,6 +17,8 @@ class SettingsUiState(
     val toastNotify: String,
     val contentRotation: String,
     val audioMonitor: String,
+    val shakeToSave: String,
+    val shakeStrength: String,
     val language: String,
     val floatingSize: Int,
     val floatingOpacity: Int,

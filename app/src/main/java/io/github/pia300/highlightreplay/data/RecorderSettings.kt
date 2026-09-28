@@ -89,7 +89,11 @@ data class RecorderSettings(
     // 内容自适应旋转默认开启：物理方向与录制方向不一致时内容自动对齐。
     val contentRotation: String = VALUE_ON,
     // 音频监视器默认关闭：关闭时不做音频电平判定，悬浮球与通知栏只指示视频状态。
-    val audioMonitor: String = VALUE_OFF
+    val audioMonitor: String = VALUE_OFF,
+    // 摇一摇保存默认关闭：开启后才注册加速度计监听（避免默认占用传感器）。
+    val shakeToSave: String = VALUE_OFF,
+    // 触发力度（0..100）：数值越大，判定阈值越高，需要越用力摇动才会触发。
+    val shakeStrength: Int = SHAKE_STRENGTH_DEFAULT
 ) {
 
     init {
@@ -119,6 +123,8 @@ data class RecorderSettings(
         require(toastNotify == VALUE_ON || toastNotify == VALUE_OFF) { "invalid toastNotify: $toastNotify" }
         require(contentRotation == VALUE_ON || contentRotation == VALUE_OFF) { "invalid contentRotation: $contentRotation" }
         require(audioMonitor == VALUE_ON || audioMonitor == VALUE_OFF) { "invalid audioMonitor: $audioMonitor" }
+        require(shakeToSave == VALUE_ON || shakeToSave == VALUE_OFF) { "invalid shakeToSave: $shakeToSave" }
+        require(shakeStrength in SHAKE_STRENGTH_RANGE) { "shakeStrength out of range: $shakeStrength" }
     }
 
     val codecEnum: VideoCodec get() = VideoCodec.fromPref(codec)
@@ -130,6 +136,9 @@ data class RecorderSettings(
 
     /** 音频监视器是否开启：开启时才判定音频电平，供悬浮球与通知栏指示。 */
     val audioMonitorEnabled: Boolean get() = audioMonitor == VALUE_ON
+
+    /** 摇一摇保存是否开启：开启后才注册加速度计监听。 */
+    val shakeToSaveEnabled: Boolean get() = shakeToSave == VALUE_ON
 
     /** 视频码率（bps）；bitRate 字段以 Mbps 存储。 */
     fun getVideoBitRateBps(): Int = bitRate * 1_000_000
@@ -166,12 +175,19 @@ data class RecorderSettings(
         const val KEY_TOAST_NOTIFY = "toast_notify"
         const val KEY_CONTENT_ROTATION = "content_rotation"
         const val KEY_AUDIO_MONITOR = "audio_monitor"
+        const val KEY_SHAKE_TO_SAVE = "shake_to_save"
+        const val KEY_SHAKE_STRENGTH = "shake_strength"
 
         // 引擎物理范围（构造校验/缓冲容量钳制使用；比 UI 档位宽）。
         val RESOLUTION_RANGE = 480..4320
         val FRAME_RATE_RANGE = 15..144
         val BIT_RATE_RANGE = 1..100
         val REPLAY_DURATION_RANGE = 1..300
+
+        // 触发力度：0（最容易触发）..100（最用力才触发）。范围即引擎换算阈值的定义域，
+        // 故不是 UI 档位而是硬边界——越界值一律钳制，见 parseShakeStrength。
+        val SHAKE_STRENGTH_RANGE = 0..100
+        const val SHAKE_STRENGTH_DEFAULT = 50
 
         // 设置页 UI 档位；存储值不在档位内时吸附到最近档位。
         val RESOLUTION_OPTIONS = intArrayOf(720, 1080, 1440)
@@ -238,6 +254,15 @@ data class RecorderSettings(
             }
         }
 
+        /**
+         * 解析触发力度：越界值钳制到 [SHAKE_STRENGTH_RANGE]，缺失/非数字回退默认值。
+         *
+         * 与 [snapToOption] 不同：力度是连续量（滑杆），不存在"吸附到档位"，只有边界与默认值。
+         * （internal 供单元测试直接调用。）
+         */
+        internal fun parseShakeStrength(raw: String?): Int =
+            raw?.toIntOrNull()?.coerceIn(SHAKE_STRENGTH_RANGE) ?: SHAKE_STRENGTH_DEFAULT
+
         /** 把存储值吸附到最近的 UI 档位；缺失/非法时回退默认档位（internal 供单元测试直接调用）。 */
         internal fun snapToOption(raw: String?, options: IntArray, default: Int): Int {
             val v = raw?.toIntOrNull() ?: return default
@@ -268,7 +293,9 @@ data class RecorderSettings(
                 ).prefValue,
                 toastNotify = if (prefs.getStringSafe(KEY_TOAST_NOTIFY) == VALUE_OFF) VALUE_OFF else VALUE_ON,
                 contentRotation = if (prefs.getStringSafe(KEY_CONTENT_ROTATION) == VALUE_OFF) VALUE_OFF else VALUE_ON,
-                audioMonitor = if (prefs.getStringSafe(KEY_AUDIO_MONITOR) == VALUE_ON) VALUE_ON else VALUE_OFF
+                audioMonitor = if (prefs.getStringSafe(KEY_AUDIO_MONITOR) == VALUE_ON) VALUE_ON else VALUE_OFF,
+                shakeToSave = if (prefs.getStringSafe(KEY_SHAKE_TO_SAVE) == VALUE_ON) VALUE_ON else VALUE_OFF,
+                shakeStrength = parseShakeStrength(prefs.getStringSafe(KEY_SHAKE_STRENGTH))
             )
         }
     }

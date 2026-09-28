@@ -282,5 +282,12 @@
     <string name="tag_color_option">Цвет %1$d</string>
     <string name="toast_recording_stopped">Запись остановлена</string>
     <string name="settings_storage_permission">Разрешение на доступ к хранилищу</string>
+    <string name="settings_section_shake">Сохранение встряхиванием</string>
+    <string name="settings_shake_enabled">Включить сохранение встряхиванием</string>
+    <string name="settings_shake_strength">Сила срабатывания</string>
+    <string name="settings_shake_hint">Во время записи встряхните устройство, чтобы сохранить повтор. Чем больше значение, тем сильнее нужно встряхнуть</string>
+    <string name="settings_shake_strength_low">Низкая</string>
+    <string name="settings_shake_strength_medium">Средняя</string>
+    <string name="settings_shake_strength_high">Высокая</string>
 </resources>
 

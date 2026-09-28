@@ -24,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.pia300.highlightreplay.R
 import io.github.pia300.highlightreplay.data.RecorderPrefs
 import io.github.pia300.highlightreplay.ui.components.SectionHeader
+import io.github.pia300.highlightreplay.ui.components.SettingCardSwitchRow
 import io.github.pia300.highlightreplay.ui.components.SettingGroupCard
 
 /** 设置页入口：包装共用内容，注入悬浮窗权限行与“悬浮窗设置”区块。 */
@@ -74,7 +75,7 @@ private fun FloatingSettingsSection(viewModel: SettingsViewModel) {
         ) {
 
             // 会话开始时是否自动显示悬浮球（显隐规则见 RecorderService.ensureFloatingService）。
-            FloatingSwitchRow(
+            SettingCardSwitchRow(
                 description = stringResource(R.string.settings_auto_show_floating_desc),
                 checked = currentState.autoShowFloating,
                 onCheckedChange = { checked ->

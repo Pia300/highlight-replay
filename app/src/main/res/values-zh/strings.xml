@@ -291,5 +291,12 @@
     <string name="notif_float_open_failed">无法打开悬浮窗，请检查悬浮窗权限</string>
     <string name="tag_color_option">颜色 %1$d</string>
     <string name="settings_storage_permission">存储权限</string>
+    <string name="settings_section_shake">摇一摇保存</string>
+    <string name="settings_shake_enabled">启用摇一摇保存</string>
+    <string name="settings_shake_strength">触发力度</string>
+    <string name="settings_shake_hint">录制中摇动设备即可保存回放；数值越大，需要越用力摇动</string>
+    <string name="settings_shake_strength_low">低</string>
+    <string name="settings_shake_strength_medium">中</string>
+    <string name="settings_shake_strength_high">高</string>
 </resources>
 

@@ -282,5 +282,12 @@
     <string name="tag_color_option">Màu %1$d</string>
     <string name="toast_recording_stopped">Đã dừng quay</string>
     <string name="settings_storage_permission">Quyền truy cập bộ nhớ</string>
+    <string name="settings_section_shake">Lắc để lưu</string>
+    <string name="settings_shake_enabled">Bật lắc để lưu</string>
+    <string name="settings_shake_strength">Lực kích hoạt</string>
+    <string name="settings_shake_hint">Khi đang ghi, lắc thiết bị để lưu bản phát lại. Giá trị càng lớn thì càng phải lắc mạnh</string>
+    <string name="settings_shake_strength_low">Thấp</string>
+    <string name="settings_shake_strength_medium">Trung bình</string>
+    <string name="settings_shake_strength_high">Cao</string>
 </resources>
 

@@ -282,5 +282,12 @@
     <string name="tag_color_option">色 %1$d</string>
     <string name="toast_recording_stopped">録画を停止しました</string>
     <string name="settings_storage_permission">ストレージの権限</string>
+    <string name="settings_section_shake">シェイクで保存</string>
+    <string name="settings_shake_enabled">シェイクで保存を有効にする</string>
+    <string name="settings_shake_strength">シェイクの強さ</string>
+    <string name="settings_shake_hint">録画中に端末を振るとリプレイを保存できます。値が大きいほど強く振る必要があります</string>
+    <string name="settings_shake_strength_low">弱</string>
+    <string name="settings_shake_strength_medium">中</string>
+    <string name="settings_shake_strength_high">強</string>
 </resources>
 

@@ -282,5 +282,12 @@
     <string name="tag_color_option">Cor %1$d</string>
     <string name="toast_recording_stopped">Gravação parada</string>
     <string name="settings_storage_permission">Permissão de armazenamento</string>
+    <string name="settings_section_shake">Salvar ao agitar</string>
+    <string name="settings_shake_enabled">Ativar salvar ao agitar</string>
+    <string name="settings_shake_strength">Força de acionamento</string>
+    <string name="settings_shake_hint">Durante a gravação, agite o dispositivo para salvar uma repetição. Quanto maior o valor, mais forte é preciso agitar</string>
+    <string name="settings_shake_strength_low">Baixa</string>
+    <string name="settings_shake_strength_medium">Média</string>
+    <string name="settings_shake_strength_high">Alta</string>
 </resources>
 

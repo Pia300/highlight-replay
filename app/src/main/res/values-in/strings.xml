@@ -284,5 +284,12 @@
     <string name="tag_color_option">Warna %1$d</string>
     <string name="toast_recording_stopped">Perekaman dihentikan</string>
     <string name="settings_storage_permission">Izin penyimpanan</string>
+    <string name="settings_section_shake">Simpan dengan goyangan</string>
+    <string name="settings_shake_enabled">Aktifkan simpan dengan goyangan</string>
+    <string name="settings_shake_strength">Kekuatan pemicu</string>
+    <string name="settings_shake_hint">Saat merekam, goyangkan perangkat untuk menyimpan replay. Semakin besar nilainya, semakin kuat goyangan yang diperlukan</string>
+    <string name="settings_shake_strength_low">Rendah</string>
+    <string name="settings_shake_strength_medium">Sedang</string>
+    <string name="settings_shake_strength_high">Tinggi</string>
 </resources>
 

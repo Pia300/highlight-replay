@@ -102,6 +102,40 @@ class RecorderSettingsParsingTest {
         expectRejected("encoderPreference") { RecorderSettings(encoderPreference = "gpu") }
         expectRejected("toastNotify") { RecorderSettings(toastNotify = "yes") }
         expectRejected("contentRotation") { RecorderSettings(contentRotation = "maybe") }
+        expectRejected("shakeToSave") { RecorderSettings(shakeToSave = "yes") }
+    }
+
+    /** 触发力度是连续量：越界钳制到端点，缺失/非数字回退默认值。 */
+    @Test
+    fun shakeStrengthClampsToRangeAndFallsBack() {
+        assertEquals(
+            RecorderSettings.SHAKE_STRENGTH_DEFAULT,
+            RecorderSettings.parseShakeStrength(null)
+        )
+        assertEquals(
+            RecorderSettings.SHAKE_STRENGTH_DEFAULT,
+            RecorderSettings.parseShakeStrength("abc")
+        )
+        assertEquals(
+            RecorderSettings.SHAKE_STRENGTH_DEFAULT,
+            RecorderSettings.parseShakeStrength("")
+        )
+        assertEquals(43, RecorderSettings.parseShakeStrength("43"))
+        assertEquals(RecorderSettings.SHAKE_STRENGTH_RANGE.first, RecorderSettings.parseShakeStrength("-1"))
+        assertEquals(RecorderSettings.SHAKE_STRENGTH_RANGE.last, RecorderSettings.parseShakeStrength("1000"))
+    }
+
+    /** 触发力度的硬边界同样在构造处拒绝越界值（解析路径已钳制，此处防新增构造路径绕过）。 */
+    @Test
+    fun constructorRejectsOutOfRangeShakeStrength() {
+        listOf(-1, 101, Int.MAX_VALUE, Int.MIN_VALUE).forEach { value ->
+            try {
+                RecorderSettings(shakeStrength = value)
+                throw AssertionError("越界力度未被拒绝：$value")
+            } catch (_: IllegalArgumentException) {
+                // 期望路径
+            }
+        }
     }
 
     /** 反向：每个枚举的合法 prefValue 都必须被接受，避免 require 写成过窄的白名单。 */

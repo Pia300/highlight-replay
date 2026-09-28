@@ -285,5 +285,12 @@
     <string name="tag_color_option">색상 %1$d</string>
     <string name="toast_recording_stopped">녹화를 중지했습니다</string>
     <string name="settings_storage_permission">저장소 권한</string>
+    <string name="settings_section_shake">흔들어 저장</string>
+    <string name="settings_shake_enabled">흔들어 저장 사용</string>
+    <string name="settings_shake_strength">흔들기 세기</string>
+    <string name="settings_shake_hint">녹화 중 기기를 흔들면 리플레이가 저장됩니다. 값이 클수록 더 세게 흔들어야 합니다</string>
+    <string name="settings_shake_strength_low">약</string>
+    <string name="settings_shake_strength_medium">중</string>
+    <string name="settings_shake_strength_high">강</string>
 </resources>
 

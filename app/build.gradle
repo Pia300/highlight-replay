@@ -50,8 +50,8 @@ android {
         applicationId = "io.github.pia300.highlightreplay"
         minSdk = 26
         targetSdk = 35
-        versionCode = 5
-        versionName = "2.6.0"
+        versionCode = 6
+        versionName = "2.7.0-beta.1"
         // 仪器化测试跑在设备上：Compose 交互与状态保存无法在 JVM 上验证。
         testInstrumentationRunner = 'androidx.test.runner.AndroidJUnitRunner'
     }

@@ -22,8 +22,7 @@ class AudioEncoder(private val audioMonitorEnabled: Boolean) {
 
         private const val INFO_OUTPUT_BUFFERS_CHANGED_LEGACY = -3
 
-        private const val FEED_RETRY_LIMIT = 3
-        private const val FEED_RETRY_SLEEP_MS = 10L
+        private const val FEED_RETRY_LIMIT = 1
     }
 
     @Volatile
@@ -266,14 +265,6 @@ class AudioEncoder(private val audioMonitorEnabled: Boolean) {
         for (attempt in 0..FEED_RETRY_LIMIT) {
             written = feedBlock(data, size, blockStartPtsUs)
             if (written >= size) break
-            if (attempt < FEED_RETRY_LIMIT) {
-                try {
-                    Thread.sleep(FEED_RETRY_SLEEP_MS)
-                } catch (_: InterruptedException) {
-                    Thread.currentThread().interrupt()
-                    break
-                }
-            }
         }
 
         ptsClock.advanceQueued(written)

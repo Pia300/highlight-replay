@@ -46,11 +46,11 @@ internal object SystemAudioCapture {
             sampleRate, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT
         ).coerceAtLeast(4096)
 
-        // 基础缓冲翻倍，减少读取线程与消费端之间的抖动。
+        // 基础缓冲取四倍，减少读取线程与消费端之间的抖动。
         val record = AudioRecord.Builder()
             .setAudioPlaybackCaptureConfig(captureConfig)
             .setAudioFormat(audioFormat)
-            .setBufferSizeInBytes(minBufSize * 2)
+            .setBufferSizeInBytes(minBufSize * 4)
             .build()
 
         // 未初始化即捕获配置无效：释放已分配的录音器原生资源后按失败处理。

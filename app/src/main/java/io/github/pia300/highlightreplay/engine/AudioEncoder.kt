@@ -5,6 +5,7 @@ import android.media.MediaCodec
 import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.media.projection.MediaProjection
+import android.os.Process
 import android.os.SystemClock
 import android.util.Log
 import io.github.pia300.highlightreplay.data.RecorderSettings
@@ -160,6 +161,11 @@ class AudioEncoder(private val audioMonitorEnabled: Boolean) {
     fun getOutputFormat(): MediaFormat? = currentOutputFormat
 
     private fun encodeLoop() {
+        try {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
+        } catch (_: Exception) {
+        }
+
         val bufferInfo = MediaCodec.BufferInfo()
         val infoCopy = MediaCodec.BufferInfo()
 

@@ -171,6 +171,8 @@
     <string name="settings_section_replay">Replay settings</string>
     <string name="settings_replay_30s">30 sec</string>
     <string name="settings_replay_60s">60 sec</string>
+    <string name="settings_replay_90s">90 sec</string>
+    <string name="settings_replay_120s">120 sec</string>
     <string name="settings_section_general">General</string>
     <string name="settings_section_theme">Theme</string>
     <string name="settings_dark_mode">Dark mode</string>

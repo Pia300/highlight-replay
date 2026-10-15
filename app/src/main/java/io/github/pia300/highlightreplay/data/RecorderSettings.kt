@@ -194,7 +194,7 @@ data class RecorderSettings(
         val FRAME_RATE_OPTIONS = intArrayOf(24, 30, 60)
         val BIT_RATE_OPTIONS = intArrayOf(4, 8, 12, 16)
         /** 回放时长 UI 档位（秒）。 */
-        val REPLAY_DURATION_OPTIONS = intArrayOf(30, 60)
+        val REPLAY_DURATION_OPTIONS = intArrayOf(30, 60, 90, 120)
 
         /** 编码器类型合法取值集合（构造校验用）。 */
         val ENCODER_PREFERENCE_VALUES = EncoderPreference.entries.map { it.prefValue }.toSet()

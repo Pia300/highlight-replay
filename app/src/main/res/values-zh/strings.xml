@@ -177,6 +177,8 @@
     <string name="settings_section_replay">回录设置</string>
     <string name="settings_replay_30s">30 秒</string>
     <string name="settings_replay_60s">60 秒</string>
+    <string name="settings_replay_90s">90 秒</string>
+    <string name="settings_replay_120s">120 秒</string>
     <string name="settings_section_general">通用</string>
     <string name="settings_section_theme">主题</string>
     <string name="settings_dark_mode">深色模式</string>

@@ -169,6 +169,8 @@
     <string name="settings_section_replay">Настройки повтора</string>
     <string name="settings_replay_30s">30 с</string>
     <string name="settings_replay_60s">60 с</string>
+    <string name="settings_replay_90s">90 с</string>
+    <string name="settings_replay_120s">120 с</string>
     <string name="settings_section_general">Общие</string>
     <string name="settings_section_theme">Тема</string>
     <string name="settings_dark_mode">Тёмный режим</string>

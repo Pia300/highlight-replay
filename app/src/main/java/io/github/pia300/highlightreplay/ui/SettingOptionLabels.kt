@@ -39,6 +39,8 @@ object SettingOptionLabels {
     fun replayDuration(value: Int): Int? = when (value) {
         30 -> R.string.settings_replay_30s
         60 -> R.string.settings_replay_60s
+        90 -> R.string.settings_replay_90s
+        120 -> R.string.settings_replay_120s
         else -> null
     }
 }

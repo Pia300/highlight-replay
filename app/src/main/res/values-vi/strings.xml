@@ -169,6 +169,8 @@
     <string name="settings_section_replay">Cài đặt replay</string>
     <string name="settings_replay_30s">30 giây</string>
     <string name="settings_replay_60s">60 giây</string>
+    <string name="settings_replay_90s">90 giây</string>
+    <string name="settings_replay_120s">120 giây</string>
     <string name="settings_section_general">Chung</string>
     <string name="settings_section_theme">Giao diện</string>
     <string name="settings_dark_mode">Chế độ tối</string>

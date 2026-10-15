@@ -171,6 +171,8 @@
     <string name="settings_section_replay">리플레이 설정</string>
     <string name="settings_replay_30s">30초</string>
     <string name="settings_replay_60s">60초</string>
+    <string name="settings_replay_90s">90초</string>
+    <string name="settings_replay_120s">120초</string>
     <string name="settings_section_general">일반</string>
     <string name="settings_section_theme">테마</string>
     <string name="settings_dark_mode">다크 모드</string>

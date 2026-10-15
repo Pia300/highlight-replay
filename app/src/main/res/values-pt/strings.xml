@@ -169,6 +169,8 @@
     <string name="settings_section_replay">Configurações de repetição</string>
     <string name="settings_replay_30s">30 segundos</string>
     <string name="settings_replay_60s">60 segundos</string>
+    <string name="settings_replay_90s">90 segundos</string>
+    <string name="settings_replay_120s">120 segundos</string>
     <string name="settings_section_general">Geral</string>
     <string name="settings_section_theme">Tema</string>
     <string name="settings_dark_mode">Modo escuro</string>

@@ -61,8 +61,8 @@ internal fun ThemeColorSettingRow(
         Text(
             text = stringResource(R.string.settings_theme_color),
 
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(
                 start = 4.dp,
                 end = 4.dp,

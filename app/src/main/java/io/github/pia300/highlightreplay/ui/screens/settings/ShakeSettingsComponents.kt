@@ -43,8 +43,8 @@ internal fun ShakeToSaveSection(
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = stringResource(R.string.settings_shake_to_save),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface,
             // 与 SwitchSettingRow 的标题位置一致：卡片左右各 16dp 内边距，此处再加 4dp。
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 4.dp)
         )

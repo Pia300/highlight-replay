@@ -1,5 +1,6 @@
 package io.github.pia300.highlightreplay.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,9 +26,14 @@ import io.github.pia300.highlightreplay.R
 fun RecordingTipCard(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        // 用低对比表面容器色作背景，弱化提示区域存在感。
+        // 与设置/列表卡片共用 24dp 圆角与 1dp 描边，避免提示卡在页面里显得“另一套风格”。
+        shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
         )
     ) {
         Row(

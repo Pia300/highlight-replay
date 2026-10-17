@@ -1,6 +1,11 @@
 package io.github.pia300.highlightreplay.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
@@ -135,38 +142,56 @@ internal fun TabContent(
         onTabSelected(Tab.CONTROL)
     }
 
-    when (currentTab) {
-        Tab.CONTROL -> tabStateHolder.SaveableStateProvider(Tab.CONTROL) {
-            ControlScreen(
-                uiState = uiState(),
-                onStartRecording = onStartRecording,
-                onStopRecording = onStopRecording,
-                onSaveReplay = onSaveReplay,
-                modifier = modifier
-            )
-        }
+    // 淡入淡出只作用于页签内容，顶栏/底栏不参与，避免整屏闪动。
+    AnimatedContent(
+        targetState = currentTab,
+        modifier = modifier,
+        transitionSpec = {
+            fadeIn(animationSpec = tween(180)) togetherWith fadeOut(animationSpec = tween(140))
+        },
+        label = "tab-content"
+    ) { tab ->
+        when (tab) {
+            Tab.CONTROL -> tabStateHolder.SaveableStateProvider(Tab.CONTROL) {
+                // 控制台保持改版前的排版/形状基线：全局 token 只服务设置与回放页，
+                // 避免“回滚控制页”后又被全局字体/圆角悄悄改一遍。
+                MaterialTheme(
+                    colorScheme = MaterialTheme.colorScheme,
+                    typography = Typography(),
+                    shapes = Shapes()
+                ) {
+                    ControlScreen(
+                        uiState = uiState(),
+                        onStartRecording = onStartRecording,
+                        onStopRecording = onStopRecording,
+                        onSaveReplay = onSaveReplay,
+                        modifier = Modifier
+                    )
+                }
+            }
 
-        Tab.HISTORY -> tabStateHolder.SaveableStateProvider(Tab.HISTORY) {
-            HistoryScreen(
-                modifier = modifier,
+            Tab.HISTORY -> tabStateHolder.SaveableStateProvider(Tab.HISTORY) {
+                HistoryScreen(
+                    modifier = Modifier,
 
-                // 多选状态上抛给主界面，用于隐藏顶栏返回按钮。
-                onSelectionModeChange = onHistorySelectionChange
-            )
-        }
+                    // 多选状态上抛给主界面，用于隐藏顶栏返回按钮。
+                    onSelectionModeChange = onHistorySelectionChange
+                )
+            }
 
-        Tab.SETTINGS -> tabStateHolder.SaveableStateProvider(Tab.SETTINGS) {
-            SettingsScreen(
-                themeMode = themeMode,
-                themeColor = themeColor,
-                onThemeModeChange = onThemeModeChange,
-                onThemeColorChange = onThemeColorChange,
-                onLanguageChange = onLanguageChange,
-                licenseOpen = licenseOpen,
-                onLicenseOpen = onLicenseOpen,
-                onLicenseClose = onLicenseClose,
-                modifier = modifier
-            )
+            Tab.SETTINGS -> tabStateHolder.SaveableStateProvider(Tab.SETTINGS) {
+                SettingsScreen(
+                    themeMode = themeMode,
+                    themeColor = themeColor,
+                    onThemeModeChange = onThemeModeChange,
+                    onThemeColorChange = onThemeColorChange,
+                    onLanguageChange = onLanguageChange,
+                    licenseOpen = licenseOpen,
+                    onLicenseOpen = onLicenseOpen,
+                    onLicenseClose = onLicenseClose,
+                    modifier = Modifier
+                )
+            }
         }
     }
 }

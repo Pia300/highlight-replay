@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -178,7 +177,7 @@ private fun LicenseTopBar(onBack: () -> Unit) {
         },
 
         windowInsets = WindowInsets(0, 0, 0, 0),
-        modifier = Modifier.compactTopBarInsets()
+        modifier = Modifier.topBarInsets()
     )
 }
 
@@ -190,18 +189,17 @@ private fun TabTopBar(currentTab: Tab) {
         title = { Text(stringResource(currentTab.labelRes)) },
 
         windowInsets = WindowInsets(0, 0, 0, 0),
-        modifier = Modifier.compactTopBarInsets()
+        modifier = Modifier.topBarInsets()
     )
 }
 
-/** 让顶栏避开状态栏并固定为 48dp 高度的修饰符扩展。 */
+/** 让顶栏避开状态栏并消费安全区；高度沿用 Material 默认的 64dp。 */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Modifier.compactTopBarInsets(): Modifier {
+private fun Modifier.topBarInsets(): Modifier {
 
     // 仅保留顶部与水平安全区，并标记已消费以防重复内边距。
     val insets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
     return windowInsetsPadding(insets)
         .consumeWindowInsets(insets)
-        .height(48.dp)
 }

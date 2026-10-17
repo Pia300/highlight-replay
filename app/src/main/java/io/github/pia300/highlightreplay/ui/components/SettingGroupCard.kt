@@ -10,12 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-/**
- * 承载一组设置项的卡片容器。
- *
- * 在浅色主题下 surfaceContainerLow 与背景的亮度差只有 1.08:1，只靠填色几乎看不出边界；
- * 这里补 1dp outlineVariant 描边，用线条而不是阴影表达层级。
- */
+/** 承载一组设置项的卡片容器：surfaceContainerLow 填充 + 1dp outlineVariant 描边。 */
 @Composable
 fun SettingGroupCard(
     modifier: Modifier = Modifier,
@@ -23,7 +18,7 @@ fun SettingGroupCard(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f))
     ) {

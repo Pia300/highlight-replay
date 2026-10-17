@@ -62,7 +62,7 @@ fun SettingSliderRow(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -73,7 +73,7 @@ fun SettingSliderRow(
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
                 },
-                modifier = Modifier.size(22.dp)
+                modifier = Modifier.size(24.dp)
             )
             Spacer(Modifier.width(12.dp))
             Text(
@@ -86,11 +86,11 @@ fun SettingSliderRow(
                 }
             )
         }
-        Spacer(Modifier.height(6.dp))
+        Spacer(Modifier.height(8.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 34.dp)
+                .padding(start = 36.dp)
                 .alpha(if (enabled) 1f else 0.38f),
             verticalAlignment = Alignment.CenterVertically
         ) {

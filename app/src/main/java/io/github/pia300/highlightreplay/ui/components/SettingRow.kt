@@ -44,14 +44,14 @@ fun SettingChoiceRow(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(22.dp)
+                modifier = Modifier.size(24.dp)
             )
             Spacer(Modifier.width(12.dp))
             Text(
@@ -60,11 +60,11 @@ fun SettingChoiceRow(
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-        Spacer(Modifier.height(6.dp))
+        Spacer(Modifier.height(8.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 34.dp)
+                .padding(start = 36.dp)
         ) {
             control()
         }
@@ -109,7 +109,7 @@ fun SettingSwitchRow(
                 imageVector = icon,
                 contentDescription = null,
                 tint = iconTint,
-                modifier = Modifier.size(22.dp)
+                modifier = Modifier.size(24.dp)
             )
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -130,7 +130,7 @@ fun SettingSwitchRow(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(top = 2.dp)
+                            modifier = Modifier.padding(top = 4.dp)
                         )
                     }
                 }
@@ -167,7 +167,7 @@ fun SettingActionRow(
             imageVector = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(22.dp)
+            modifier = Modifier.size(24.dp)
         )
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -194,7 +194,7 @@ fun SettingActionRow(
                 imageVector = trailingIcon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(24.dp)
             )
         }
     }

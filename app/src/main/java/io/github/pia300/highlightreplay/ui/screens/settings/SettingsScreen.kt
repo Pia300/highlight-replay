@@ -77,7 +77,7 @@ private fun FloatingSettingsSection(viewModel: SettingsViewModel) {
                 viewModel.setBoolPref(RecorderPrefs.KEY_AUTO_SHOW_FLOATING, checked)
             }
         )
-        SettingsDivider(insetStart = 50.dp)
+        SettingsDivider(insetStart = 52.dp)
         SettingSliderRow(
             icon = SettingIcons.floatingSize,
             label = stringResource(R.string.settings_floating_size),
@@ -91,7 +91,7 @@ private fun FloatingSettingsSection(viewModel: SettingsViewModel) {
                 viewModel.onFloatingSettingChanged()
             }
         )
-        SettingsDivider(insetStart = 50.dp)
+        SettingsDivider(insetStart = 52.dp)
         SettingSliderRow(
             icon = SettingIcons.floatingOpacity,
             label = stringResource(R.string.settings_floating_opacity),
@@ -105,7 +105,7 @@ private fun FloatingSettingsSection(viewModel: SettingsViewModel) {
                 viewModel.onFloatingSettingChanged()
             }
         )
-        SettingsDivider(insetStart = 50.dp)
+        SettingsDivider(insetStart = 52.dp)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,7 +116,7 @@ private fun FloatingSettingsSection(viewModel: SettingsViewModel) {
                 Icon(
                     imageVector = SettingIcons.reset,
                     contentDescription = null,
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(20.dp)
                 )
                 Spacer(Modifier.width(6.dp))
                 Text(stringResource(R.string.settings_reset_floating))

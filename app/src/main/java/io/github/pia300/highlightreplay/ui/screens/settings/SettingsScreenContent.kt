@@ -136,7 +136,7 @@ fun SettingsScreenContent(
                                 onSelect = { update(RecorderSettings.KEY_CODEC, it) }
                             )
                         }
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         SettingChoiceRow(
                             icon = SettingIcons.encoder,
                             title = stringResource(R.string.settings_encoder_type)
@@ -147,7 +147,7 @@ fun SettingsScreenContent(
                                 onSelect = { update(RecorderSettings.KEY_ENCODER_PREFERENCE, it) }
                             )
                         }
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         SettingChoiceRow(
                             icon = SettingIcons.resolution,
                             title = stringResource(R.string.settings_resolution)
@@ -158,7 +158,7 @@ fun SettingsScreenContent(
                                 onSelect = { update(RecorderSettings.KEY_RESOLUTION, it) }
                             )
                         }
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         SettingChoiceRow(
                             icon = SettingIcons.resolutionMode,
                             title = stringResource(R.string.settings_resolution_mode)
@@ -186,7 +186,7 @@ fun SettingsScreenContent(
                                 }
                             }
                         }
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         SettingChoiceRow(
                             icon = SettingIcons.frameRate,
                             title = stringResource(R.string.settings_frame_rate)
@@ -197,7 +197,7 @@ fun SettingsScreenContent(
                                 onSelect = { update(RecorderSettings.KEY_FRAME_RATE, it) }
                             )
                         }
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         SettingChoiceRow(
                             icon = SettingIcons.bitrate,
                             title = stringResource(R.string.settings_video_bitrate)
@@ -208,7 +208,7 @@ fun SettingsScreenContent(
                                 onSelect = { update(RecorderSettings.KEY_BITRATE, it) }
                             )
                         }
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         SettingChoiceRow(
                             icon = SettingIcons.orientation,
                             title = stringResource(R.string.settings_orientation)
@@ -219,7 +219,7 @@ fun SettingsScreenContent(
                                 onSelect = { update(RecorderSettings.KEY_ORIENTATION, it) }
                             )
                         }
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         SettingSwitchRow(
                             icon = SettingIcons.contentRotation,
                             title = stringResource(R.string.settings_content_rotation),
@@ -301,7 +301,7 @@ fun SettingsScreenContent(
                             },
                             offHint = stringResource(R.string.settings_toast_notify_off_hint)
                         )
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         SettingSwitchRow(
                             icon = SettingIcons.audioMonitor,
                             title = stringResource(R.string.settings_audio_monitor),
@@ -315,7 +315,7 @@ fun SettingsScreenContent(
                             offHint = stringResource(R.string.settings_audio_monitor_off_hint)
                         )
                         if (shakeSupported) {
-                            SettingsDivider(insetStart = 50.dp)
+                            SettingsDivider(insetStart = 52.dp)
                             ShakeToSaveSection(
                                 enabled = currentState.shakeToSave == RecorderSettings.VALUE_ON,
                                 strength = currentState.shakeStrength.toIntOrNull()
@@ -366,7 +366,7 @@ fun SettingsScreenContent(
                                 onSelect = onThemeModeChange
                             )
                         }
-                        SettingsDivider(insetStart = 50.dp)
+                        SettingsDivider(insetStart = 52.dp)
                         ThemeColorSettingRow(
                             selected = themeColor,
                             dynamicSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,

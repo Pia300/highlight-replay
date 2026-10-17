@@ -4,16 +4,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
 
-/**
- * 应用统一形状基线。
- *
- * Material 3 默认值（4/8/12/16/28）偏紧凑，卡片在浅色低对比表面下会显得生硬；
- * 这里整体放大一级，让卡片、指标格与缩略图共享同一套圆角语言。
- */
+/** 应用形状基线：M3 圆角令牌 4/8/12/16/28dp。 */
 val AppShapes = Shapes(
-    extraSmall = RoundedCornerShape(8.dp),
-    small = RoundedCornerShape(12.dp),
-    medium = RoundedCornerShape(18.dp),
-    large = RoundedCornerShape(24.dp),
-    extraLarge = RoundedCornerShape(30.dp)
+    extraSmall = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(12.dp),
+    large = RoundedCornerShape(16.dp),
+    extraLarge = RoundedCornerShape(28.dp)
 )

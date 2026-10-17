@@ -38,7 +38,7 @@ internal fun AboutCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -55,18 +55,18 @@ internal fun AboutCard(
                     text = "v$versionName",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                 )
             }
         }
-        SettingsDivider(insetStart = 50.dp)
+        SettingsDivider(insetStart = 52.dp)
         SettingActionRow(
             icon = SettingIcons.license,
             title = stringResource(R.string.settings_license),
             onClick = onLicenseClick,
             trailingIcon = Icons.AutoMirrored.Filled.KeyboardArrowRight
         )
-        SettingsDivider(insetStart = 50.dp)
+        SettingsDivider(insetStart = 52.dp)
         SettingActionRow(
             icon = SettingIcons.project,
             title = stringResource(R.string.settings_about_project),

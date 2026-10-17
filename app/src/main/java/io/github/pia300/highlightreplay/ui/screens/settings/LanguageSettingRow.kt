@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.pia300.highlightreplay.R
 import io.github.pia300.highlightreplay.data.LanguagePrefs
@@ -76,10 +75,8 @@ internal fun LanguageSettingRow(
             headlineContent = {
                 Text(
                     text = selectedLabel,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             },
             leadingContent = {
@@ -87,7 +84,7 @@ internal fun LanguageSettingRow(
                     imageVector = SettingIcons.language,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             },
             trailingContent = {
@@ -95,7 +92,7 @@ internal fun LanguageSettingRow(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             },
             colors = ListItemDefaults.colors(

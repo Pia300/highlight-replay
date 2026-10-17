@@ -44,7 +44,7 @@ internal fun ShakeToSaveSection(
             onCheckedChange = onEnabledChange,
             hint = stringResource(R.string.settings_shake_hint)
         )
-        SettingsDivider(insetStart = 50.dp)
+        SettingsDivider(insetStart = 52.dp)
         SettingSliderRow(
             icon = SettingIcons.shake,
             label = stringResource(R.string.settings_shake_strength),
@@ -56,7 +56,7 @@ internal fun ShakeToSaveSection(
             enabled = enabled,
             onCommit = { onStrengthChange(it.toInt()) }
         )
-        SettingsDivider(insetStart = 50.dp)
+        SettingsDivider(insetStart = 52.dp)
         ShakeStrengthPresetRow(
             selected = strength,
             enabled = enabled,

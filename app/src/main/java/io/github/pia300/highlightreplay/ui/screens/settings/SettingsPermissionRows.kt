@@ -66,7 +66,7 @@ internal fun ColumnScope.PermissionGroup(
         add { BatteryOptimizationRow() }
     }
     rows.forEachIndexed { index, row ->
-        if (index > 0) SettingsDivider(insetStart = 50.dp)
+        if (index > 0) SettingsDivider(insetStart = 52.dp)
         row()
     }
 }
@@ -112,7 +112,7 @@ internal fun PermissionStatusRow(
             imageVector = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(22.dp)
+            modifier = Modifier.size(24.dp)
         )
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -121,7 +121,7 @@ internal fun PermissionStatusRow(
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = statusIcon,
@@ -129,7 +129,7 @@ internal fun PermissionStatusRow(
                     tint = statusColor,
                     modifier = Modifier.size(16.dp)
                 )
-                Spacer(Modifier.width(6.dp))
+                Spacer(Modifier.width(8.dp))
                 Text(
                     text = if (granted) grantedText else deniedText,
                     style = MaterialTheme.typography.bodySmall,
@@ -146,7 +146,7 @@ internal fun PermissionStatusRow(
             imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(24.dp)
         )
     }
 }

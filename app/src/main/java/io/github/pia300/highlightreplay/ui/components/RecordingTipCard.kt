@@ -30,8 +30,7 @@ import io.github.pia300.highlightreplay.R
 fun RecordingTipCard(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        // 与设置/列表卡片共用 24dp 圆角与 1dp 描边，避免提示卡在页面里显得“另一套风格”。
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),

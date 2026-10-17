@@ -52,7 +52,7 @@ private fun ComponentPreviewContent() {
                     onSelect = {}
                 )
             }
-            SettingsDivider(insetStart = 50.dp)
+            SettingsDivider(insetStart = 52.dp)
             SettingSwitchRow(
                 icon = SettingIcons.contentRotation,
                 title = "内容旋转",

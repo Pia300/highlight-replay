@@ -36,7 +36,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -68,7 +70,8 @@ fun SettingChoiceControl(
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (options.size == 2) {
+    val largeFont = LocalDensity.current.fontScale > 1.2f
+    if (options.size == 2 && !largeFont) {
         SettingSegmentedChoice(options, selected, onSelect, modifier)
     } else {
         SettingChipChoice(options, selected, onSelect, modifier)
@@ -235,6 +238,9 @@ fun SettingSwatchRow(
                         role = Role.RadioButton,
                         onClick = { if (!isSelected) onSelect(option.value) }
                     )
+                    .semantics(mergeDescendants = true) {
+                        contentDescription = option.label
+                    }
                     .padding(vertical = 4.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

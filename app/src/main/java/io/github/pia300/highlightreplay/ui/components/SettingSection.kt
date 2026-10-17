@@ -35,7 +35,7 @@ fun SettingSection(
         Row(
             modifier = Modifier
                 .semantics { heading() }
-                .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 10.dp),
+                .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
@@ -55,7 +55,7 @@ fun SettingSection(
                     )
                 }
             }
-            Spacer(Modifier.width(12.dp))
+            Spacer(Modifier.width(16.dp))
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,

@@ -11,7 +11,7 @@ val StatusCaptureLostDark = StatusCaptureLostDarkBase
 /** 深色浅粉“丢失”底上的前景图标色（近黑深红保证对比度），与浅色主题 onErrorContainer 同值。 */
 val StatusCaptureLostDarkIcon = StatusCaptureLostDarkIconBase
 
-/** 悬浮窗音频电平条颜色（绿色），与状态指示 StatusRecordingDark 共享同一基色。 */
+/** 悬浮窗音频电平条颜色（绿色），与录制态绿色基色一致。 */
 val AudioBar = StatusActiveGreenBase
 
 /** 悬浮窗“录制中”状态颜色（深绿，仅本层使用，保留字面量）。 */

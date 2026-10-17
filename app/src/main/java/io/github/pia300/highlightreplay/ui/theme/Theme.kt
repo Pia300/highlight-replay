@@ -38,6 +38,8 @@ fun HighlightReplayTheme(
     CompositionLocalProvider(LocalDarkTheme provides darkTheme) {
         MaterialTheme(
             colorScheme = colorScheme,
+            typography = AppTypography,
+            shapes = AppShapes,
             content = content
         )
     }

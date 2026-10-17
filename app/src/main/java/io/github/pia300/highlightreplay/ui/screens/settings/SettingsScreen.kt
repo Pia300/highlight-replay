@@ -109,7 +109,7 @@ private fun FloatingSettingsSection(viewModel: SettingsViewModel) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp),
+                .padding(horizontal = 8.dp, vertical = 12.dp),
             contentAlignment = Alignment.CenterEnd
         ) {
             TextButton(onClick = { viewModel.resetFloating() }) {

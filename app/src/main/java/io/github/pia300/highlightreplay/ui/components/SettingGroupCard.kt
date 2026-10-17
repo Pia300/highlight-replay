@@ -19,12 +19,12 @@ fun SettingGroupCard(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f))
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 4.dp),
+            modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
             content = content
         )
     }

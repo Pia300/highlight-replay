@@ -2,6 +2,7 @@ package io.github.pia300.highlightreplay.ui.screens.settings
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -69,7 +70,9 @@ internal fun LanguageSettingRow(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
     ) {
         ListItem(
             headlineContent = {

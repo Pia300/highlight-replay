@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -112,35 +113,34 @@ fun SettingSwitchRow(
                 modifier = Modifier.size(24.dp)
             )
             Spacer(Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                AnimatedVisibility(
-                    visible = visibleHint != null,
-                    enter = expandVertically() + fadeIn(),
-                    exit = shrinkVertically() + fadeOut()
-                ) {
-                    if (visibleHint != null) {
-                        Text(
-                            text = visibleHint,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 3,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
-                }
-            }
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(Modifier.width(12.dp))
             Switch(
                 checked = checked,
                 onCheckedChange = null,
                 modifier = Modifier.clearAndSetSemantics { }
             )
+        }
+        AnimatedVisibility(
+            visible = visibleHint != null,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
+            if (visibleHint != null) {
+                Text(
+                    text = visibleHint,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = 36.dp, top = 4.dp)
+                )
+            }
         }
     }
 }
@@ -160,6 +160,7 @@ fun SettingActionRow(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
+            .heightIn(min = 48.dp)
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

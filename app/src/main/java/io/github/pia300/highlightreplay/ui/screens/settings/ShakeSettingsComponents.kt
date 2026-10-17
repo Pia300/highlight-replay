@@ -75,7 +75,7 @@ private fun ShakeStrengthPresetRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
             .selectableGroup(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {

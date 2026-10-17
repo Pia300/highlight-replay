@@ -1,23 +1,20 @@
 package io.github.pia300.highlightreplay.ui.components
 
 import android.content.SharedPreferences
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.HighQuality
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Speed
-import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.pia300.highlightreplay.R
 import io.github.pia300.highlightreplay.data.AudioSourceMode
@@ -38,7 +35,16 @@ import io.github.pia300.highlightreplay.data.VideoCodec
 import io.github.pia300.highlightreplay.data.defaultPrefs
 import io.github.pia300.highlightreplay.ui.SettingOptionLabels
 
-/** 录制设置卡片：以图标加文本行展示当前录制配置摘要。 */
+/**
+ * 录制设置摘要卡片：一行“分辨率/模式/编码”主摘要，下面 2×2 排列其余四项。
+ *
+ * 原实现是五行“图标 + 标签 + 值”，卡片高、扫读路径长；这里把分辨率模式、
+ * 分辨率与编码合并成一行主摘要（保留原有全部信息），其余数值改成等宽两列，
+ * 卡片更矮、层次更清楚，也不再依赖五个图标撑节奏。
+ *
+ * 横屏右栏只有 220dp：用 BoxWithConstraints 收紧内边距与字号，并把主摘要改为
+ * 上下排，避免值被截断；小窗（compact）复用同一套密集样式。
+ */
 @Composable
 fun RecordingSettingsCard(
     modifier: Modifier = Modifier,
@@ -83,108 +89,147 @@ fun RecordingSettingsCard(
         AudioSourceMode.NONE -> stringResource(R.string.settings_audio_none)
     }
 
-    val contentPadding = if (compact) 10.dp else 16.dp
-    val rowSpacing = if (compact) 4.dp else 8.dp
-    val iconSize = if (compact) 20.dp else 24.dp
-    val textStyle =
-        if (compact) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium
-
-    // 用 surfaceContainerLow 作卡片背景，与主题一致。
     Card(
         modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
         )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
+        BoxWithConstraints {
+            val narrow = maxWidth < 280.dp
+            val dense = compact || narrow
+            val contentPadding = if (dense) 12.dp else 16.dp
+            val blockSpacing = if (dense) 8.dp else 12.dp
+            val cellSpacing = if (dense) 8.dp else 16.dp
+            val cellValueStyle = when {
+                narrow -> MaterialTheme.typography.bodySmall
+                compact -> MaterialTheme.typography.bodyMedium
+                else -> MaterialTheme.typography.titleSmall
+            }
 
-                .padding(contentPadding)
-        ) {
-            SettingInfoRow(
-                Icons.Default.Videocam,
-                stringResource(R.string.settings_resolution),
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding)
+            ) {
+                // 主摘要：分辨率模式 · 分辨率 · 编码，保留原卡片里被合并的三项信息。
+                if (dense) {
+                    Column {
+                        Text(
+                            text = stringResource(R.string.settings_resolution),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.settings_resolution_summary,
+                                resolutionModeLabel,
+                                resolutionLabel,
+                                codecLabel
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = if (narrow) 2 else 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(top = 2.dp)
+                        )
+                    }
+                } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.settings_resolution),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            text = stringResource(
+                                R.string.settings_resolution_summary,
+                                resolutionModeLabel,
+                                resolutionLabel,
+                                codecLabel
+                            ),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
 
-                stringResource(
-                    R.string.settings_resolution_summary,
-                    resolutionModeLabel, resolutionLabel, codecLabel
-                ),
-                iconSize = iconSize,
-                textStyle = textStyle
-            )
-            Spacer(Modifier.height(rowSpacing))
-            SettingInfoRow(
-                Icons.Default.Speed,
-                stringResource(R.string.settings_frame_rate),
-                stringResource(R.string.settings_fps, settingsValue.frameRate),
-                iconSize = iconSize,
-                textStyle = textStyle
-            )
-            Spacer(Modifier.height(rowSpacing))
-            SettingInfoRow(
-                Icons.Default.HighQuality,
-                stringResource(R.string.settings_video_bitrate),
-                stringResource(R.string.settings_mbps, settingsValue.bitRate),
-                iconSize = iconSize,
-                textStyle = textStyle
-            )
-            Spacer(Modifier.height(rowSpacing))
-            SettingInfoRow(
-                Icons.Default.Mic,
-                stringResource(R.string.settings_audio_source),
-                audioLabel,
-                iconSize = iconSize,
-                textStyle = textStyle
-            )
-            Spacer(Modifier.height(rowSpacing))
-            SettingInfoRow(
-                Icons.Default.AccessTime,
-                stringResource(R.string.settings_replay_duration),
-                stringResource(R.string.settings_seconds, settingsValue.replayDuration),
-                iconSize = iconSize,
-                textStyle = textStyle
-            )
+                Spacer(Modifier.height(blockSpacing))
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+                )
+                Spacer(Modifier.height(blockSpacing))
+
+                Row(horizontalArrangement = Arrangement.spacedBy(cellSpacing)) {
+                    SettingInfoCell(
+                        label = stringResource(R.string.settings_frame_rate),
+                        value = stringResource(R.string.settings_fps, settingsValue.frameRate),
+                        valueStyle = cellValueStyle,
+                        modifier = Modifier.weight(1f)
+                    )
+                    SettingInfoCell(
+                        label = stringResource(R.string.settings_video_bitrate),
+                        value = stringResource(R.string.settings_mbps, settingsValue.bitRate),
+                        valueStyle = cellValueStyle,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(Modifier.height(if (dense) 6.dp else 10.dp))
+
+                Row(horizontalArrangement = Arrangement.spacedBy(cellSpacing)) {
+                    SettingInfoCell(
+                        label = stringResource(R.string.settings_audio_source),
+                        value = audioLabel,
+                        valueStyle = cellValueStyle,
+                        modifier = Modifier.weight(1f)
+                    )
+                    SettingInfoCell(
+                        label = stringResource(R.string.settings_replay_duration),
+                        value = stringResource(
+                            R.string.settings_seconds,
+                            settingsValue.replayDuration
+                        ),
+                        valueStyle = cellValueStyle,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
         }
     }
 }
 
-/** 单行设置信息：左侧图标与标签，右侧当前值。 */
+/** 规格格：上方小标签、下方当前值，两列等宽对齐。 */
 @Composable
-private fun SettingInfoRow(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+private fun SettingInfoCell(
     label: String,
     value: String,
-    modifier: Modifier = Modifier,
-    iconSize: Dp = 24.dp,
-    textStyle: TextStyle? = null
+    valueStyle: TextStyle,
+    modifier: Modifier = Modifier
 ) {
-    val effectiveTextStyle = textStyle ?: MaterialTheme.typography.bodyMedium
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            // 图标装饰性（标签已说明含义），无需无障碍描述。
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(iconSize)
-            )
-            Spacer(Modifier.size(12.dp))
-            Text(
-                text = label,
-                style = effectiveTextStyle,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+    Column(modifier = modifier) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
         Text(
             text = value,
-            style = effectiveTextStyle,
-            color = MaterialTheme.colorScheme.onSurface
+            style = valueStyle,
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(top = 2.dp)
         )
     }
 }

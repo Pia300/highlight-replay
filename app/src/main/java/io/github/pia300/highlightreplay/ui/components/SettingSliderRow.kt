@@ -78,7 +78,7 @@ fun SettingSliderRow(
             Spacer(Modifier.width(12.dp))
             Text(
                 text = label,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.labelLarge,
                 color = if (enabled) {
                     MaterialTheme.colorScheme.onSurface
                 } else {

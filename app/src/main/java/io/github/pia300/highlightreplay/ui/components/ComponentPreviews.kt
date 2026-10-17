@@ -30,26 +30,56 @@ private fun ComponentPreviewsDark() {
     }
 }
 
-/** 预览内容：小节标题、开关行、分隔线与标签行。 */
+/** 预览内容：设置分区、选择行、开关行与标签行。 */
 @Composable
 private fun ComponentPreviewContent() {
     Column {
-        SectionHeader(title = "视频设置")
-        SwitchSettingRow(
-            label = "内容旋转",
-            boxText = "跟随屏幕方向旋转画面",
-            checked = true,
-            onCheckedChange = {},
-            hint = "录制中旋转屏幕时自动调整画面方向"
-        )
-        SwitchSettingRow(
-            label = "Toast 通知",
-            boxText = "显示录制状态提示",
-            checked = false,
-            onCheckedChange = {},
-            offHint = "关闭后不再显示状态提示"
-        )
-        SettingsDivider()
+        SettingSection(
+            icon = SettingIcons.video,
+            title = "视频设置"
+        ) {
+            SettingChoiceRow(
+                icon = SettingIcons.resolution,
+                title = "分辨率"
+            ) {
+                SettingChoiceControl(
+                    options = listOf(
+                        SettingChoice("720", "720p"),
+                        SettingChoice("1080", "1080p"),
+                        SettingChoice("1440", "1440p")
+                    ),
+                    selected = "1080",
+                    onSelect = {}
+                )
+            }
+            SettingsDivider(insetStart = 50.dp)
+            SettingSwitchRow(
+                icon = SettingIcons.contentRotation,
+                title = "内容旋转",
+                checked = true,
+                onCheckedChange = {},
+                hint = "录制中旋转屏幕时自动调整画面方向"
+            )
+        }
+        SettingSection(
+            icon = SettingIcons.theme,
+            title = "主题"
+        ) {
+            SettingChoiceRow(
+                icon = SettingIcons.darkMode,
+                title = "深色模式"
+            ) {
+                SettingChoiceControl(
+                    options = listOf(
+                        SettingChoice("system", "跟随系统", SettingIcons.themeSystem),
+                        SettingChoice("light", "浅色", SettingIcons.themeLight),
+                        SettingChoice("dark", "深色", SettingIcons.themeDark)
+                    ),
+                    selected = "system",
+                    onSelect = {}
+                )
+            }
+        }
         TagChipRow(
             tags = listOf(
                 VideoTag("tag_preview_1", "精彩瞬间", 0xFFE91E63),

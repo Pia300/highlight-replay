@@ -16,22 +16,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.pia300.highlightreplay.R
 import io.github.pia300.highlightreplay.data.RecorderSettings
-import io.github.pia300.highlightreplay.ui.components.SettingCardSwitchRow
-import io.github.pia300.highlightreplay.ui.components.SettingGroupCard
+import io.github.pia300.highlightreplay.ui.components.SettingIcons
+import io.github.pia300.highlightreplay.ui.components.SettingSliderRow
+import io.github.pia300.highlightreplay.ui.components.SettingSwitchRow
 
-/**
- * 「触发力度」快捷档位：值与文案资源。
- *
- * 档位只是滑杆的跳转点，不是离散档位：拖到 43 时三个档位都不高亮。
- * 值必须落在 [RecorderSettings.SHAKE_STRENGTH_RANGE] 内且严格递增（见 ShakeStrengthPresetsTest）。
- */
+/** 触发力度快捷档位：值与文案资源。 */
 internal val SHAKE_STRENGTH_PRESETS: List<Pair<Int, Int>> = listOf(
     25 to R.string.settings_shake_strength_low,
     50 to R.string.settings_shake_strength_medium,
     75 to R.string.settings_shake_strength_high
 )
 
-/** 摇一摇保存区块：标题、开关、触发力度滑杆与低/中/高快捷档位；力度改动即时下发到录制服务。 */
+/** 摇一摇保存区块：开关、力度滑杆与低/中/高快捷档位。 */
 @Composable
 internal fun ShakeToSaveSection(
     enabled: Boolean,
@@ -41,50 +37,45 @@ internal fun ShakeToSaveSection(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = stringResource(R.string.settings_shake_to_save),
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-            // 与 SwitchSettingRow 的标题位置一致：卡片左右各 16dp 内边距，此处再加 4dp。
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 4.dp)
+        SettingSwitchRow(
+            icon = SettingIcons.shake,
+            title = stringResource(R.string.settings_shake_to_save),
+            checked = enabled,
+            onCheckedChange = onEnabledChange,
+            hint = stringResource(R.string.settings_shake_hint)
         )
-        SettingGroupCard(modifier = Modifier.padding(horizontal = 16.dp)) {
-            SettingCardSwitchRow(
-                description = stringResource(R.string.settings_shake_enabled),
-                checked = enabled,
-                onCheckedChange = onEnabledChange
-            )
-            SettingsDivider()
-            SliderSettingRow(
-                label = stringResource(R.string.settings_shake_strength),
-                valueRange = RecorderSettings.SHAKE_STRENGTH_RANGE.start.toFloat()..
-                    RecorderSettings.SHAKE_STRENGTH_RANGE.endInclusive.toFloat(),
-                initialValue = strength.toFloat(),
-                formatValue = { "${it.toInt()}%" },
-                isPercent = true,
-                onCommit = { onStrengthChange(it.toInt()) }
-            )
-            SettingsDivider()
-            ShakeStrengthPresetRow(selected = strength, onSelect = onStrengthChange)
-        }
-        Text(
-            text = stringResource(R.string.settings_shake_hint),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 32.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
+        SettingsDivider(insetStart = 50.dp)
+        SettingSliderRow(
+            icon = SettingIcons.shake,
+            label = stringResource(R.string.settings_shake_strength),
+            valueRange = RecorderSettings.SHAKE_STRENGTH_RANGE.start.toFloat()..
+                RecorderSettings.SHAKE_STRENGTH_RANGE.endInclusive.toFloat(),
+            initialValue = strength.toFloat(),
+            formatValue = { "${it.toInt()}%" },
+            isPercent = true,
+            enabled = enabled,
+            onCommit = { onStrengthChange(it.toInt()) }
+        )
+        SettingsDivider(insetStart = 50.dp)
+        ShakeStrengthPresetRow(
+            selected = strength,
+            enabled = enabled,
+            onSelect = onStrengthChange
         )
     }
 }
 
-/** 力度快捷档位行：点击跳到对应力度；已处于该档位时点击不再重复下发。 */
+/** 力度快捷档位行：点击跳到对应力度。 */
 @Composable
-private fun ShakeStrengthPresetRow(selected: Int, onSelect: (Int) -> Unit) {
+private fun ShakeStrengthPresetRow(
+    selected: Int,
+    enabled: Boolean,
+    onSelect: (Int) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-
-            // 一组互斥快捷项，读屏按一组播报。
             .selectableGroup(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -93,8 +84,8 @@ private fun ShakeStrengthPresetRow(selected: Int, onSelect: (Int) -> Unit) {
             FilterChip(
                 selected = isSelected,
                 onClick = { if (!isSelected) onSelect(preset) },
+                enabled = enabled,
                 label = {
-                    // 三个档位等宽，文字在按钮内居中。
                     Text(
                         text = stringResource(labelRes),
                         style = MaterialTheme.typography.labelLarge,

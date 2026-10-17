@@ -1,10 +1,7 @@
 package io.github.pia300.highlightreplay.ui.screens.settings
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -16,8 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.Surface
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,13 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.pia300.highlightreplay.R
 import io.github.pia300.highlightreplay.data.LanguagePrefs
+import io.github.pia300.highlightreplay.ui.components.SettingIcons
 
-/** 语言设置行：下拉菜单提供跟随系统、中英与日韩西葡印越泰俄文选项。 */
+/** 语言设置行：下拉菜单选择跟随系统或具体语言。 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LanguageSettingRow(
@@ -44,7 +42,6 @@ internal fun LanguageSettingRow(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    // 选项列表含 12 次字符串解析，仅随所选语言变化重建。
     val options = remember(selected) {
         fun str(resId: Int): String = LanguagePrefs.string(context, resId)
         listOf(
@@ -64,81 +61,83 @@ internal fun LanguageSettingRow(
     }
     val selectedLabel = options.firstOrNull { it.second == selected }?.first
         ?: stringResource(R.string.settings_language_system)
+    val effectiveSelected = if (options.any { it.second == selected }) {
+        selected
+    } else {
+        LanguagePrefs.LANG_SYSTEM
+    }
 
-    // 无效的已存取值按"跟随系统"处理，保证菜单始终有选中项。
-    val effectiveSelected =
-        if (options.any { it.second == selected }) selected else LanguagePrefs.LANG_SYSTEM
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        modifier = modifier.fillMaxWidth()
     ) {
-        Surface(
-            shape = MaterialTheme.shapes.medium,
-            color = MaterialTheme.colorScheme.surfaceContainerLow
-        ) {
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = it }
-            ) {
-
-                ListItem(
-                    headlineContent = {
-                        Text(
-                            text = selectedLabel,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    },
-                    trailingContent = {
-                        Icon(
-                            Icons.Default.ArrowDropDown,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    },
-                    colors = ListItemDefaults.colors(
-                        containerColor = Color.Transparent
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true)
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = selectedLabel,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-
-                    modifier = Modifier.exposedDropdownSize()
-                ) {
-                    options.forEach { (label, value) ->
-                        val isSelected = value == effectiveSelected
-                        DropdownMenuItem(
-                            text = { Text(label, style = MaterialTheme.typography.bodyLarge) },
-                            leadingIcon = {
-
-                                if (isSelected) {
-                                    Icon(
-                                        Icons.Default.Check,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                }
-                            },
-                            // 选中态写入语义树，TalkBack 可获知当前语言。
-                            modifier = Modifier.semantics { this.selected = isSelected },
-                            onClick = {
-                                // 收起菜单；取值变化时才通知外层，避免无谓持久化。
-                                expanded = false
-                                if (value != selected) onSelect(value)
-                            }
+            },
+            leadingContent = {
+                Icon(
+                    imageVector = SettingIcons.language,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp)
+                )
+            },
+            trailingContent = {
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp)
+                )
+            },
+            colors = ListItemDefaults.colors(
+                containerColor = Color.Transparent
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true)
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.exposedDropdownSize()
+        ) {
+            options.forEach { (label, value) ->
+                val isSelected = value == effectiveSelected
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = label,
+                            style = MaterialTheme.typography.bodyLarge
                         )
+                    },
+                    leadingIcon = {
+                        if (isSelected) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        } else {
+                            Spacer(Modifier.size(24.dp))
+                        }
+                    },
+                    modifier = Modifier.semantics { this.selected = isSelected },
+                    onClick = {
+                        expanded = false
+                        if (value != selected) onSelect(value)
                     }
-                }
+                )
             }
         }
-        Spacer(Modifier.height(4.dp))
     }
 }

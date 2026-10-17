@@ -5,13 +5,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-/** 设置页通用细分隔线：分隔设置行与区块。 */
+/** 设置页细分隔线；insetStart 控制起点缩进。 */
 @Composable
-internal fun SettingsDivider() {
+internal fun SettingsDivider(insetStart: Dp = 16.dp) {
     HorizontalDivider(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier.padding(start = insetStart, end = 16.dp),
         color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
     )
 }

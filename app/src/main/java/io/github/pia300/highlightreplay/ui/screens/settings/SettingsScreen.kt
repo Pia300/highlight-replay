@@ -3,6 +3,7 @@ package io.github.pia300.highlightreplay.ui.screens.settings
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -109,10 +110,13 @@ private fun FloatingSettingsSection(viewModel: SettingsViewModel) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 12.dp),
+                .padding(horizontal = 8.dp),
             contentAlignment = Alignment.CenterEnd
         ) {
-            TextButton(onClick = { viewModel.resetFloating() }) {
+            TextButton(
+                onClick = { viewModel.resetFloating() },
+                modifier = Modifier.heightIn(min = 48.dp)
+            ) {
                 Icon(
                     imageVector = SettingIcons.reset,
                     contentDescription = null,

@@ -35,9 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.github.pia300.highlightreplay.R
+import kotlin.math.roundToInt
 
 /** 连续数值设置行：减号、滑杆、加号与可点击的数值芯片。 */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -230,4 +234,84 @@ private fun ValueInputDialog(
             }
         }
     )
+}
+
+/** 离散选项滑杆：按选项索引吸附，轨道上绘制刻度点，当前值显示在标题行右侧。 */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingDiscreteSliderRow(
+    icon: ImageVector,
+    title: String,
+    options: List<SettingChoice>,
+    selected: String,
+    onSelect: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (options.isEmpty()) return
+
+    val selectedIndex = options.indexOfFirst { it.value == selected }.coerceAtLeast(0)
+    var value by remember(selectedIndex, options.size) {
+        mutableFloatStateOf(selectedIndex.toFloat())
+    }
+    val currentIndex = value.roundToInt().coerceIn(0, options.lastIndex)
+    val currentLabel = options[currentIndex].label
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(Modifier.width(12.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = currentLabel,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                maxLines = 1
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+        Slider(
+            value = value,
+            onValueChange = { value = it },
+            onValueChangeFinished = {
+                val index = value.roundToInt().coerceIn(0, options.lastIndex)
+                if (index != selectedIndex) onSelect(options[index].value)
+            },
+            valueRange = 0f..options.lastIndex.toFloat(),
+            steps = (options.size - 2).coerceAtLeast(0),
+            track = { sliderState ->
+                SliderDefaults.Track(
+                    sliderState = sliderState,
+                    drawTick = { tickOffset, tickColor ->
+                        drawCircle(
+                            color = tickColor,
+                            radius = 2.dp.toPx(),
+                            center = tickOffset
+                        )
+                    }
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 36.dp)
+                .semantics {
+                    contentDescription = title
+                    stateDescription = currentLabel
+                }
+        )
+    }
 }

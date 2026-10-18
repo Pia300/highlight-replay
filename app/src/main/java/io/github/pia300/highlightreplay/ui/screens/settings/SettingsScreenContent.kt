@@ -40,6 +40,7 @@ import io.github.pia300.highlightreplay.service.ShakeController
 import io.github.pia300.highlightreplay.ui.components.RecordingTipCard
 import io.github.pia300.highlightreplay.ui.components.SettingChoiceControl
 import io.github.pia300.highlightreplay.ui.components.SettingChoiceRow
+import io.github.pia300.highlightreplay.ui.components.SettingDiscreteSliderRow
 import io.github.pia300.highlightreplay.ui.components.SettingIcons
 import io.github.pia300.highlightreplay.ui.components.SettingSection
 import io.github.pia300.highlightreplay.ui.components.SettingSwitchRow
@@ -148,16 +149,13 @@ fun SettingsScreenContent(
                             )
                         }
                         SettingsDivider(insetStart = 52.dp)
-                        SettingChoiceRow(
+                        SettingDiscreteSliderRow(
                             icon = SettingIcons.resolution,
-                            title = stringResource(R.string.settings_resolution)
-                        ) {
-                            SettingChoiceControl(
-                                options = optionLists.resolutionOptions,
-                                selected = currentState.resolution,
-                                onSelect = { update(RecorderSettings.KEY_RESOLUTION, it) }
-                            )
-                        }
+                            title = stringResource(R.string.settings_resolution),
+                            options = optionLists.resolutionOptions,
+                            selected = currentState.resolution,
+                            onSelect = { update(RecorderSettings.KEY_RESOLUTION, it) }
+                        )
                         SettingsDivider(insetStart = 52.dp)
                         SettingChoiceRow(
                             icon = SettingIcons.resolutionMode,
@@ -187,27 +185,21 @@ fun SettingsScreenContent(
                             }
                         }
                         SettingsDivider(insetStart = 52.dp)
-                        SettingChoiceRow(
+                        SettingDiscreteSliderRow(
                             icon = SettingIcons.frameRate,
-                            title = stringResource(R.string.settings_frame_rate)
-                        ) {
-                            SettingChoiceControl(
-                                options = optionLists.frameRateOptions,
-                                selected = currentState.frameRate,
-                                onSelect = { update(RecorderSettings.KEY_FRAME_RATE, it) }
-                            )
-                        }
+                            title = stringResource(R.string.settings_frame_rate),
+                            options = optionLists.frameRateOptions,
+                            selected = currentState.frameRate,
+                            onSelect = { update(RecorderSettings.KEY_FRAME_RATE, it) }
+                        )
                         SettingsDivider(insetStart = 52.dp)
-                        SettingChoiceRow(
+                        SettingDiscreteSliderRow(
                             icon = SettingIcons.bitrate,
-                            title = stringResource(R.string.settings_video_bitrate)
-                        ) {
-                            SettingChoiceControl(
-                                options = optionLists.bitrateOptions,
-                                selected = currentState.bitrate,
-                                onSelect = { update(RecorderSettings.KEY_BITRATE, it) }
-                            )
-                        }
+                            title = stringResource(R.string.settings_video_bitrate),
+                            options = optionLists.bitrateOptions,
+                            selected = currentState.bitrate,
+                            onSelect = { update(RecorderSettings.KEY_BITRATE, it) }
+                        )
                         SettingsDivider(insetStart = 52.dp)
                         SettingChoiceRow(
                             icon = SettingIcons.orientation,
@@ -270,16 +262,13 @@ fun SettingsScreenContent(
                         icon = SettingIcons.replay,
                         title = stringResource(R.string.settings_section_replay)
                     ) {
-                        SettingChoiceRow(
+                        SettingDiscreteSliderRow(
                             icon = SettingIcons.replayDuration,
-                            title = stringResource(R.string.settings_replay_duration)
-                        ) {
-                            SettingChoiceControl(
-                                options = optionLists.replayDurationOptions,
-                                selected = currentState.replayDuration,
-                                onSelect = { update(RecorderSettings.KEY_REPLAY_DURATION, it) }
-                            )
-                        }
+                            title = stringResource(R.string.settings_replay_duration),
+                            options = optionLists.replayDurationOptions,
+                            selected = currentState.replayDuration,
+                            onSelect = { update(RecorderSettings.KEY_REPLAY_DURATION, it) }
+                        )
                     }
                 }
 

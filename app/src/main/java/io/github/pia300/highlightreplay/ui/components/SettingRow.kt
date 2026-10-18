@@ -2,7 +2,6 @@ package io.github.pia300.highlightreplay.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -24,7 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -73,7 +71,7 @@ fun SettingChoiceRow(
     }
 }
 
-/** 开关类设置行：整行可切换，图标随开关状态着色。 */
+/** 开关类设置行：整行可切换。 */
 @Composable
 fun SettingSwitchRow(
     icon: ImageVector,
@@ -85,14 +83,6 @@ fun SettingSwitchRow(
     offHint: String? = null
 ) {
     val visibleHint = if (!checked) offHint ?: hint else hint
-    val iconTint by animateColorAsState(
-        targetValue = if (checked) {
-            MaterialTheme.colorScheme.primary
-        } else {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        },
-        label = "setting-switch-icon"
-    )
 
     Column(
         modifier = modifier
@@ -109,7 +99,7 @@ fun SettingSwitchRow(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = iconTint,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(24.dp)
             )
             Spacer(Modifier.width(12.dp))

@@ -1,9 +1,7 @@
 package io.github.pia300.highlightreplay.ui
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -22,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import io.github.pia300.highlightreplay.R
 import io.github.pia300.highlightreplay.ui.components.isLandscapeLayout
 import io.github.pia300.highlightreplay.ui.screens.control.ControlUiState
@@ -93,26 +90,6 @@ fun MainScreen(
     onLanguageChange: () -> Unit
 ) {
     Scaffold(
-
-        topBar = {
-            // 仅竖屏且非控制页时显示顶栏；横屏由导航栏承担。
-            if (!isLandscapeLayout() && currentTab != Tab.CONTROL) {
-                when (currentTab) {
-                    Tab.SETTINGS -> if (licenseOpen) {
-                        LicenseTopBar(onBack = onLicenseClose)
-                    } else {
-                        TabTopBar(currentTab)
-                    }
-
-                    Tab.HISTORY -> if (!historySelectionActive) {
-                        TabTopBar(currentTab)
-                    }
-
-                    // CONTROL 已被外层条件排除；Kotlin 1.7+ 要求枚举 when 穷尽，故显式列出。
-                    Tab.CONTROL -> Unit
-                }
-            }
-        },
         bottomBar = {
 
             // 仅竖屏显示底部导航栏。
@@ -128,7 +105,13 @@ fun MainScreen(
             isLandscape = isLandscapeLayout(),
             currentTab = currentTab,
             onTabSelected = onTabSelected,
-            modifier = Modifier.padding(padding)
+            modifier = Modifier
+                .padding(bottom = padding.calculateBottomPadding())
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                    )
+                )
         ) { contentModifier ->
             TabContent(
                 currentTab = currentTab,
@@ -136,6 +119,7 @@ fun MainScreen(
                 licenseOpen = licenseOpen,
                 onLicenseOpen = onLicenseOpen,
                 onLicenseClose = onLicenseClose,
+                historySelectionActive = historySelectionActive,
                 onHistorySelectionChange = onHistorySelectionChange,
                 uiState = uiState,
                 onStartRecording = onStartRecording,
@@ -162,9 +146,9 @@ fun MainScreen(
 }
 
 /** 许可证页顶栏：居中标题加返回按钮。 */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LicenseTopBar(onBack: () -> Unit) {
+internal fun LicenseTopBar(onBack: () -> Unit, modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         title = { Text(stringResource(R.string.settings_license)) },
         navigationIcon = {
@@ -175,31 +159,18 @@ private fun LicenseTopBar(onBack: () -> Unit) {
                 )
             }
         },
-
         windowInsets = WindowInsets(0, 0, 0, 0),
-        modifier = Modifier.topBarInsets()
+        modifier = modifier
     )
 }
 
 /** 普通页签顶栏：居中显示当前页签标题。 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TabTopBar(currentTab: Tab) {
+internal fun TabTopBar(currentTab: Tab, modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         title = { Text(stringResource(currentTab.labelRes)) },
-
         windowInsets = WindowInsets(0, 0, 0, 0),
-        modifier = Modifier.topBarInsets()
+        modifier = modifier
     )
-}
-
-/** 让顶栏避开状态栏并消费安全区；高度沿用 Material 默认的 64dp。 */
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun Modifier.topBarInsets(): Modifier {
-
-    // 仅保留顶部与水平安全区，并标记已消费以防重复内边距。
-    val insets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
-    return windowInsetsPadding(insets)
-        .consumeWindowInsets(insets)
 }

@@ -7,11 +7,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,12 +25,14 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.github.pia300.highlightreplay.ui.components.isLandscapeLayout
 import io.github.pia300.highlightreplay.ui.screens.control.ControlScreen
 import io.github.pia300.highlightreplay.ui.screens.control.ControlUiState
 import io.github.pia300.highlightreplay.ui.screens.history.HistoryScreen
@@ -122,6 +127,7 @@ internal fun TabContent(
     licenseOpen: Boolean,
     onLicenseOpen: () -> Unit,
     onLicenseClose: () -> Unit,
+    historySelectionActive: Boolean,
     onHistorySelectionChange: (Boolean) -> Unit,
     uiState: () -> ControlUiState,
     onStartRecording: () -> Unit,
@@ -171,26 +177,81 @@ internal fun TabContent(
             }
 
             Tab.HISTORY -> tabStateHolder.SaveableStateProvider(Tab.HISTORY) {
-                HistoryScreen(
-                    modifier = Modifier,
+                val showTopBar = !isLandscapeLayout() && !historySelectionActive
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                top = if (showTopBar) {
+                                    TopAppBarDefaults.TopAppBarExpandedHeight + 8.dp
+                                } else {
+                                    0.dp
+                                }
+                            )
+                    ) {
+                        HistoryScreen(
+                            modifier = Modifier,
 
-                    // 多选状态上抛给主界面，用于隐藏顶栏返回按钮。
-                    onSelectionModeChange = onHistorySelectionChange
-                )
+                            // 多选状态上抛给主界面，用于隐藏顶栏返回按钮。
+                            onSelectionModeChange = onHistorySelectionChange
+                        )
+                    }
+                    if (showTopBar) {
+                        TabTopBar(
+                            currentTab = Tab.HISTORY,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.TopCenter)
+                        )
+                    }
+                }
             }
 
             Tab.SETTINGS -> tabStateHolder.SaveableStateProvider(Tab.SETTINGS) {
-                SettingsScreen(
-                    themeMode = themeMode,
-                    themeColor = themeColor,
-                    onThemeModeChange = onThemeModeChange,
-                    onThemeColorChange = onThemeColorChange,
-                    onLanguageChange = onLanguageChange,
-                    licenseOpen = licenseOpen,
-                    onLicenseOpen = onLicenseOpen,
-                    onLicenseClose = onLicenseClose,
-                    modifier = Modifier
-                )
+                val showTopBar = !isLandscapeLayout()
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                top = if (showTopBar) {
+                                    TopAppBarDefaults.TopAppBarExpandedHeight + 8.dp
+                                } else {
+                                    0.dp
+                                }
+                            )
+                    ) {
+                        SettingsScreen(
+                            themeMode = themeMode,
+                            themeColor = themeColor,
+                            onThemeModeChange = onThemeModeChange,
+                            onThemeColorChange = onThemeColorChange,
+                            onLanguageChange = onLanguageChange,
+                            licenseOpen = licenseOpen,
+                            onLicenseOpen = onLicenseOpen,
+                            onLicenseClose = onLicenseClose,
+                            modifier = Modifier
+                        )
+                    }
+                    if (showTopBar) {
+                        if (licenseOpen) {
+                            LicenseTopBar(
+                                onBack = onLicenseClose,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.TopCenter)
+                            )
+                        } else {
+                            TabTopBar(
+                                currentTab = Tab.SETTINGS,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.TopCenter)
+                            )
+                        }
+                    }
+                }
             }
         }
     }

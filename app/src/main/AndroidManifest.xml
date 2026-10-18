@@ -21,7 +21,11 @@
         android:maxSdkVersion="28" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+        android:maxSdkVersion="32" />
+    <!-- Android 13+ 读取历史回录所需的视频媒体权限（MediaStore 查询非本应用创建的文件）。 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <!-- Android 14+ 部分媒体访问：用户只授权选中视频时仍可读取这一部分。 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
     <!-- 进程内动态广播的签名级权限：Android 13- 动态接收器注册时用它约束发送方。 -->
     <permission

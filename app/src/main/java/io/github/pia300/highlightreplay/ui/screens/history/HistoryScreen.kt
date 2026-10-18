@@ -39,6 +39,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.pia300.highlightreplay.hasMediaReadPermission
+import io.github.pia300.highlightreplay.requiredMediaReadPermission
 import io.github.pia300.highlightreplay.data.TagCoverage
 import io.github.pia300.highlightreplay.data.TagStore
 import io.github.pia300.highlightreplay.data.thumbnailCache
@@ -56,6 +58,17 @@ fun HistoryScreen(
     onSelectionModeChange: (Boolean) -> Unit = {}
 ) {
     val context = LocalContext.current
+
+    val mediaPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        viewModel.loadVideos()
+    }
+    LaunchedEffect(Unit) {
+        if (!hasMediaReadPermission(context)) {
+            mediaPermissionLauncher.launch(requiredMediaReadPermission())
+        }
+    }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val videos = uiState.videos

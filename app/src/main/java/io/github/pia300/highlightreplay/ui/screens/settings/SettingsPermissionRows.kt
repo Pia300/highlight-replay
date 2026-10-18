@@ -29,6 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,6 +45,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import io.github.pia300.highlightreplay.R
+import io.github.pia300.highlightreplay.hasMediaReadPermission
+import io.github.pia300.highlightreplay.requiredMediaReadPermission
 import io.github.pia300.highlightreplay.ui.components.SettingIcons
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -60,6 +64,9 @@ internal fun ColumnScope.PermissionGroup(
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             add { LegacyStoragePermissionRow() }
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            add { MediaPermissionRow() }
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             add { NotificationPermissionRow() }
         }
@@ -75,13 +82,41 @@ internal fun ColumnScope.PermissionGroup(
  * 权限授予状态：组合时读取一次作为初值，此后每次进入 RESUMED 都在 IO 线程重新读取。
  */
 @Composable
-internal fun rememberPermissionGranted(check: () -> Boolean): State<Boolean> {
+internal fun rememberPermissionGranted(
+    refreshKey: Int = 0,
+    check: () -> Boolean
+): State<Boolean> {
     val lifecycleOwner = LocalLifecycleOwner.current
-    return produceState(initialValue = check(), lifecycleOwner) {
+    return produceState(initialValue = check(), lifecycleOwner, refreshKey) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             value = withContext(Dispatchers.IO) { check() }
         }
     }
+}
+
+/** Android 10+ 历史回录的媒体读取权限行。 */
+@Composable
+internal fun MediaPermissionRow() {
+    val context = LocalContext.current
+    var refreshKey by remember { mutableIntStateOf(0) }
+    val granted by rememberPermissionGranted(refreshKey) {
+        hasMediaReadPermission(context)
+    }
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        refreshKey++
+    }
+    PermissionStatusRow(
+        icon = SettingIcons.storagePermission,
+        label = stringResource(R.string.settings_storage_permission),
+        grantedText = stringResource(R.string.settings_permission_granted),
+        deniedText = stringResource(R.string.settings_permission_denied),
+        granted = granted,
+        onClick = {
+            launcher.launch(requiredMediaReadPermission())
+        }
+    )
 }
 
 /** 权限状态行：前置图标、标题、状态图标与跳转入口。 */

@@ -37,3 +37,25 @@ internal fun collectMissingRuntimePermissions(context: Context): List<String> {
     }
     return permissions
 }
+
+/** 历史回录所需的媒体读取权限：Android 13+ 使用 READ_MEDIA_VIDEO，之前使用 READ_EXTERNAL_STORAGE。 */
+internal fun requiredMediaReadPermission(): String =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_VIDEO
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    }
+
+/** 当前是否已获得历史回录所需的媒体读取权限（含 Android 14+ 部分访问）。 */
+internal fun hasMediaReadPermission(context: Context): Boolean {
+    if (ContextCompat.checkSelfPermission(context, requiredMediaReadPermission()) ==
+        PackageManager.PERMISSION_GRANTED
+    ) {
+        return true
+    }
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+        ) == PackageManager.PERMISSION_GRANTED
+}

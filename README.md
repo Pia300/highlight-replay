@@ -23,7 +23,7 @@ English | [简体中文](README_ZH_CN.md) | [繁體中文](README_ZH_TW.md)
 
 - Replay recording: tap "Save replay" to save the last few seconds as a video, without starting a recording in advance
 - Nothing is written to disk while recording; a file is produced only by a save action, and the same content can be saved repeatedly
-- Configurable recording: resolution 720p / 1080p / 1440p / custom, frame rate 24 / 30 / 60 fps, bitrate 4 / 8 / 12 / 16 Mbps, replay length 30 / 60 seconds
+- Configurable recording: resolution 720p / 1080p / 1440p / custom, frame rate 24 / 30 / 60 fps, bitrate 4 / 8 / 12 / 16 Mbps, replay length 30 / 60 / 90 / 120 seconds
 - Internal audio: record device audio (Android 10 and above), or record without sound
 - Selectable encoders: H.264 or H.265, hardware / software / automatic
 - Rotation adaptive: content is rotated to match the capture direction, or force portrait / landscape
